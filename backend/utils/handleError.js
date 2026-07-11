@@ -1,6 +1,5 @@
 
 
-// backend error handling
 
 class ErrorHandler extends Error{
     constructor(message, statusCode){
