@@ -2,10 +2,11 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Header from "@/components/Header";
 import {
-  getCart,
-  updateCartQuantity,
-  removeFromCart,
   formatPrice,
+  getCart,
+  getCartTotal,
+  removeCartItem,
+  updateCartItem,
 } from "@/lib/storage";
 
 export default function Cart() {
@@ -15,21 +16,24 @@ export default function Cart() {
     setCart(getCart());
   }, []);
 
-  function handleQuantityChange(item, newQuantity) {
-    const safeQuantity = Math.max(1, newQuantity);
-
-    updateCartQuantity(item.id, item.size, item.color, safeQuantity);
-    setCart(getCart());
+  function handleDecrease(index, currentQuantity) {
+    const newQuantity = Math.max(1, Number(currentQuantity) - 1);
+    const updatedCart = updateCartItem(index, newQuantity);
+    setCart([...updatedCart]);
   }
 
-  function handleRemove(item) {
-    removeFromCart(item.id, item.size, item.color);
-    setCart(getCart());
+  function handleIncrease(index, currentQuantity) {
+    const newQuantity = Number(currentQuantity) + 1;
+    const updatedCart = updateCartItem(index, newQuantity);
+    setCart([...updatedCart]);
   }
 
-  const subtotal = cart.reduce((total, item) => {
-    return total + Number(item.price || 0) * Number(item.quantity || 1);
-  }, 0);
+  function handleRemove(index) {
+    const updatedCart = removeCartItem(index);
+    setCart([...updatedCart]);
+  }
+
+  const subtotal = getCartTotal(cart);
 
   return (
     <main>
@@ -41,20 +45,17 @@ export default function Cart() {
         {cart.length === 0 ? (
           <div className="emptyBox">
             <h2>Your cart is empty</h2>
-            <p>Start shopping and add your favorite items.</p>
+            <p>Add something you love from our latest collection.</p>
 
-            <Link to="/" className="btn black">
+            <Link to="/" className="wideBtn">
               Continue Shopping
             </Link>
           </div>
         ) : (
           <div className="checkoutLayout">
             <div className="panel">
-              {cart.map((item) => (
-                <div
-                  className="cartItem"
-                  key={`${item.id}-${item.color}-${item.size}`}
-                >
+              {cart.map((item, index) => (
+                <div className="cartItem" key={`${item.id}-${item.color}-${item.size}-${index}`}>
                   <div className="miniVisual cartImageBox">
                     {item.image ? (
                       <img src={item.image} alt={item.name} />
@@ -72,12 +73,7 @@ export default function Cart() {
                     <div className="qty small">
                       <button
                         type="button"
-                        onClick={() =>
-                          handleQuantityChange(
-                            item,
-                            Number(item.quantity || 1) - 1
-                          )
-                        }
+                        onClick={() => handleDecrease(index, item.quantity)}
                       >
                         -
                       </button>
@@ -86,12 +82,7 @@ export default function Cart() {
 
                       <button
                         type="button"
-                        onClick={() =>
-                          handleQuantityChange(
-                            item,
-                            Number(item.quantity || 1) + 1
-                          )
-                        }
+                        onClick={() => handleIncrease(index, item.quantity)}
                       >
                         +
                       </button>
@@ -99,12 +90,10 @@ export default function Cart() {
                   </div>
 
                   <strong>
-                    {formatPrice(
-                      Number(item.price || 0) * Number(item.quantity || 1)
-                    )}
+                    {formatPrice(Number(item.price) * Number(item.quantity))}
                   </strong>
 
-                  <button type="button" onClick={() => handleRemove(item)}>
+                  <button type="button" onClick={() => handleRemove(index)}>
                     Remove
                   </button>
                 </div>
@@ -131,7 +120,7 @@ export default function Cart() {
                 <strong>{formatPrice(subtotal)}</strong>
               </div>
 
-              <Link to="/ship" className="wideBtn">
+              <Link to="/checkout" className="wideBtn">
                 Checkout
               </Link>
             </div>

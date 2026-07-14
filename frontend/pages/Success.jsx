@@ -23,7 +23,7 @@ export default function Success() {
           <button className="btn black" onClick={() => navigate("/")}>
             Back Home
           </button>
-        </section>
+        </section>  
       </main>
     );
   }

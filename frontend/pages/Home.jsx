@@ -9,6 +9,53 @@ import menImg from "@/assets/images/men.jpg";
 import unisexImg from "@/assets/images/unisex.jpg";
 import essentialsImg from "@/assets/images/essentials.jpg";
 
+function TruckIcon() {
+  return (
+    <svg width="34" height="34" viewBox="0 0 24 24" fill="none">
+      <path d="M3 7H15V17H3V7Z" stroke="currentColor" strokeWidth="1.8" />
+      <path
+        d="M15 10H19L21 13V17H15V10Z"
+        stroke="currentColor"
+        strokeWidth="1.8"
+      />
+      <circle cx="7" cy="18" r="1.7" stroke="currentColor" strokeWidth="1.8" />
+      <circle cx="18" cy="18" r="1.7" stroke="currentColor" strokeWidth="1.8" />
+    </svg>
+  );
+}
+
+function BoxIcon() {
+  return (
+    <svg width="34" height="34" viewBox="0 0 24 24" fill="none">
+      <path
+        d="M12 3L21 8L12 13L3 8L12 3Z"
+        stroke="currentColor"
+        strokeWidth="1.8"
+      />
+      <path d="M3 8V16L12 21V13" stroke="currentColor" strokeWidth="1.8" />
+      <path d="M21 8V16L12 21" stroke="currentColor" strokeWidth="1.8" />
+    </svg>
+  );
+}
+
+function CalendarIcon() {
+  return (
+    <svg width="34" height="34" viewBox="0 0 24 24" fill="none">
+      <rect
+        x="4"
+        y="5"
+        width="16"
+        height="15"
+        stroke="currentColor"
+        strokeWidth="1.8"
+      />
+      <path d="M8 3V7" stroke="currentColor" strokeWidth="1.8" />
+      <path d="M16 3V7" stroke="currentColor" strokeWidth="1.8" />
+      <path d="M4 10H20" stroke="currentColor" strokeWidth="1.8" />
+    </svg>
+  );
+}
+
 const categories = [
   {
     title: "Women",
@@ -39,26 +86,38 @@ export default function Home() {
 
       <HeroWidget />
 
-      <section className="benefits">
-        <div>
-          <strong>Free Shipping</strong>
-          <p>On orders over $60</p>
+      <section className="benefitsBar">
+        <div className="benefitsBarItem">
+          <TruckIcon />
+
+          <div>
+            <strong>Free Shipping</strong>
+            <p>On orders over $60</p>
+          </div>
         </div>
 
-        <div>
-          <strong>Easy Returns</strong>
-          <p>Within 30 days</p>
+        <div className="benefitsBarItem">
+          <BoxIcon />
+
+          <div>
+            <strong>Easy Returns</strong>
+            <p>Within 30 days</p>
+          </div>
         </div>
 
-        <div>
-          <strong>New Drops</strong>
-          <p>Every week</p>
+        <div className="benefitsBarItem">
+          <CalendarIcon />
+
+          <div>
+            <strong>New Drops</strong>
+            <p>Every week</p>
+          </div>
         </div>
       </section>
 
       <section className="section">
         <p className="label">Shop by Category</p>
-        <h2>Explore essentials made for every move.</h2>
+        <h2>Everyday essentials, made to move with you.</h2>
 
         <div className="categoryGrid">
           {categories.map((category) => (
@@ -82,7 +141,7 @@ export default function Home() {
 
       <section className="section">
         <p className="label">Recommended</p>
-        <h2>This week’s picks</h2>
+        <h2>Fresh Picks This Week</h2>
 
         <div className="productGrid">
           {products.map((product) => (
@@ -91,8 +150,14 @@ export default function Home() {
               className="productCard"
               key={product.id}
             >
-              <div className={`productVisual ${product.tone}`}>
+              <div className="productVisual hasImage">
                 <span>{product.tag}</span>
+
+                <img
+                  src={product.image}
+                  alt={product.name}
+                  className="productImage"
+                />
               </div>
 
               <h3>{product.name}</h3>

@@ -13,10 +13,9 @@ export default function Checkout() {
     setCart(getCart());
   }, []);
 
-  const subtotal = cart.reduce(
-    (sum, item) => sum + item.price * item.quantity,
-    0
-  );
+  const subtotal = cart.reduce((sum, item) => {
+    return sum + Number(item.price || 0) * Number(item.quantity || 1);
+  }, 0);
 
   const shippingFee = subtotal >= 60 ? 0 : 4;
   const total = subtotal + shippingFee;
@@ -29,12 +28,25 @@ export default function Checkout() {
 
     const shipping = JSON.parse(localStorage.getItem("shipping") || "{}");
 
+    const orderItems = cart.map((item) => ({
+      id: item.id,
+      name: item.name,
+      price: Number(item.price) || 0,
+      tag: item.tag,
+      category: item.category,
+      tone: item.tone,
+      color: item.color,
+      size: item.size,
+      quantity: Number(item.quantity) || 1,
+      image: item.image,
+    }));
+
     const order = {
       id: String(Date.now()),
       orderNumber: `#${Math.floor(10000 + Math.random() * 90000)}`,
       date: new Date().toLocaleDateString(),
       status: "Processing",
-      items: cart,
+      items: orderItems,
       shipping,
       payment,
       subtotal,
@@ -73,7 +85,7 @@ export default function Checkout() {
               )
             )}
 
-            <button className="wideBtn" onClick={placeOrder}>
+            <button className="wideBtn" type="button" onClick={placeOrder}>
               Place Order
             </button>
           </div>

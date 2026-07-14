@@ -1,17 +1,25 @@
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import Header from "@/components/Header";
-import { formatPrice, getOrders } from "@/lib/storage";
+import { products } from "@/lib/products";
+import { formatPrice, getOrderById } from "@/lib/storage";
 
 export default function OrderDetail() {
-  const params = useParams();
-  const [order, setOrder] = useState(null);
+  const { id } = useParams();
+  const order = getOrderById(id);
 
-  useEffect(() => {
-    const orders = getOrders();
-    const foundOrder = orders.find((item) => item.id === params.id);
-    setOrder(foundOrder);
-  }, [params.id]);
+  function getItemImage(item) {
+    const product = products.find((product) => product.id === item.id);
+
+    if (product?.images?.[item.color]) {
+      return product.images[item.color];
+    }
+
+    if (product?.image) {
+      return product.image;
+    }
+
+    return item.image;
+  }
 
   if (!order) {
     return (
@@ -19,11 +27,20 @@ export default function OrderDetail() {
         <Header />
 
         <section className="page">
-          <h1>Order not found.</h1>
+          <h1>Order not found</h1>
+
+          <Link to="/orders" className="wideBtn">
+            Back to Orders
+          </Link>
         </section>
       </main>
     );
   }
+
+  const subtotal =
+    order.items?.reduce((total, item) => {
+      return total + Number(item.price || 0) * Number(item.quantity || 1);
+    }, 0) || 0;
 
   return (
     <main>
@@ -34,7 +51,7 @@ export default function OrderDetail() {
 
         <div className="checkoutLayout">
           <div className="panel">
-            <h2>{order.orderNumber}</h2>
+            <h2>{order.orderNumber || `#${order.id}`}</h2>
 
             <p>Status: {order.status}</p>
             <p>Date: {order.date}</p>
@@ -42,50 +59,61 @@ export default function OrderDetail() {
 
             <hr />
 
-            {order.items.map((item, index) => (
-              <div className="cartItem" key={`${item.id}-${index}`}>
-                <div className={`miniVisual ${item.tone}`}></div>
+            {order.items?.map((item, index) => {
+              const itemImage = getItemImage(item);
 
-                <div>
-                  <h3>{item.name}</h3>
+              return (
+                <div
+                  className="cartItem"
+                  key={`${item.id}-${item.color}-${item.size}-${index}`}
+                >
+                  <div className="miniVisual cartImageBox">
+                    {itemImage ? (
+                      <img src={itemImage} alt={item.name} />
+                    ) : (
+                      <span>No image</span>
+                    )}
+                  </div>
 
-                  <p>
-                    {item.color} / {item.size} / Qty: {item.quantity}
-                  </p>
+                  <div>
+                    <h3>{item.name}</h3>
+
+                    <p>
+                      {item.color} / {item.size} / Qty: {item.quantity}
+                    </p>
+                  </div>
+
+                  <strong>
+                    {formatPrice(Number(item.price) * Number(item.quantity))}
+                  </strong>
                 </div>
-
-                <strong>{formatPrice(item.price * item.quantity)}</strong>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
           <aside className="summary">
             <h2>Shipping</h2>
 
-            <p>{order.shipping.fullName}</p>
-            <p>{order.shipping.phone}</p>
-            <p>{order.shipping.address}</p>
-
-            <p>
-              {order.shipping.ward}, {order.shipping.district},{" "}
-              {order.shipping.city}
-            </p>
+            <p>{order.shipping?.name}</p>
+            <p>{order.shipping?.phone}</p>
+            <p>{order.shipping?.address}</p>
+            <p>{order.shipping?.city}</p>
 
             <hr />
 
             <div>
               <span>Subtotal</span>
-              <strong>{formatPrice(order.subtotal)}</strong>
+              <strong>{formatPrice(subtotal)}</strong>
             </div>
 
             <div>
               <span>Shipping</span>
-              <strong>{formatPrice(order.shippingFee)}</strong>
+              <strong>{formatPrice(order.shippingFee || 0)}</strong>
             </div>
 
             <div>
               <span>Total</span>
-              <strong>{formatPrice(order.total)}</strong>
+              <strong>{formatPrice(order.total || subtotal)}</strong>
             </div>
           </aside>
         </div>

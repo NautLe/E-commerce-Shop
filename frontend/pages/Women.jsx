@@ -3,16 +3,18 @@ import Header from "@/components/Header";
 import { products } from "@/lib/products";
 import { formatPrice } from "@/lib/storage";
 
-const categoryTitles = {
-  Women: "The Women’s Edit",
-  Men: "Men’s Essentials",
-  Unisex: "Unisex Favorites",
-  Essentials: "Everyday Essentials",
-};
+export default function Women() {
+  const womenItemIds = [
+    "soft-rib-tank-top",
+    "wide-leg-trousers",
+    "cropped-zip-hoodie",
+    "minimal-long-skirt",
+    "straight-leg-pants",
+    "soft-knit-cardigan",
+  ];
 
-export default function CategoryPage({ category }) {
-  const filteredProducts = products.filter(
-    (product) => product.category === category
+  const womenProducts = products.filter((product) =>
+    womenItemIds.includes(product.id)
   );
 
   return (
@@ -20,22 +22,16 @@ export default function CategoryPage({ category }) {
       <Header />
 
       <section className="page">
-        <p className="label">{category}</p>
-
-        <h1>
-      {category === "Women"
-      ? "The Women’s Collection"
-      : category === "Men"
-      ? "Men’s Essentials"
-      : category === "Unisex"
-      ? "Unisex Favorites"
-      : category === "Essentials"
-      ? "Everyday Essentials"
-      : `Shop ${category}`}
-        </h1>
+        <div className="simplePageHead">
+          <div>
+            <p className="label">Women</p>
+            <h1>All Women</h1>
+            <p>Elevated staples. Modern silhouettes.</p>
+          </div>
+        </div>
 
         <div className="productGrid">
-          {filteredProducts.map((product) => (
+          {womenProducts.map((product) => (
             <Link
               to={`/item/${product.id}`}
               className="productCard"

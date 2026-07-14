@@ -1,124 +1,111 @@
 export function formatPrice(price) {
   const safePrice = Number(price) || 0;
-
-  return safePrice.toLocaleString("en-US", {
-    style: "currency",
-    currency: "USD",
-  });
+  return `$${safePrice.toFixed(2)}`;
 }
 
+/* CART */
+
 export function getCart() {
-  if (typeof window === "undefined") return [];
-
-  const cart = localStorage.getItem("cart");
-
-  if (!cart) return [];
-
   try {
-    return JSON.parse(cart);
+    return JSON.parse(localStorage.getItem("cart")) || [];
   } catch {
     return [];
   }
 }
 
 export function saveCart(cart) {
-  if (typeof window === "undefined") return;
-
   localStorage.setItem("cart", JSON.stringify(cart));
 }
 
 export function addToCart(product) {
   const cart = getCart();
 
-  const newItem = {
-    ...product,
-    price: Number(product.price) || 0,
-    quantity: Number(product.quantity) || 1,
-    size: product.size || "M",
-    color: product.color || "White",
-  };
+  const quantity = Number(product.quantity) || 1;
 
-  const existing = cart.find(
+  const existingItem = cart.find(
     (item) =>
-      item.id === newItem.id &&
-      item.size === newItem.size &&
-      item.color === newItem.color
+      item.id === product.id &&
+      item.size === product.size &&
+      item.color === product.color
   );
 
-  if (existing) {
-    existing.quantity = Number(existing.quantity || 0) + newItem.quantity;
+  if (existingItem) {
+    existingItem.quantity = Number(existingItem.quantity || 0) + quantity;
   } else {
-    cart.push(newItem);
+    cart.push({
+      id: product.id,
+      name: product.name,
+      price: Number(product.price) || 0,
+      tag: product.tag,
+      category: product.category,
+      tone: product.tone,
+      size: product.size,
+      color: product.color,
+      image: product.image,
+      quantity,
+    });
   }
 
   saveCart(cart);
 }
 
-export function updateCartQuantity(id, size, color, quantity) {
+export function updateCartItem(index, quantity) {
   const cart = getCart();
 
-  const newQuantity = Number(quantity) || 1;
+  if (!cart[index]) return cart;
 
-  const updatedCart = cart.map((item) => {
-    if (item.id === id && item.size === size && item.color === color) {
-      return {
-        ...item,
-        quantity: newQuantity,
-      };
-    }
+  cart[index].quantity = Math.max(1, Number(quantity) || 1);
+  saveCart(cart);
 
-    return item;
-  });
-
-  saveCart(updatedCart);
+  return cart;
 }
 
-export function removeFromCart(id, size, color) {
+export function removeCartItem(index) {
   const cart = getCart();
 
-  const updatedCart = cart.filter(
-    (item) => !(item.id === id && item.size === size && item.color === color)
-  );
+  cart.splice(index, 1);
+  saveCart(cart);
 
-  saveCart(updatedCart);
+  return cart;
 }
 
-export function getCartTotal() {
-  const cart = getCart();
-
+export function getCartTotal(cart) {
   return cart.reduce((total, item) => {
-    const price = Number(item.price) || 0;
-    const quantity = Number(item.quantity) || 1;
-
-    return total + price * quantity;
+    return total + Number(item.price || 0) * Number(item.quantity || 1);
   }, 0);
 }
 
 export function clearCart() {
-  if (typeof window === "undefined") return;
-
   localStorage.removeItem("cart");
 }
 
+/* ORDERS */
+
 export function getOrders() {
-  if (typeof window === "undefined") return [];
-
-  const orders = localStorage.getItem("orders");
-
-  if (!orders) return [];
-
   try {
-    return JSON.parse(orders);
+    return JSON.parse(localStorage.getItem("orders")) || [];
   } catch {
     return [];
   }
 }
 
 export function saveOrder(order) {
-  if (typeof window === "undefined") return;
-
   const orders = getOrders();
-  orders.push(order);
+
+  const newOrder = {
+    id: `MOCHA-${Date.now()}`,
+    date: new Date().toISOString(),
+    status: "Processing",
+    ...order,
+  };
+
+  orders.unshift(newOrder);
   localStorage.setItem("orders", JSON.stringify(orders));
-  localStorage.setItem("latestOrder", JSON.stringify(order));
+
+  return newOrder;
+}
+
+export function getOrderById(orderId) {
+  const orders = getOrders();
+  return orders.find((order) => order.id === orderId);
 }

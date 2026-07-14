@@ -1,31 +1,39 @@
-import { useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useEffect, useMemo, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import Header from "@/components/Header";
 import { products } from "@/lib/products";
 import { addToCart, formatPrice } from "@/lib/storage";
 
-import shirtWhite from "@/assets/images/shirt-white.jpg";
-import shirtBlack from "@/assets/images/shirt-black.jpg";
-import shirtBeige from "@/assets/images/shirt-beige.jpg";
-
-const shirtImages = {
-  White: shirtWhite,
-  Black: shirtBlack,
-  Beige: shirtBeige,
-};
-
 export default function ItemDetail() {
-  const params = useParams();
+  const { id } = useParams();
   const navigate = useNavigate();
 
-  const product = products.find((item) => item.id === params.id);
+  const product = useMemo(
+    () => products.find((item) => item.id === id),
+    [id]
+  );
 
   const sizes = ["S", "M", "L", "XL"];
-  const colors = ["White", "Black", "Beige"];
+
+  const colors = product
+    ? Array.isArray(product.color)
+      ? product.color
+      : [product.color]
+    : ["White"];
+
+  const defaultColor = colors[0] || "White";
 
   const [selectedSize, setSelectedSize] = useState("M");
-  const [selectedColor, setSelectedColor] = useState("White");
+  const [selectedColor, setSelectedColor] = useState(defaultColor);
   const [quantity, setQuantity] = useState(1);
+
+  useEffect(() => {
+    if (product) {
+      setSelectedColor(defaultColor);
+      setSelectedSize("M");
+      setQuantity(1);
+    }
+  }, [product, defaultColor]);
 
   if (!product) {
     return (
@@ -39,12 +47,19 @@ export default function ItemDetail() {
     );
   }
 
+  const currentImage = product.images?.[selectedColor] || product.image;
+
   function handleAddToCart() {
     addToCart({
-      ...product,
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      tag: product.tag,
+      category: product.category,
+      tone: product.tone,
       size: selectedSize,
       color: selectedColor,
-      image: shirtImages[selectedColor],
+      image: currentImage,
       quantity,
     });
 
@@ -57,10 +72,8 @@ export default function ItemDetail() {
 
       <section className="itemPage">
         <div className="itemVisual imageFrame">
-          <span>{product.tag}</span>
-
           <img
-            src={shirtImages[selectedColor]}
+            src={currentImage}
             alt={`${product.name} ${selectedColor}`}
             className="itemImage"
           />
@@ -79,14 +92,14 @@ export default function ItemDetail() {
             <strong>Color</strong>
 
             <div className="colorList">
-              {colors.map((color) => (
+              {colors.map((itemColor) => (
                 <button
-                  key={color}
+                  key={itemColor}
                   type="button"
-                  onClick={() => setSelectedColor(color)}
-                  className={selectedColor === color ? "active" : ""}
+                  className={selectedColor === itemColor ? "active" : ""}
+                  onClick={() => setSelectedColor(itemColor)}
                 >
-                  {color}
+                  {itemColor}
                 </button>
               ))}
             </div>
@@ -100,8 +113,8 @@ export default function ItemDetail() {
                 <button
                   key={size}
                   type="button"
-                  onClick={() => setSelectedSize(size)}
                   className={selectedSize === size ? "active" : ""}
+                  onClick={() => setSelectedSize(size)}
                 >
                   {size}
                 </button>
@@ -115,20 +128,23 @@ export default function ItemDetail() {
             <div className="qty">
               <button
                 type="button"
-                onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                onClick={() => setQuantity((prev) => Math.max(1, prev - 1))}
               >
                 -
               </button>
 
               <span>{quantity}</span>
 
-              <button type="button" onClick={() => setQuantity(quantity + 1)}>
+              <button
+                type="button"
+                onClick={() => setQuantity((prev) => prev + 1)}
+              >
                 +
               </button>
             </div>
           </div>
 
-          <button className="wideBtn" onClick={handleAddToCart}>
+          <button className="wideBtn" type="button" onClick={handleAddToCart}>
             Add to Cart
           </button>
         </div>

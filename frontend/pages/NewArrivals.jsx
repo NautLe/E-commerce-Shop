@@ -25,6 +25,13 @@ export default function NewArrivals() {
             >
               <div className={`productVisual ${product.tone}`}>
                 <span>{product.tag}</span>
+                {product.image && (
+                  <img
+                    src={product.image}
+                    alt={product.name}
+                    className="productImage"
+                  />
+                )}
               </div>
 
               <h3>{product.name}</h3>

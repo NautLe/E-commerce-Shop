@@ -44,8 +44,6 @@ export default function Header() {
   const [cartCount, setCartCount] = useState(0);
 
   useEffect(() => {
-    // Listen for custom events or updates (or simple interval/state sync if needed,
-    // but a standard useEffect read on mount is what was here originally)
     const cart = JSON.parse(localStorage.getItem("cart") || "[]");
     const count = cart.reduce((total, item) => total + item.quantity, 0);
     setCartCount(count);
@@ -61,6 +59,7 @@ export default function Header() {
         <Link to="/women">Women</Link>
         <Link to="/men">Men</Link>
         <Link to="/unisex">Unisex</Link>
+        <Link to="/essentials">Essentials</Link>
        </nav>
 
       <div className="headerActions">
