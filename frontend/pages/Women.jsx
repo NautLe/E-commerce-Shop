@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import Header from "@/components/Header";
 import { products } from "@/lib/products";
-import { formatPrice } from "@/lib/storage";
+import { formatPrice } from "@/lib/storage";  
 
 export default function Women() {
   const womenItemIds = [
@@ -10,7 +10,13 @@ export default function Women() {
     "cropped-zip-hoodie",
     "minimal-long-skirt",
     "straight-leg-pants",
-    "soft-knit-cardigan",
+    "lightweight-windbreaker",
+    "high-waist-leggings",
+    "running-shorts",
+    "sport-skirt",
+    "tanktop",
+    "fitted-long-sleeve-sport-top"
+
   ];
 
   const womenProducts = products.filter((product) =>

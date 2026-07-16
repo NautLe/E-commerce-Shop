@@ -1,3 +1,5 @@
+/* BASIC PRODUCTS */
+
 import tshirtWhite from "@/assets/images/tshirt-white.jpg";
 import tshirtBlack from "@/assets/images/tshirt-black.jpg";
 import tshirtBeige from "@/assets/images/tshirt-beige.jpg";
@@ -29,6 +31,35 @@ import tanktopBeige from "@/assets/images/tanktop_beige.jpg";
 import trackpantsBlack from "@/assets/images/trackpants_black.jpg";
 import trackpantsBeige from "@/assets/images/trackpants_beige.jpg";
 import trackpantsWhite from "@/assets/images/trackpants_white.jpg";
+
+/* WOMEN SPORTY ITEMS */
+
+import croppedZipHoodieWhite from "@/assets/images/cropped_zip_hoodie_white.jpg";
+import croppedZipHoodieBlack from "@/assets/images/cropped_zip_hoodie_black.jpg";
+import croppedZipHoodieBeige from "@/assets/images/cropped_zip_hoodie_beige.jpg";
+
+import runningShortsWhite from "@/assets/images/running_shorts_white.jpg";
+import runningShortsBlack from "@/assets/images/running_shorts_black.jpg";
+import runningShortsBeige from "@/assets/images/running_shorts_beige.jpg";
+
+/* These files currently exist as single images in your folder */
+import highWaistLeggingsBlack from "@/assets/images/high_waist_leggings_black.jpg";
+import highWaistLeggingsWhite from "@/assets/images/high_waist_leggings_white.jpg";
+import highWaistLeggingsBeige from "@/assets/images/high_waist_leggings_beige.jpg";
+
+import fittedLongSleeveSportTopBlack from "@/assets/images/fitted_long_sleeve_sport_top_black.jpg";
+import fittedLongSleeveSportTopWhite from "@/assets/images/fitted_long_sleeve_sport_top_white.jpg";
+import fittedLongSleeveSportTopBeige from "@/assets/images/fitted_long_sleeve_sport_top_beige.jpg";
+
+
+import lightweightWindbreakerBlack from "@/assets/images/lightweight_windbreaker_black.jpg";
+import lightweightWindbreakerBeige from "@/assets/images/lightweight_windbreaker_beige.jpg";
+import lightweightWindbreakerWhite from "@/assets/images/lightweight_windbreaker_white.jpg";
+
+import sportSkirtBeige from "@/assets/images/sport_skirt_beige.jpg";
+import sportSkirtWhite from "@/assets/images/sport_skirt_white.jpg";
+import sportSkirtBlack from "@/assets/images/sport_skirt_black.jpg";
+
 
 export const products = [
   {
@@ -171,6 +202,170 @@ export const products = [
       White: trackpantsWhite,
       Black: trackpantsBlack,
       Beige: trackpantsBeige,
+    },
+  },
+
+  /* WOMEN PAGE ITEMS */
+
+  {
+    id: "cropped-zip-hoodie",
+    name: "Cropped Zip Hoodie",
+    price: 39.9,
+    tag: "New",
+    color: ["White", "Black", "Beige"],
+    category: "Women",
+    tone: "light",
+    description:
+      "A cropped zip hoodie for gym days, walks, and casual everyday outfits.",
+    image: croppedZipHoodieWhite,
+    images: {
+      White: croppedZipHoodieWhite,
+      Black: croppedZipHoodieBlack,
+      Beige: croppedZipHoodieBeige,
+    },
+  },
+
+  {
+    id: "running-shorts",
+    name: "Running Shorts",
+    price: 29.9,
+    tag: "Sport",
+    color: ["White", "Black", "Beige"],
+    category: "Women",
+    tone: "light",
+    description:
+      "Lightweight running shorts with a relaxed sporty shape for training and daily wear.",
+    image: runningShortsWhite,
+    images: {
+      White: runningShortsWhite,
+      Black: runningShortsBlack,
+      Beige: runningShortsBeige,
+    },
+  },
+
+  {
+    id: "high-waist-leggings",
+    name: "High Waist Leggings",
+    price: 36.9,
+    tag: "Active",
+    color: ["White", "Black", "Beige"],
+    category: "Women",
+    tone: "light",
+    description:
+      "Smooth high waist leggings made for gym, running, stretching, and everyday comfort.",
+    image: highWaistLeggings,
+    images: {
+      White: highWaistLeggingsWhite,
+      Black: highWaistLeggingsBlack,
+      Beige: highWaistLeggingsBeige,
+    },
+  },
+
+  {
+    id: "fitted-long-sleeve-sport-top",
+    name: "Fitted Long Sleeve Sport Top",
+    price: 32.9,
+    tag: "Active",
+    color: ["White", "Black", "Beige"],
+    category: "Women",
+    tone: "light",
+    description:
+      "A fitted long sleeve sport top with a clean silhouette for training and casual styling.",
+    image: fittedLongSleeveSportTop,
+    images: {
+      White: fittedLongSleeveSportTopWhite,
+      Black: fittedLongSleeveSportTopBlack,
+      Beige: fittedLongSleeveSportTopBeige,
+    },
+  },
+
+  {
+    id: "lightweight-windbreaker",
+    name: "Lightweight Windbreaker",
+    price: 59.9,
+    tag: "Sport",
+    color: ["White", "Black", "Beige"],
+    category: "Women",
+    tone: "light",
+    description:
+      "A lightweight hooded windbreaker for running, walking, travel, and layering.",
+    image: lightweightWindbreaker,
+    images: {
+      White: lightweightWindbreakerWhite,
+      Black: lightweightWindbreakerBlack,
+      Beige: lightweightWindbreakerBeige,
+    },
+  },
+
+  {
+    id: "sport-skirt",
+    name: "Sport Skirt",
+    price: 34.9,
+    tag: "Active",
+    color: ["White", "Black", "Beige"],
+    category: "Women",
+    tone: "light",
+    description:
+      "A sporty skirt with built-in shorts, made for movement and casual everyday styling.",
+    image: sportSkirt,
+    images: {
+      White: sportSkirtWhite,
+      Black: sportSkirtBlack,
+      Beige: sportSkirtBeige,
+    },
+  },
+
+  {
+    id: "minimal-long-skirt",
+    name: "Minimal Long Skirt",
+    price: 44.9,
+    tag: "New",
+    color: ["White", "Black", "Beige"],
+    category: "Women",
+    tone: "light",
+    description:
+      "A minimal long skirt with a clean shape for soft casual everyday styling.",
+    image: sportSkirt,
+    images: {
+      White: sportSkirtWhite,
+      Black: sportSkirtBlack,
+      Beige: sportSkirtBeige,
+    },
+  },
+
+  {
+    id: "straight-leg-pants",
+    name: "Straight Leg Pants",
+    price: 46.9,
+    tag: "Essential",
+    color: ["White", "Black", "Beige"],
+    category: "Women",
+    tone: "light",
+    description:
+      "Straight-leg pants with a relaxed sporty shape for daily comfort.",
+    image: trousersWhite,
+    images: {
+      White: trousersWhite,
+      Black: trousersBlack,
+      Beige: trousersBeige,
+    },
+  },
+
+  {
+    id: "tanktop",
+    name: "Active Racer Tank Top",
+    price: 24.9,
+    tag: "Active",
+    color: ["White", "Black", "Beige"],
+    category: "Women",
+    tone: "light",
+    description:
+      "A sporty racer tank top for gym, running, walking, and casual daily outfits.",
+    image: tanktopWhite,
+    images: {
+      White: tanktopWhite,
+      Black: tanktopBlack,
+      Beige: tanktopBeige,
     },
   },
 ];
