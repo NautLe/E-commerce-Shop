@@ -1,33 +1,7 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import Header from "../components/Header";
-import { formatPrice } from "../lib/storage";
+import { Link } from "react-router-dom";
+import Header from "@/components/Header";
 
 export default function Success() {
-  const navigate = useNavigate();
-  const [order, setOrder] = useState(null);
-
-  useEffect(() => {
-    const latestOrder = JSON.parse(localStorage.getItem("latestOrder") || "null");
-    setOrder(latestOrder);
-  }, []);
-
-  if (!order) {
-    return (
-      <main>
-        <Header />
-
-        <section className="page center">
-          <h1>No order found.</h1>
-
-          <button className="btn black" onClick={() => navigate("/")}>
-            Back Home
-          </button>
-        </section>  
-      </main>
-    );
-  }
-
   return (
     <main>
       <Header />
@@ -35,43 +9,18 @@ export default function Success() {
       <section className="successPage">
         <div className="checkIcon">✓</div>
 
-        <h1>Thank you for your order!</h1>
+        <h1>Order Successful</h1>
 
-        <p>Your order has been placed successfully.</p>
-
-        <div className="orderBox">
-          <div>
-            <span>Order Number</span>
-            <strong>{order.orderNumber}</strong>
-          </div>
-
-          <div>
-            <span>Date</span>
-            <strong>{order.date}</strong>
-          </div>
-
-          <div>
-            <span>Payment</span>
-            <strong>{order.payment}</strong>
-          </div>
-
-          <div>
-            <span>Total</span>
-            <strong>{formatPrice(order.total)}</strong>
-          </div>
-        </div>
+        <p>Thank you for shopping with MOCHA Store.</p>
 
         <div className="actions">
-          <button
-            className="btn black"
-            onClick={() => navigate(`/order/${order.id}`)}
-          >
-            View Order
-          </button>
+          <Link to="/orders" className="btn black">
+            View All Orders
+          </Link>
 
-          <button className="btn white" onClick={() => navigate("/")}>
+          <Link to="/" className="btn white">
             Continue Shopping
-          </button>
+          </Link>
         </div>
       </section>
     </main>

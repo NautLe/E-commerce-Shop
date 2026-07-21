@@ -93,19 +93,27 @@ export function saveOrder(order) {
   const orders = getOrders();
 
   const newOrder = {
-    id: `MOCHA-${Date.now()}`,
-    date: new Date().toISOString(),
-    status: "Processing",
     ...order,
+    id: order.id || `MOCHA-${Date.now()}`,
+    orderNumber:
+      order.orderNumber || `#${Math.floor(10000 + Math.random() * 90000)}`,
+    date: order.date || new Date().toLocaleDateString(),
+    status: order.status || "Processing",
   };
 
   orders.unshift(newOrder);
+
   localStorage.setItem("orders", JSON.stringify(orders));
+  localStorage.setItem("lastOrderId", newOrder.id);
 
   return newOrder;
 }
 
 export function getOrderById(orderId) {
   const orders = getOrders();
-  return orders.find((order) => order.id === orderId);
+  return orders.find((order) => String(order.id) === String(orderId));
+}
+
+export function getLastOrderId() {
+  return localStorage.getItem("lastOrderId");
 }

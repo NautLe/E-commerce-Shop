@@ -50,45 +50,49 @@ export default function OrderDetail() {
         <h1>Order Detail</h1>
 
         <div className="checkoutLayout">
-          <div className="panel">
+          <div className="panel orderDetailPanel">
             <h2>{order.orderNumber || `#${order.id}`}</h2>
 
-            <p>Status: {order.status}</p>
-            <p>Date: {order.date}</p>
-            <p>Payment: {order.payment}</p>
+            <div className="orderMeta">
+              <p>Status: {order.status}</p>
+              <p>Date: {order.date}</p>
+              <p>Payment: {order.payment}</p>
+            </div>
 
             <hr />
 
-            {order.items?.map((item, index) => {
-              const itemImage = getItemImage(item);
+            <div className="orderItemList">
+              {order.items?.map((item, index) => {
+                const itemImage = getItemImage(item);
 
-              return (
-                <div
-                  className="cartItem"
-                  key={`${item.id}-${item.color}-${item.size}-${index}`}
-                >
-                  <div className="miniVisual cartImageBox">
-                    {itemImage ? (
-                      <img src={itemImage} alt={item.name} />
-                    ) : (
-                      <span>No image</span>
-                    )}
+                return (
+                  <div
+                    className="orderDetailItem"
+                    key={`${item.id}-${item.color}-${item.size}-${index}`}
+                  >
+                    <div className="orderDetailImage">
+                      {itemImage ? (
+                        <img src={itemImage} alt={item.name} />
+                      ) : (
+                        <span>No image</span>
+                      )}
+                    </div>
+
+                    <div className="orderDetailInfo">
+                      <h3>{item.name}</h3>
+
+                      <p>
+                        {item.color} / {item.size} / Qty: {item.quantity}
+                      </p>
+                    </div>
+
+                    <strong>
+                      {formatPrice(Number(item.price) * Number(item.quantity))}
+                    </strong>
                   </div>
-
-                  <div>
-                    <h3>{item.name}</h3>
-
-                    <p>
-                      {item.color} / {item.size} / Qty: {item.quantity}
-                    </p>
-                  </div>
-
-                  <strong>
-                    {formatPrice(Number(item.price) * Number(item.quantity))}
-                  </strong>
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
           </div>
 
           <aside className="summary">

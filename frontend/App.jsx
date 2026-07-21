@@ -10,6 +10,7 @@ import Checkout from "./pages/Checkout";
 import Success from "./pages/Success";
 import Orders from "./pages/Orders";
 import OrderDetail from "./pages/OrderDetail";
+import Women from "@/pages/Women";
 
 export default function App() {
   return (
@@ -19,10 +20,8 @@ export default function App() {
 
         <Route path="/new-arrivals" element={<NewArrivals />} />
 
-        <Route
-          path="/women"
-          element={<CategoryPage category="Women" />}
-        />
+        
+        <Route path="/women" element={<Women />} />
 
         <Route
           path="/men"

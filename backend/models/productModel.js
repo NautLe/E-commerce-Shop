@@ -6,6 +6,7 @@ const productSchema = new mongoose.Schema({
         trim: true,
         required: [true , "Please enter Product name"]
     },
+
     description: {
         type: String,
         trim: true,
@@ -20,6 +21,7 @@ const productSchema = new mongoose.Schema({
     ratings: {
         type: Number,
         default: 0
+
     },
     image: [
         {
@@ -64,6 +66,13 @@ const productSchema = new mongoose.Schema({
             
         }
     ],
+    
+    user:{
+        type: mongoose.Schema.ObjectId,
+        ref: "User",
+        required: true
+    },
+
     createdAt:{
         type: Date, 
         default: Date.now
