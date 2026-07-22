@@ -29,7 +29,7 @@ const productTypes = {
   "active-tennis-dress": "Dresses",
 };
 
-const chips = ["All", "Tops", "Bottoms", "Dresses", "Outerwear", "Active"];
+const chips = ["All", "Tops", "Bottoms", "Dresses", "Outerwear"];
 
 export default function Women() {
   const [page, setPage] = useState(1);

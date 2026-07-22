@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import Header from "@/components/Header";
 import HeroWidget from "@/components/HeroWidget";
@@ -33,7 +34,56 @@ const categories = [
   },
 ];
 
+const recommendedItemIds = [
+  "oversized-cotton-tshirt",
+  "relaxed-fit-shirt",
+  "wide-leg-trousers",
+  "minimal-utility-jacket",
+  "sport-zip-hoodie",
+  "minimal-baseball-cap",
+  "lightweight-track-pants",
+  "cropped-zip-hoodie",
+  "half-zip-sweatshirt",
+  "tailored-bermuda-shorts",
+];
+
 export default function Home() {
+  const [selectedColors, setSelectedColors] = useState({});
+  const [likedItems, setLikedItems] = useState({});
+
+  const recommendedProducts = recommendedItemIds
+    .map((id) => products.find((product) => product.id === id))
+    .filter(Boolean);
+
+  function handleColorChange(event, productId, color) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    setSelectedColors((prev) => ({
+      ...prev,
+      [productId]: color,
+    }));
+  }
+
+  function handleLike(event, productId) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    setLikedItems((prev) => ({
+      ...prev,
+      [productId]: !prev[productId],
+    }));
+  }
+
+  function getSelectedColor(product) {
+    return selectedColors[product.id] || product.color?.[0] || "White";
+  }
+
+  function getCurrentImage(product) {
+    const selectedColor = getSelectedColor(product);
+    return product.images?.[selectedColor] || product.image;
+  }
+
   return (
     <main>
       <Header />
@@ -81,31 +131,76 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="section recommendedSection">
-        <p className="label">Recommended</p>
-        <h2>Fresh Picks This Week</h2>
+      <section className="homeRecommended">
+        <div className="homeProductShell">
+          <div className="homeSectionHead">
+            <div>
+              <p className="label">Recommended</p>
+              <h2>Fresh Picks This Week</h2>
+            </div>
+          </div>
 
-        <div className="productGrid">
-          {products.slice(0, 8).map((product) => (
-            <Link
-              to={`/item/${product.id}`}
-              className="productCard"
-              key={product.id}
-            >
-              <div className="productVisual hasImage">
-                <span>{product.tag}</span>
+          <div className="homeProductGrid">
+            {recommendedProducts.map((product) => {
+              const selectedColor = getSelectedColor(product);
+              const currentImage = getCurrentImage(product);
 
-                <img
-                  src={product.image}
-                  alt={product.name}
-                  className="productImage"
-                />
-              </div>
+              return (
+                <Link
+                  to={`/item/${product.id}`}
+                  state={{ selectedColor }}
+                  className="homeProductCard"
+                  key={product.id}
+                >
+                  <div className="homeProductImage">
+                    <span>{product.tag}</span>
 
-              <h3>{product.name}</h3>
-              <p>{formatPrice(product.price)}</p>
-            </Link>
-          ))}
+                    <img
+                      src={currentImage}
+                      alt={`${product.name} ${selectedColor}`}
+                    />
+                  </div>
+
+                  <div className="homeProductFooter">
+                    <div>
+                      <div className="homeColors">
+                        {product.color?.map((color) => (
+                          <button
+                            key={color}
+                            type="button"
+                            className={`colorDot ${color.toLowerCase()} ${
+                              selectedColor === color ? "active" : ""
+                            }`}
+                            title={color}
+                            aria-label={`Choose ${color}`}
+                            onClick={(event) =>
+                              handleColorChange(event, product.id, color)
+                            }
+                          />
+                        ))}
+                      </div>
+
+                      <h3>{product.name}</h3>
+                      <p>{formatPrice(product.price)}</p>
+                    </div>
+
+                    <button
+                      type="button"
+                      className={
+                        likedItems[product.id]
+                          ? "homeHeart active"
+                          : "homeHeart"
+                      }
+                      onClick={(event) => handleLike(event, product.id)}
+                      aria-label="Add to wishlist"
+                    >
+                      ♥
+                    </button>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
         </div>
       </section>
 

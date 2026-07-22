@@ -11,6 +11,14 @@
   import trousersBeige from "@/assets/images/trousers_beige.jpg";
   import trousersBlack from "@/assets/images/trousers_black.jpg";
   import trousersWhite from "@/assets/images/trousers_white.jpg";
+  
+  import halfZipSweatshirtBlack from "@/assets/images/half_zip_sweatshirt_black.jpg";
+  import halfZipSweatshirtWhite from "@/assets/images/half_zip_sweatshirt_white.jpg";
+  import halfZipSweatshirtBeige from "@/assets/images/half_zip_sweatshirt_beige.jpg";
+
+  import tailoredBermudaShortsBlack from "@/assets/images/tailored_bermuda_shorts_black.jpg";
+  import tailoredBermudaShortsWhite from "@/assets/images/tailored_bermuda_shorts_white.jpg";
+  import tailoredBermudaShortsBeige from "@/assets/images/tailored_bermuda_shorts_beige.jpg";
 
   import jacketWhite from "@/assets/images/jacket_white.jpg";
   import jacketBeige from "@/assets/images/jacket_beige.jpg";
@@ -67,7 +75,7 @@
   import activeTennisDressWhite from "@/assets/images/active_tennis_dress_white.jpg";
   import activeTennisDressBlack from "@/assets/images/active_tennis_dress_black.jpg";
   import activeTennisDressBeige from "@/assets/images/active_tennis_dress_beige.jpg";
-  
+
   export const products = [
     {
       id: "oversized-cotton-tshirt",
@@ -373,6 +381,40 @@
     White: straightLegPantsWhite,
     Black: straightLegPantsBlack,
     Beige: straightLegPantsBeige,
+  },
+},
+{
+  id: "half-zip-sweatshirt",
+  name: "Half-Zip Sweatshirt",
+  price: 44.9,
+  tag: "New",
+  color: ["White", "Black", "Beige"],
+  category: "Unisex",
+  tone: "light",
+  description:
+    "A soft half-zip sweatshirt with a relaxed fit, designed for everyday layering.",
+  image: halfZipSweatshirtWhite,
+  images: {
+    White: halfZipSweatshirtWhite,
+    Black: halfZipSweatshirtBlack,
+    Beige: halfZipSweatshirtBeige,
+  },
+},
+{
+  id: "tailored-bermuda-shorts",
+  name: "Tailored Bermuda Shorts",
+  price: 39.9,
+  tag: "Essential",
+  color: ["White", "Black", "Beige"],
+  category: "Men",
+  tone: "light",
+  description:
+    "Clean tailored bermuda shorts with soft pleats and a minimal everyday silhouette.",
+  image: tailoredBermudaShortsWhite,
+  images: {
+    White: tailoredBermudaShortsWhite,
+    Black: tailoredBermudaShortsBlack,
+    Beige: tailoredBermudaShortsBeige,
   },
 },
   ];
