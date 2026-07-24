@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { getCart } from "@/lib/storage";
+import SearchTools from "@/components/SearchTools";
 
 function SearchIcon() {
   return (
@@ -103,9 +104,7 @@ export default function Header() {
       </nav>
 
       <div className="mochaHeaderActions">
-        <button type="button" aria-label="Search">
-          <SearchIcon />
-        </button>
+        <SearchTools />     
 
         <Link to="/orders" aria-label="Account">
           <UserIcon />

@@ -5,16 +5,7 @@ import ServiceStrip from "@/components/ServiceStrip";
 import { products } from "@/lib/products";
 import { formatPrice } from "@/lib/storage";
 
-const essentialsItemIds = [
-  "minimal-baseball-cap",
-  "minimal-5-panel-cap",
-  "minimal-sunglasses",
-  "minimal-card-holder",
-  "minimal-everyday-tote",
-  "structured-canvas-tote",
-  "classic-webbing-belt",
-  "performance-sport-bottle",
-];
+const pageSize = 4;
 
 const productTypes = {
   "minimal-baseball-cap": "Headwear",
@@ -36,11 +27,13 @@ const chips = [
   "Sport",
 ];
 
-const pageSize = 4;
-
 function BottleIcon() {
   return (
-    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden="true"
+    >
       <path
         d="M9 3H15V6L17 8V20C17 20.55 16.55 21 16 21H8C7.45 21 7 20.55 7 20V8L9 6V3Z"
         stroke="currentColor"
@@ -66,7 +59,11 @@ function BottleIcon() {
 
 function SparkIcon() {
   return (
-    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden="true"
+    >
       <path
         d="M12 3L14.2 8.8L20 11L14.2 13.2L12 19L9.8 13.2L4 11L9.8 8.8L12 3Z"
         stroke="currentColor"
@@ -85,14 +82,22 @@ export default function Essentials() {
   const [selectedColors, setSelectedColors] = useState({});
   const [likedItems, setLikedItems] = useState({});
 
+  /*
+   * Lấy trực tiếp toàn bộ sản phẩm có category Essentials.
+   * Không cần dùng danh sách ID thủ công.
+   */
   const allEssentialsProducts = useMemo(() => {
-    return essentialsItemIds
-      .map((id) =>
-        products.find((product) => product.id === id)
-      )
-      .filter(Boolean);
+    return products.filter(
+      (product) =>
+        product.category?.trim().toLowerCase() ===
+        "essentials"
+    );
   }, []);
 
+  /*
+   * Lọc theo nhóm sản phẩm:
+   * Headwear, Eyewear, Bags, Accessories, Sport.
+   */
   const filteredProducts = useMemo(() => {
     if (filter === "All") {
       return allEssentialsProducts;
@@ -103,6 +108,9 @@ export default function Essentials() {
     );
   }, [allEssentialsProducts, filter]);
 
+  /*
+   * Lấy danh sách tag hiện có sau khi lọc.
+   */
   const availableTags = useMemo(() => {
     const tags = filteredProducts
       .map((product) => product.tag)
@@ -111,33 +119,45 @@ export default function Essentials() {
     return ["All", ...new Set(tags)];
   }, [filteredProducts]);
 
+  /*
+   * Featured filter và sorting.
+   */
   const essentialsProducts = useMemo(() => {
     let list = [...filteredProducts];
 
     if (featured !== "All") {
       list = list.filter(
         (product) =>
-          product.tag?.toLowerCase() === featured.toLowerCase()
+          product.tag?.trim().toLowerCase() ===
+          featured.trim().toLowerCase()
       );
     }
 
-    if (sort === "Price Low") {
-      list.sort((a, b) => a.price - b.price);
-    }
+    switch (sort) {
+      case "Price Low":
+        list.sort((a, b) => a.price - b.price);
+        break;
 
-    if (sort === "Price High") {
-      list.sort((a, b) => b.price - a.price);
-    }
+      case "Price High":
+        list.sort((a, b) => b.price - a.price);
+        break;
 
-    if (sort === "Name A-Z") {
-      list.sort((a, b) => a.name.localeCompare(b.name));
+      case "Name A-Z":
+        list.sort((a, b) =>
+          a.name.localeCompare(b.name)
+        );
+        break;
+
+      default:
+        break;
     }
 
     return list;
   }, [filteredProducts, featured, sort]);
 
-  const totalPages = Math.ceil(
-    essentialsProducts.length / pageSize
+  const totalPages = Math.max(
+    1,
+    Math.ceil(essentialsProducts.length / pageSize)
   );
 
   const currentProducts = essentialsProducts.slice(
@@ -145,13 +165,23 @@ export default function Essentials() {
     page * pageSize
   );
 
-  const bannerImage =
-    allEssentialsProducts.find(
+  /*
+   * Dùng ảnh Performance Sport Bottle màu beige
+   * làm ảnh nền banner.
+   */
+  const bannerImage = useMemo(() => {
+    const sportBottle = allEssentialsProducts.find(
       (product) =>
         product.id === "performance-sport-bottle"
-    )?.images?.Beige ||
-    allEssentialsProducts[0]?.image ||
-    "";
+    );
+
+    return (
+      sportBottle?.images?.Beige ||
+      sportBottle?.image ||
+      allEssentialsProducts[0]?.image ||
+      ""
+    );
+  }, [allEssentialsProducts]);
 
   function handleFilterChange(value) {
     setFilter(value);
@@ -169,7 +199,11 @@ export default function Essentials() {
     setPage(1);
   }
 
-  function handleColorChange(event, productId, color) {
+  function handleColorChange(
+    event,
+    productId,
+    color
+  ) {
     event.preventDefault();
     event.stopPropagation();
 
@@ -200,7 +234,10 @@ export default function Essentials() {
   function getCurrentImage(product) {
     const selectedColor = getSelectedColor(product);
 
-    return product.images?.[selectedColor] || product.image;
+    return (
+      product.images?.[selectedColor] ||
+      product.image
+    );
   }
 
   return (
@@ -224,8 +261,9 @@ export default function Essentials() {
               <h1>Everyday Essentials</h1>
 
               <p>
-                Minimal accessories, practical carry pieces, and
-                sporty essentials designed for everyday routines.
+                Minimal accessories, practical carry
+                pieces, and sporty essentials designed
+                for everyday routines.
               </p>
             </div>
 
@@ -236,11 +274,16 @@ export default function Essentials() {
                 <select
                   value={filter}
                   onChange={(event) =>
-                    handleFilterChange(event.target.value)
+                    handleFilterChange(
+                      event.target.value
+                    )
                   }
                 >
                   {chips.map((chip) => (
-                    <option key={chip} value={chip}>
+                    <option
+                      key={chip}
+                      value={chip}
+                    >
                       {chip}
                     </option>
                   ))}
@@ -254,13 +297,18 @@ export default function Essentials() {
                   value={sort}
                   onChange={handleSortChange}
                 >
-                  <option value="Featured">Featured</option>
+                  <option value="Featured">
+                    Featured
+                  </option>
+
                   <option value="Price Low">
                     Price Low
                   </option>
+
                   <option value="Price High">
                     Price High
                   </option>
+
                   <option value="Name A-Z">
                     Name A-Z
                   </option>
@@ -275,7 +323,10 @@ export default function Essentials() {
                   onChange={handleFeaturedChange}
                 >
                   {availableTags.map((tag) => (
-                    <option key={tag} value={tag}>
+                    <option
+                      key={tag}
+                      value={tag}
+                    >
                       {tag}
                     </option>
                   ))}
@@ -301,8 +352,9 @@ export default function Essentials() {
                 <strong>Everyday Edit</strong>
 
                 <p>
-                  Practical accessories and clean finishing pieces
-                  designed to support every part of your day.
+                  Practical accessories and clean
+                  finishing pieces designed to support
+                  every part of your day.
                 </p>
               </div>
             </div>
@@ -312,7 +364,7 @@ export default function Essentials() {
                 <i />
 
                 <strong>
-                  {essentialsItemIds.length} essentials
+                  {allEssentialsProducts.length} essentials
                 </strong>
               </div>
 
@@ -333,7 +385,9 @@ export default function Essentials() {
                   <SparkIcon />
                 </div>
 
-                <strong>Made for every day</strong>
+                <strong>
+                  Made for every day
+                </strong>
               </div>
             </div>
           </div>
@@ -343,8 +397,12 @@ export default function Essentials() {
               <button
                 key={chip}
                 type="button"
-                className={filter === chip ? "active" : ""}
-                onClick={() => handleFilterChange(chip)}
+                className={
+                  filter === chip ? "active" : ""
+                }
+                onClick={() =>
+                  handleFilterChange(chip)
+                }
               >
                 {chip}
               </button>
@@ -393,31 +451,35 @@ export default function Essentials() {
                       <div className="essentialsV2Footer">
                         <div>
                           <div className="essentialsV2Colors">
-                            {product.color?.map((color) => (
-                              <button
-                                key={color}
-                                type="button"
-                                className={`colorDot ${color.toLowerCase()} ${
-                                  selectedColor === color
-                                    ? "active"
-                                    : ""
-                                }`}
-                                title={color}
-                                aria-label={`Choose ${color}`}
-                                onClick={(event) =>
-                                  handleColorChange(
-                                    event,
-                                    product.id,
-                                    color
-                                  )
-                                }
-                              />
-                            ))}
+                            {product.color?.map(
+                              (color) => (
+                                <button
+                                  key={color}
+                                  type="button"
+                                  className={`colorDot ${color.toLowerCase()} ${
+                                    selectedColor === color
+                                      ? "active"
+                                      : ""
+                                  }`}
+                                  title={color}
+                                  aria-label={`Choose ${color}`}
+                                  onClick={(event) =>
+                                    handleColorChange(
+                                      event,
+                                      product.id,
+                                      color
+                                    )
+                                  }
+                                />
+                              )
+                            )}
                           </div>
 
                           <h3>{product.name}</h3>
 
-                          <p>{formatPrice(product.price)}</p>
+                          <p>
+                            {formatPrice(product.price)}
+                          </p>
                         </div>
 
                         <button
@@ -433,10 +495,15 @@ export default function Essentials() {
                               : "Add to wishlist"
                           }
                           onClick={(event) =>
-                            handleLike(event, product.id)
+                            handleLike(
+                              event,
+                              product.id
+                            )
                           }
                         >
-                          {likedItems[product.id] ? "♥" : "♡"}
+                          {likedItems[product.id]
+                            ? "♥"
+                            : "♡"}
                         </button>
                       </div>
                     </Link>
@@ -452,7 +519,10 @@ export default function Essentials() {
                     aria-label="Previous page"
                     onClick={() =>
                       setPage((previousPage) =>
-                        Math.max(1, previousPage - 1)
+                        Math.max(
+                          1,
+                          previousPage - 1
+                        )
                       )
                     }
                   >
@@ -469,9 +539,13 @@ export default function Essentials() {
                         key={pageNumber}
                         type="button"
                         className={
-                          page === pageNumber ? "active" : ""
+                          page === pageNumber
+                            ? "active"
+                            : ""
                         }
-                        onClick={() => setPage(pageNumber)}
+                        onClick={() =>
+                          setPage(pageNumber)
+                        }
                       >
                         {pageNumber}
                       </button>
@@ -506,7 +580,9 @@ export default function Essentials() {
 
               <button
                 type="button"
-                onClick={() => handleFilterChange("All")}
+                onClick={() =>
+                  handleFilterChange("All")
+                }
               >
                 Reset Filters
               </button>
