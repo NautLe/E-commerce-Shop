@@ -34,26 +34,11 @@ const categories = [
   },
 ];
 
-const recommendedItemIds = [
-  "oversized-cotton-tshirt",
-  "relaxed-fit-shirt",
-  "wide-leg-trousers",
-  "minimal-utility-jacket",
-  "sport-zip-hoodie",
-  "minimal-baseball-cap",
-  "lightweight-track-pants",
-  "cropped-zip-hoodie",
-  "half-zip-sweatshirt",
-  "tailored-bermuda-shorts",
-];
-
 export default function Home() {
   const [selectedColors, setSelectedColors] = useState({});
   const [likedItems, setLikedItems] = useState({});
 
-  const recommendedProducts = recommendedItemIds
-    .map((id) => products.find((product) => product.id === id))
-    .filter(Boolean);
+  const recommendedProducts = products.slice(0, 10);
 
   function handleColorChange(event, productId, color) {
     event.preventDefault();
@@ -194,7 +179,7 @@ export default function Home() {
                       onClick={(event) => handleLike(event, product.id)}
                       aria-label="Add to wishlist"
                     >
-                      ♥
+                      {likedItems[product.id] ? "♥" : "♡"}
                     </button>
                   </div>
                 </Link>

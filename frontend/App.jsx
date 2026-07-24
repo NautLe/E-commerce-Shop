@@ -11,6 +11,8 @@ import Success from "./pages/Success";
 import Orders from "./pages/Orders";
 import OrderDetail from "./pages/OrderDetail";
 import Women from "@/pages/Women";
+import Men from "@/pages/Men";
+import Unisex from "@/pages/Unisex";
 
 export default function App() {
   return (
@@ -23,15 +25,9 @@ export default function App() {
         
         <Route path="/women" element={<Women />} />
 
-        <Route
-          path="/men"
-          element={<CategoryPage category="Men" />}
-        />
+        <Route path="/men" element={<Men />} />
 
-        <Route
-          path="/unisex"
-          element={<CategoryPage category="Unisex" />}
-        />
+        <Route path="/unisex" element={<Unisex />} />
 
         <Route
           path="/essentials"

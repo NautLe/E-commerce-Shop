@@ -76,6 +76,48 @@
   import activeTennisDressBlack from "@/assets/images/active_tennis_dress_black.jpg";
   import activeTennisDressBeige from "@/assets/images/active_tennis_dress_beige.jpg";
 
+  import performanceTankTopWhite from "../assets/images/performance_tank_top_white.jpg";
+  import performanceTankTopBlack from "../assets/images/performance_tank_top_black.jpg";
+  import performanceTankTopBeige from "../assets/images/performance_tank_top_beige.jpg";
+
+  import trainingShortsWhite from "../assets/images/training_shorts_white.jpg";
+  import trainingShortsBlack from "../assets/images/training_shorts_black.jpg";
+  import trainingShortsBeige from "../assets/images/training_shorts_beige.jpg";
+   
+  import bomberJacketBlack from "../assets/images/bomber_jacket_black.jpg";
+  import bomberJacketWhite from "../assets/images/bomber_jacket_white.jpg";
+  import bomberJacketBeige from "../assets/images/bomber_jacket_beige.jpg";
+
+  import lightweightSweatShortsBlack from "../assets/images/lightweight_sweat_shorts_with_pockets_black.jpg";
+  import lightweightSweatShortsWhite from "../assets/images/lightweight_sweat_shorts_with_pockets_white.jpg";
+  import lightweightSweatShortsBeige from "../assets/images/lightweight_sweat_shorts_with_pockets_beige.jpg";
+
+  import threeStripesTrackPantsBlack from "../assets/images/3_stripes_track_pants_black.jpg";
+  import threeStripesTrackPantsWhite from "../assets/images/3_stripes_track_pants_white.jpg";
+  import threeStripesTrackPantsBeige from "../assets/images/3_stripes_track_pants_beige.jpg";
+
+  import westMeshShortsBlack from "../assets/images/west_mesh_shorts_black.jpg";
+  import westMeshShortsWhite from "../assets/images/west_mesh_shorts_white.jpg";
+  import westMeshShortsBeige from "../assets/images/west_mesh_shorts_beige.jpg";
+  
+  /* UNISEX NEW ITEMS */
+
+import essentialCrewneckSweatshirtBlack from "@/assets/images/essential_crewneck_sweatshirt_black.jpg";
+import essentialCrewneckSweatshirtWhite from "@/assets/images/essential_crewneck_sweatshirt_white.jpg";
+import essentialCrewneckSweatshirtBeige from "@/assets/images/essential_crewneck_sweatshirt_beige.jpg";
+
+import relaxedStraightLegSweatpantsBlack from "@/assets/images/relaxed_straight_leg_sweatpants_black.jpg";
+import relaxedStraightLegSweatpantsWhite from "@/assets/images/relaxed_straight_leg_sweatpants_white.jpg";
+import relaxedStraightLegSweatpantsBeige from "@/assets/images/relaxed_straight_leg_sweatpants_beige.jpg";
+
+import ribbedTankTopBlack from "@/assets/images/ribbed_tank_top_black.jpg";
+import ribbedTankTopWhite from "@/assets/images/ribbed_tank_top_white.jpg";
+import ribbedTankTopBeige from "@/assets/images/ribbed_tank_top_beige.jpg";
+
+import lightweightCoachJacketBlack from "@/assets/images/lightweight_coach_jacket_black.jpg";
+import lightweightCoachJacketWhite from "@/assets/images/lightweight_coach_jacket_white.jpg";
+import lightweightCoachJacketBeige from "@/assets/images/lightweight_coach_jacket_beige.jpg";
+
   export const products = [
     {
       id: "oversized-cotton-tshirt",
@@ -400,21 +442,175 @@
     Beige: halfZipSweatshirtBeige,
   },
 },
+
 {
-  id: "tailored-bermuda-shorts",
-  name: "Tailored Bermuda Shorts",
-  price: 39.9,
-  tag: "Essential",
+  id: "performance-tank-top",
+  name: "Performance Tank Top",
+  price: 29.9,
+  tag: "Active",
   color: ["White", "Black", "Beige"],
   category: "Men",
   tone: "light",
   description:
-    "Clean tailored bermuda shorts with soft pleats and a minimal everyday silhouette.",
-  image: tailoredBermudaShortsWhite,
+    "A lightweight performance tank top designed for training, movement, and everyday active wear.",
+  image: performanceTankTopWhite,
   images: {
-    White: tailoredBermudaShortsWhite,
-    Black: tailoredBermudaShortsBlack,
-    Beige: tailoredBermudaShortsBeige,
+    White: performanceTankTopWhite,
+    Black: performanceTankTopBlack,
+    Beige: performanceTankTopBeige,
+  },
+},
+{
+  id: "training-shorts",
+  name: "2-in-1 Training Shorts",
+  price: 39.9,
+  tag: "Active",
+  color: ["White", "Black", "Beige"],
+  category: "Men",
+  tone: "light",
+  description:
+    "Versatile 2-in-1 training shorts with a lightweight outer layer and supportive inner shorts.",
+  image: trainingShortsWhite,
+  images: {
+    White: trainingShortsWhite,
+    Black: trainingShortsBlack,
+    Beige: trainingShortsBeige,
+  },
+},
+{
+  id: "bomber-jacket",
+  name: "Bomber Jacket",
+  price: 69.9,
+  tag: "New",
+  color: ["White", "Black", "Beige"],
+  category: "Men",
+  tone: "light",
+  description:
+    "A clean bomber jacket with a streamlined silhouette, ribbed finishes, and an easy everyday fit.",
+  image: bomberJacketWhite,
+  images: {
+    White: bomberJacketWhite,
+    Black: bomberJacketBlack,
+    Beige: bomberJacketBeige,
+  },
+},
+{
+  id: "lightweight-sweat-shorts-with-pockets",
+  name: "Lightweight Sweat Shorts with Pockets",
+  price: 34.9,
+  tag: "Comfort Pick",
+  color: ["White", "Black", "Beige"],
+  category: "Men",
+  tone: "light",
+  description:
+    "Lightweight sweat shorts with practical side pockets, a soft waistband, and a relaxed everyday fit.",
+  image: lightweightSweatShortsWhite,
+  images: {
+    White: lightweightSweatShortsWhite,
+    Black: lightweightSweatShortsBlack,
+    Beige: lightweightSweatShortsBeige,
+  },
+},
+{
+  id: "3-stripes-track-pants",
+  name: "3-Stripes Track Pants",
+  price: 49.9,
+  tag: "Sport",
+  color: ["White", "Black", "Beige"],
+  category: "Men",
+  tone: "light",
+  description:
+    "Sport-inspired track pants with a tapered shape, elastic cuffs, and clean three-stripe detailing.",
+  image: threeStripesTrackPantsWhite,
+  images: {
+    White: threeStripesTrackPantsWhite,
+    Black: threeStripesTrackPantsBlack,
+    Beige: threeStripesTrackPantsBeige,
+  },
+},
+{
+  id: "west-mesh-shorts",
+  name: "West Mesh Shorts",
+  price: 32.9,
+  tag: "Active",
+  color: ["White", "Black", "Beige"],
+  category: "Men",
+  tone: "light",
+  description:
+    "Breathable mesh shorts with a relaxed athletic shape, designed for training and casual movement.",
+  image: westMeshShortsWhite,
+  images: {
+    White: westMeshShortsWhite,
+    Black: westMeshShortsBlack,
+    Beige: westMeshShortsBeige,
+  },
+},
+{
+  id: "essential-crewneck-sweatshirt",
+  name: "Essential Crewneck Sweatshirt",
+  price: 42.9,
+  tag: "Essential",
+  color: ["White", "Black", "Beige"],
+  category: "Unisex",
+  tone: "light",
+  description:
+    "A soft crewneck sweatshirt with a relaxed unisex fit for everyday layering and casual wear.",
+  image: essentialCrewneckSweatshirtWhite,
+  images: {
+    White: essentialCrewneckSweatshirtWhite,
+    Black: essentialCrewneckSweatshirtBlack,
+    Beige: essentialCrewneckSweatshirtBeige,
+  },
+},
+{
+  id: "relaxed-straight-leg-sweatpants",
+  name: "Relaxed Straight-Leg Sweatpants",
+  price: 45.9,
+  tag: "Comfort Pick",
+  color: ["White", "Black", "Beige"],
+  category: "Unisex",
+  tone: "light",
+  description:
+    "Relaxed straight-leg sweatpants with a comfortable waistband and a clean everyday silhouette.",
+  image: relaxedStraightLegSweatpantsWhite,
+  images: {
+    White: relaxedStraightLegSweatpantsWhite,
+    Black: relaxedStraightLegSweatpantsBlack,
+    Beige: relaxedStraightLegSweatpantsBeige,
+  },
+},
+{
+  id: "ribbed-tank-top",
+  name: "Ribbed Tank Top",
+  price: 24.9,
+  tag: "New",
+  color: ["White", "Black", "Beige"],
+  category: "Unisex",
+  tone: "light",
+  description:
+    "A clean ribbed tank top with a simple unisex silhouette for layering, training, and warm-weather styling.",
+  image: ribbedTankTopWhite,
+  images: {
+    White: ribbedTankTopWhite,
+    Black: ribbedTankTopBlack,
+    Beige: ribbedTankTopBeige,
+  },
+},
+{
+  id: "lightweight-coach-jacket",
+  name: "Lightweight Coach Jacket",
+  price: 59.9,
+  tag: "Utility",
+  color: ["White", "Black", "Beige"],
+  category: "Unisex",
+  tone: "light",
+  description:
+    "A lightweight coach jacket with a clean collar, relaxed fit, and practical everyday styling.",
+  image: lightweightCoachJacketWhite,
+  images: {
+    White: lightweightCoachJacketWhite,
+    Black: lightweightCoachJacketBlack,
+    Beige: lightweightCoachJacketBeige,
   },
 },
   ];

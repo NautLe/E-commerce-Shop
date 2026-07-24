@@ -1,23 +1,50 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
+import { getCart } from "@/lib/storage";
 
 function SearchIcon() {
   return (
-    <svg width="17" height="17" viewBox="0 0 24 24" fill="none">
-      <circle cx="11" cy="11" r="7" stroke="currentColor" strokeWidth="2" />
-      <path d="M20 20L16.5 16.5" stroke="currentColor" strokeWidth="2" />
+    <svg
+      width="22"
+      height="22"
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden="true"
+    >
+      <path
+        d="M10.8 18.2C14.886 18.2 18.2 14.886 18.2 10.8C18.2 6.714 14.886 3.4 10.8 3.4C6.714 3.4 3.4 6.714 3.4 10.8C3.4 14.886 6.714 18.2 10.8 18.2Z"
+        stroke="currentColor"
+        strokeWidth="1.8"
+      />
+      <path
+        d="M16.2 16.2L21 21"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+      />
     </svg>
   );
 }
 
 function UserIcon() {
   return (
-    <svg width="17" height="17" viewBox="0 0 24 24" fill="none">
-      <circle cx="12" cy="8" r="4" stroke="currentColor" strokeWidth="2" />
+    <svg
+      width="22"
+      height="22"
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden="true"
+    >
       <path
-        d="M4 21C4 17.2 7.3 14 12 14C16.7 14 20 17.2 20 21"
+        d="M12 12.2C14.43 12.2 16.4 10.23 16.4 7.8C16.4 5.37 14.43 3.4 12 3.4C9.57 3.4 7.6 5.37 7.6 7.8C7.6 10.23 9.57 12.2 12 12.2Z"
         stroke="currentColor"
-        strokeWidth="2"
+        strokeWidth="1.8"
+      />
+      <path
+        d="M4.5 20.5C5.3 16.9 8.2 14.8 12 14.8C15.8 14.8 18.7 16.9 19.5 20.5"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
       />
     </svg>
   );
@@ -25,45 +52,58 @@ function UserIcon() {
 
 function BagIcon() {
   return (
-    <svg width="17" height="17" viewBox="0 0 24 24" fill="none">
+    <svg
+      width="22"
+      height="22"
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden="true"
+    >
       <path
-        d="M6 8H18L19 21H5L6 8Z"
+        d="M6.5 8.5H17.5L18.4 21H5.6L6.5 8.5Z"
         stroke="currentColor"
-        strokeWidth="2"
+        strokeWidth="1.8"
+        strokeLinejoin="round"
       />
       <path
-        d="M9 8C9 5.8 10.3 4 12 4C13.7 4 15 5.8 15 8"
+        d="M9 8.5V6.5C9 4.8 10.3 3.5 12 3.5C13.7 3.5 15 4.8 15 6.5V8.5"
         stroke="currentColor"
-        strokeWidth="2"
+        strokeWidth="1.8"
+        strokeLinecap="round"
       />
     </svg>
   );
 }
 
 export default function Header() {
+  const location = useLocation();
   const [cartCount, setCartCount] = useState(0);
 
   useEffect(() => {
-    const cart = JSON.parse(localStorage.getItem("cart") || "[]");
-    const count = cart.reduce((total, item) => total + item.quantity, 0);
+    const cart = getCart();
+
+    const count = cart.reduce((total, item) => {
+      return total + Number(item.quantity || 1);
+    }, 0);
+
     setCartCount(count);
-  }, []);
+  }, [location.pathname]);
 
   return (
-    <header className="siteHeader">
-      <Link href="/" className="brandLogo" to="/">
+    <header className="mochaHeader">
+      <Link to="/" className="mochaLogo">
         MOCHA
       </Link>
 
-      <nav className="mainNav">
-        <Link to="/women">Women</Link>
-        <Link to="/men">Men</Link>
-        <Link to="/unisex">Unisex</Link>
-        <Link to="/essentials">Essentials</Link>
-       </nav>
+      <nav className="mochaNav">
+        <NavLink to="/women">Women</NavLink>
+        <NavLink to="/men">Men</NavLink>
+        <NavLink to="/unisex">Unisex</NavLink>
+        <NavLink to="/essentials">Essentials</NavLink>
+      </nav>
 
-      <div className="headerActions">
-        <button aria-label="Search">
+      <div className="mochaHeaderActions">
+        <button type="button" aria-label="Search">
           <SearchIcon />
         </button>
 
@@ -71,9 +111,10 @@ export default function Header() {
           <UserIcon />
         </Link>
 
-        <Link to="/cart" aria-label="Cart" className="cartLink">
+        <Link to="/cart" className="mochaCartLink" aria-label="Cart">
           <BagIcon />
-          <span>({cartCount})</span>
+
+          {cartCount > 0 && <span className="mochaCartBadge">{cartCount}</span>}
         </Link>
       </div>
     </header>
