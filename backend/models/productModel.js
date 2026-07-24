@@ -45,12 +45,17 @@ const productSchema = new mongoose.Schema({
         maxLength: [5,"Stock cannot exceed 5 digits"],
         default: 1
     },
-    numbReviews:{
+    numReviews:{
         type: Number,
         default: 0
     },
     reviews:[
         {
+            user: {
+                    type: mongoose.Schema.ObjectId,
+                    ref: "User",
+                    required: true
+                },
             name:{ 
                 type: String,
                 required: true
