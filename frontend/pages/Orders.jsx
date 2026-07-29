@@ -1,12 +1,7 @@
-import {
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 
 import Header from "@/components/Header";
-import ServiceStrip from "@/components/ServiceStrip";
 
 import { formatPrice } from "@/lib/storage";
 import {
@@ -647,7 +642,7 @@ export default function Orders() {
         </div>
       </section>
 
-      <ServiceStrip />
+      
     </main>
   );
 }

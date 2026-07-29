@@ -11,7 +11,6 @@ import {
 } from "react-router-dom";
 
 import Header from "@/components/Header";
-import ServiceStrip from "@/components/ServiceStrip";
 
 import { formatPrice } from "@/lib/storage";
 import {
@@ -365,7 +364,6 @@ export default function OrderDetail() {
           </div>
         </section>
 
-        <ServiceStrip />
       </main>
     );
   }
@@ -399,7 +397,6 @@ export default function OrderDetail() {
           </div>
         </section>
 
-        <ServiceStrip />
       </main>
     );
   }
@@ -526,7 +523,7 @@ export default function OrderDetail() {
                   </strong>
 
                   <small>
-                    Estimated 2–4 business days
+                    Estimated 2{"\u2013"}4 business days
                   </small>
                 </article>
 
@@ -724,7 +721,7 @@ export default function OrderDetail() {
                           >
                             <i>
                               {completed
-                                ? "✓"
+                                ? "\u2713"
                                 : index + 1}
                             </i>
 
@@ -875,7 +872,7 @@ export default function OrderDetail() {
         </div>
       </section>
 
-      <ServiceStrip />
+    
     </main>
   );
 }

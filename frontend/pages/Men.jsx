@@ -1,7 +1,6 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import Header from "@/components/Header";
-import ServiceStrip from "@/components/ServiceStrip";
 import { products } from "@/lib/products";
 import { formatPrice } from "@/lib/storage";
 import noteBg from "@/assets/images/men.jpg";
@@ -471,7 +470,6 @@ export default function Men() {
         </div>
       </section>
 
-      <ServiceStrip />
     </main>
   );
 }

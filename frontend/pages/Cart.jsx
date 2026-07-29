@@ -34,6 +34,12 @@ export default function Cart() {
   }
 
   const subtotal = getCartTotal(cart);
+  const shippingFee =
+  subtotal >= 60 || subtotal === 0
+    ? 0
+    : 4;
+
+const total = subtotal + shippingFee;
 
   return (
     <main>
@@ -110,14 +116,18 @@ export default function Cart() {
 
               <div>
                 <span>Shipping</span>
-                <strong>Free</strong>
+                <strong>
+                {shippingFee === 0
+                  ? "Free"
+                  : formatPrice(shippingFee)}
+              </strong>
               </div>
 
               <hr />
 
               <div>
                 <span>Total</span>
-                <strong>{formatPrice(subtotal)}</strong>
+                <strong>{formatPrice(total)}</strong>
               </div>
 
               <Link to="/checkout" className="wideBtn">

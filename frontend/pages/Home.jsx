@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import Header from "@/components/Header";
 import HeroWidget from "@/components/HeroWidget";
-import ServiceStrip from "@/components/ServiceStrip";
 import { products } from "@/lib/products";
 import { formatPrice } from "@/lib/storage";
 
@@ -108,7 +107,7 @@ export default function Home() {
 
                 <div className="categoryLabel">
                   <h3>{category.title}</h3>
-                  <span>Shop now →</span>
+                  <span>Shop now {"\u2192"}</span>
                 </div>
               </div>
             </Link>
@@ -179,7 +178,7 @@ export default function Home() {
                       onClick={(event) => handleLike(event, product.id)}
                       aria-label="Add to wishlist"
                     >
-                      {likedItems[product.id] ? "♥" : "♡"}
+                      {likedItems[product.id] ? "\u2665" : "\u2661"}
                     </button>
                   </div>
                 </Link>
@@ -189,7 +188,6 @@ export default function Home() {
         </div>
       </section>
 
-      <ServiceStrip />
     </main>
   );
 }

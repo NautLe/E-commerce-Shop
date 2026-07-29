@@ -1,104 +1,166 @@
 import {
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
+
+import {
   Navigate,
   Route,
   Routes,
 } from "react-router-dom";
 
-import Home from "@/pages/Home";
-import Women from "@/pages/Women";
-import Men from "@/pages/Men";
-import Unisex from "@/pages/Unisex";
-import Essentials from "@/pages/Essentials";
-import NewArrivals from "@/pages/NewArrivals";
+import VoucherPopup from "./components/VoucherPopup.jsx";
+import SiteFooter from "./components/SiteFooter.jsx";
 
-import ItemDetail from "@/pages/ItemDetail";
+import Home from "./pages/Home.jsx";
+import Women from "./pages/Women.jsx";
+import Men from "./pages/Men.jsx";
+import Unisex from "./pages/Unisex.jsx";
+import Essentials from "./pages/Essentials.jsx";
+import NewArrivals from "./pages/NewArrivals.jsx";
 
-import Cart from "@/pages/Cart";
-import Ship from "@/pages/Ship";
-import Checkout from "@/pages/Checkout";
-import Success from "@/pages/Success";
-
-import Orders from "@/pages/Orders";
-import OrderDetail from "@/pages/OrderDetail";
+import ItemDetail from "./pages/ItemDetail.jsx";
+import Cart from "./pages/Cart.jsx";
+import Ship from "./pages/Ship.jsx";
+import Checkout from "./pages/Checkout.jsx";
+import Success from "./pages/Success.jsx";
+import Orders from "./pages/Orders.jsx";
+import OrderDetail from "./pages/OrderDetail.jsx";
 
 export default function App() {
+  const [
+    voucherOpen,
+    setVoucherOpen,
+  ] = useState(false);
+
+  const openVoucher = useCallback(() => {
+    setVoucherOpen(true);
+  }, []);
+
+  const closeVoucher =
+    useCallback(() => {
+      setVoucherOpen(false);
+    }, []);
+
+  /*
+   * Không sử dụng localStorage.
+   *
+   * Popup chỉ mở một lần trong lần
+   * tải hiện tại của ứng dụng.
+   *
+   * Khi người dùng reload trình duyệt,
+   * App được khởi tạo lại và popup
+   * sẽ tiếp tục xuất hiện.
+   */
+  useEffect(() => {
+    const timer = window.setTimeout(
+      () => {
+        openVoucher();
+      },
+      650
+    );
+
+    return () => {
+      window.clearTimeout(timer);
+    };
+  }, [openVoucher]);
+
   return (
-    <Routes>
-      <Route
-        path="/"
-        element={<Home />}
+    <div className="mochaAppLayout">
+      <VoucherPopup
+        open={voucherOpen}
+        onClose={closeVoucher}
       />
 
-      <Route
-        path="/women"
-        element={<Women />}
-      />
+      <Routes>
+        <Route
+          path="/"
+          element={<Home />}
+        />
 
-      <Route
-        path="/men"
-        element={<Men />}
-      />
+        <Route
+          path="/women"
+          element={<Women />}
+        />
 
-      <Route
-        path="/unisex"
-        element={<Unisex />}
-      />
+        <Route
+          path="/men"
+          element={<Men />}
+        />
 
-      <Route
-        path="/essentials"
-        element={<Essentials />}
-      />
+        <Route
+          path="/unisex"
+          element={<Unisex />}
+        />
 
-      <Route
-        path="/new-arrivals"
-        element={<NewArrivals />}
-      />
+        <Route
+          path="/essentials"
+          element={<Essentials />}
+        />
 
-      {/* Product detail — dùng page có sẵn */}
-      <Route
-        path="/item/:productId"
-        element={<ItemDetail />}
-      />
+        <Route
+          path="/new-arrivals"
+          element={<NewArrivals />}
+        />
 
-      <Route
-        path="/cart"
-        element={<Cart />}
-      />
+        {/*
+          ItemDetail hiện tại của bạn dùng:
 
-      <Route
-        path="/ship"
-        element={<Ship />}
-      />
+          const { id } = useParams();
 
-      <Route
-        path="/checkout"
-        element={<Checkout />}
-      />
+          nên route phải là :id.
+        */}
 
-      <Route
-        path="/success"
-        element={<Success />}
-      />
+        <Route
+          path="/item/:id"
+          element={<ItemDetail />}
+        />
 
-      <Route
-        path="/orders"
-        element={<Orders />}
-      />
+        <Route
+          path="/cart"
+          element={<Cart />}
+        />
 
-      <Route
-        path="/orders/:orderId"
-        element={<OrderDetail />}
-      />
+        <Route
+          path="/ship"
+          element={<Ship />}
+        />
 
-      <Route
-        path="*"
-        element={
-          <Navigate
-            to="/"
-            replace
-          />
-        }
+        <Route
+          path="/checkout"
+          element={<Checkout />}
+        />
+
+        <Route
+          path="/success"
+          element={<Success />}
+        />
+
+        <Route
+          path="/orders"
+          element={<Orders />}
+        />
+
+        <Route
+          path="/orders/:orderId"
+          element={<OrderDetail />}
+        />
+
+        <Route
+          path="*"
+          element={
+            <Navigate
+              to="/"
+              replace
+            />
+          }
+        />
+      </Routes>
+
+      <SiteFooter
+        onOpenVoucher={openVoucher}
       />
-    </Routes>
+    </div>
   );
 }

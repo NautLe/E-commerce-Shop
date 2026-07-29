@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
+
 import Header from "@/components/Header";
-import ServiceStrip from "@/components/ServiceStrip";
 import { products } from "@/lib/products";
 import { formatPrice } from "@/lib/storage";
 import noteBg from "@/assets/images/essentials.jpg";
@@ -30,17 +30,28 @@ const productTypes = {
   "active-tennis-dress": "Dresses",
 };
 
-const chips = ["All", "Tops", "Bottoms", "Dresses", "Outerwear"];
+const chips = [
+  "All",
+  "Tops",
+  "Bottoms",
+  "Dresses",
+  "Outerwear",
+];
 
 function HangerIcon() {
   return (
-    <svg viewBox="0 0 24 24" fill="none">
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden="true"
+    >
       <path
         d="M12 7.5C12 5.8 13.2 5 14.3 5C15.7 5 16.7 6 16.7 7.3C16.7 8.5 16 9.2 14.8 9.8L12 11.2"
         stroke="currentColor"
         strokeWidth="1.8"
         strokeLinecap="round"
       />
+
       <path
         d="M4 20L12 12L20 20H4Z"
         stroke="currentColor"
@@ -53,11 +64,56 @@ function HangerIcon() {
 
 function SparkIcon() {
   return (
-    <svg viewBox="0 0 24 24" fill="none">
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden="true"
+    >
       <path
         d="M12 3L14.2 8.8L20 11L14.2 13.2L12 19L9.8 13.2L4 11L9.8 8.8L12 3Z"
         stroke="currentColor"
         strokeWidth="1.8"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function HeartIcon({ filled = false }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill={filled ? "currentColor" : "none"}
+      aria-hidden="true"
+    >
+      <path
+        d="M12 20.5C12 20.5 3.5 15.7 3.5 9.2C3.5 6.4 5.6 4.5 8.1 4.5C9.7 4.5 11.1 5.3 12 6.6C12.9 5.3 14.3 4.5 15.9 4.5C18.4 4.5 20.5 6.4 20.5 9.2C20.5 15.7 12 20.5 12 20.5Z"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function ChevronIcon({ direction = "right" }) {
+  const path =
+    direction === "left"
+      ? "M15 6L9 12L15 18"
+      : "M9 6L15 12L9 18";
+
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden="true"
+    >
+      <path
+        d={path}
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
         strokeLinejoin="round"
       />
     </svg>
@@ -74,11 +130,16 @@ export default function Women() {
 
   const baseWomenProducts = useMemo(() => {
     let list = womenItemIds
-      .map((id) => products.find((product) => product.id === id))
+      .map((id) =>
+        products.find((product) => product.id === id)
+      )
       .filter(Boolean);
 
     if (filter !== "All") {
-      list = list.filter((product) => productTypes[product.id] === filter);
+      list = list.filter(
+        (product) =>
+          productTypes[product.id] === filter
+      );
     }
 
     return list;
@@ -97,26 +158,38 @@ export default function Women() {
 
     if (featured !== "All") {
       list = list.filter(
-        (product) => product.tag?.toLowerCase() === featured.toLowerCase()
+        (product) =>
+          product.tag?.toLowerCase() ===
+          featured.toLowerCase()
       );
     }
 
-    if (sort === "Price Low") {
-      list = [...list].sort((a, b) => a.price - b.price);
-    }
+    switch (sort) {
+      case "Price Low":
+        list.sort((a, b) => a.price - b.price);
+        break;
 
-    if (sort === "Price High") {
-      list = [...list].sort((a, b) => b.price - a.price);
-    }
+      case "Price High":
+        list.sort((a, b) => b.price - a.price);
+        break;
 
-    if (sort === "Name A-Z") {
-      list = [...list].sort((a, b) => a.name.localeCompare(b.name));
+      case "Name A-Z":
+        list.sort((a, b) =>
+          a.name.localeCompare(b.name)
+        );
+        break;
+
+      default:
+        break;
     }
 
     return list;
-  }, [baseWomenProducts, sort, featured]);
+  }, [baseWomenProducts, featured, sort]);
 
-  const totalPages = Math.ceil(womenProducts.length / pageSize);
+  const totalPages = Math.max(
+    1,
+    Math.ceil(womenProducts.length / pageSize)
+  );
 
   const currentProducts = womenProducts.slice(
     (page - 1) * pageSize,
@@ -139,12 +212,16 @@ export default function Women() {
     setPage(1);
   }
 
-  function handleColorChange(event, productId, color) {
+  function handleColorChange(
+    event,
+    productId,
+    color
+  ) {
     event.preventDefault();
     event.stopPropagation();
 
-    setSelectedColors((prev) => ({
-      ...prev,
+    setSelectedColors((current) => ({
+      ...current,
       [productId]: color,
     }));
   }
@@ -153,19 +230,29 @@ export default function Women() {
     event.preventDefault();
     event.stopPropagation();
 
-    setLikedItems((prev) => ({
-      ...prev,
-      [productId]: !prev[productId],
+    setLikedItems((current) => ({
+      ...current,
+      [productId]: !current[productId],
     }));
   }
 
   function getSelectedColor(product) {
-    return selectedColors[product.id] || product.color?.[0] || "White";
+    return (
+      selectedColors[product.id] ||
+      product.color?.[0] ||
+      "White"
+    );
   }
 
   function getCurrentImage(product) {
-    const selectedColor = getSelectedColor(product);
-    return product.images?.[selectedColor] || product.image;
+    const selectedColor =
+      getSelectedColor(product);
+
+    return (
+      product.images?.[selectedColor] ||
+      product.image ||
+      ""
+    );
   }
 
   return (
@@ -183,37 +270,77 @@ export default function Women() {
           <div className="womenV2Top">
             <div>
               <h1>Women&apos;s Collection</h1>
-              <p>Sporty casual staples. Modern silhouettes.</p>
+
+              <p>
+                Sporty casual staples. Modern
+                silhouettes.
+              </p>
             </div>
 
             <div className="womenV2Controls">
               <label>
                 <span>Filter</span>
+
                 <select
                   value={filter}
-                  onChange={(event) => handleFilterChange(event.target.value)}
+                  onChange={(event) =>
+                    handleFilterChange(
+                      event.target.value
+                    )
+                  }
                 >
                   {chips.map((chip) => (
-                    <option key={chip}>{chip}</option>
+                    <option
+                      key={chip}
+                      value={chip}
+                    >
+                      {chip}
+                    </option>
                   ))}
                 </select>
               </label>
 
               <label>
                 <span>Sort by</span>
-                <select value={sort} onChange={handleSortChange}>
-                  <option>Featured</option>
-                  <option>Price Low</option>
-                  <option>Price High</option>
-                  <option>Name A-Z</option>
+
+                <select
+                  value={sort}
+                  onChange={handleSortChange}
+                >
+                  <option value="Featured">
+                    Featured
+                  </option>
+
+                  <option value="Price Low">
+                    Price Low
+                  </option>
+
+                  <option value="Price High">
+                    Price High
+                  </option>
+
+                  <option value="Name A-Z">
+                    Name A-Z
+                  </option>
                 </select>
               </label>
 
               <label>
                 <span>Featured</span>
-                <select value={featured} onChange={handleFeaturedChange}>
+
+                <select
+                  value={featured}
+                  onChange={
+                    handleFeaturedChange
+                  }
+                >
                   {availableTags.map((tag) => (
-                    <option key={tag}>{tag}</option>
+                    <option
+                      key={tag}
+                      value={tag}
+                    >
+                      {tag}
+                    </option>
                   ))}
                 </select>
               </label>
@@ -222,7 +349,9 @@ export default function Women() {
 
           <div
             className="womenV2Note"
-            style={{ "--women-note-bg": `url(${noteBg})` }}
+            style={{
+              "--women-note-bg": `url(${noteBg})`,
+            }}
           >
             <div className="womenV2NoteMain">
               <div className="womenV2NoteIcon">
@@ -231,9 +360,11 @@ export default function Women() {
 
               <div>
                 <strong>Women Edit</strong>
+
                 <p>
-                  Versatile pieces in soft tones. Designed for comfort, made to
-                  move with you.
+                  Versatile pieces in soft tones.
+                  Designed for comfort, made to move
+                  with you.
                 </p>
               </div>
             </div>
@@ -241,7 +372,10 @@ export default function Women() {
             <div className="womenV2NoteDetails">
               <div>
                 <i />
-                <strong>{womenItemIds.length} styles</strong>
+
+                <strong>
+                  {womenItemIds.length} styles
+                </strong>
               </div>
 
               <div>
@@ -251,7 +385,9 @@ export default function Women() {
                   <i />
                 </div>
 
-                <strong>White / Black / Beige</strong>
+                <strong>
+                  White / Black / Beige
+                </strong>
               </div>
 
               <div>
@@ -269,8 +405,14 @@ export default function Women() {
               <button
                 key={chip}
                 type="button"
-                className={filter === chip ? "active" : ""}
-                onClick={() => handleFilterChange(chip)}
+                className={
+                  filter === chip
+                    ? "active"
+                    : ""
+                }
+                onClick={() =>
+                  handleFilterChange(chip)
+                }
               >
                 {chip}
               </button>
@@ -280,70 +422,125 @@ export default function Women() {
           {womenProducts.length > 0 ? (
             <>
               <div className="womenV2Count">
-                <strong>{womenProducts.length} items</strong>
-                <span>Tap a color dot to preview each tone.</span>
+                <strong>
+                  {womenProducts.length} items
+                </strong>
+
+                <span>
+                  Tap a color dot to preview each
+                  tone.
+                </span>
               </div>
 
               <div className="womenV2Grid">
-                {currentProducts.map((product) => {
-                  const selectedColor = getSelectedColor(product);
-                  const currentImage = getCurrentImage(product);
+                {currentProducts.map(
+                  (product) => {
+                    const selectedColor =
+                      getSelectedColor(product);
 
-                  return (
-                    <Link
-                      to={`/item/${product.id}`}
-                      state={{ selectedColor }}
-                      className="womenV2Card"
-                      key={product.id}
-                    >
-                      <div className="womenV2Image">
-                        <span>{product.tag}</span>
+                    const currentImage =
+                      getCurrentImage(product);
 
-                        <img
-                          src={currentImage}
-                          alt={`${product.name} ${selectedColor}`}
-                        />
-                      </div>
+                    return (
+                      <Link
+                        key={product.id}
+                        to={`/item/${product.id}`}
+                        state={{
+                          selectedColor,
+                        }}
+                        className="womenV2Card"
+                      >
+                        <div className="womenV2Image">
+                          {product.tag && (
+                            <span>
+                              {product.tag}
+                            </span>
+                          )}
 
-                      <div className="womenV2Footer">
-                        <div>
-                          <div className="womenV2Colors">
-                            {product.color?.map((color) => (
-                              <button
-                                key={color}
-                                type="button"
-                                className={`colorDot ${color.toLowerCase()} ${
-                                  selectedColor === color ? "active" : ""
-                                }`}
-                                title={color}
-                                aria-label={`Choose ${color}`}
-                                onClick={(event) =>
-                                  handleColorChange(event, product.id, color)
-                                }
-                              />
-                            ))}
-                          </div>
-
-                          <h3>{product.name}</h3>
-                          <p>{formatPrice(product.price)}</p>
+                          <img
+                            src={currentImage}
+                            alt={`${product.name} ${selectedColor}`}
+                            loading="lazy"
+                          />
                         </div>
 
-                        <button
-                          type="button"
-                          className={
-                            likedItems[product.id]
-                              ? "womenV2Heart active"
-                              : "womenV2Heart"
-                          }
-                          onClick={(event) => handleLike(event, product.id)}
-                          aria-label="Add to wishlist"
-                        >
-                          {likedItems[product.id] ? "♥" : "♡"}
-                        </button>
-                      </div>
-                    </Link>
-                  );
-                })}
+                        <div className="womenV2Footer">
+                          <div>
+                            <div className="womenV2Colors">
+                              {product.color?.map(
+                                (color) => (
+                                  <button
+                                    key={color}
+                                    type="button"
+                                    className={`colorDot ${color.toLowerCase()} ${
+                                      selectedColor ===
+                                      color
+                                        ? "active"
+                                        : ""
+                                    }`}
+                                    title={color}
+                                    aria-label={`Choose ${color}`}
+                                    onClick={(
+                                      event
+                                    ) =>
+                                      handleColorChange(
+                                        event,
+                                        product.id,
+                                        color
+                                      )
+                                    }
+                                  />
+                                )
+                              )}
+                            </div>
+
+                            <h3>
+                              {product.name}
+                            </h3>
+
+                            <p>
+                              {formatPrice(
+                                product.price
+                              )}
+                            </p>
+                          </div>
+
+                          <button
+                            type="button"
+                            className={
+                              likedItems[
+                                product.id
+                              ]
+                                ? "womenV2Heart active"
+                                : "womenV2Heart"
+                            }
+                            onClick={(event) =>
+                              handleLike(
+                                event,
+                                product.id
+                              )
+                            }
+                            aria-label={
+                              likedItems[
+                                product.id
+                              ]
+                                ? "Remove from wishlist"
+                                : "Add to wishlist"
+                            }
+                          >
+                            <HeartIcon
+                              filled={Boolean(
+                                likedItems[
+                                  product.id
+                                ]
+                              )}
+                            />
+                          </button>
+                        </div>
+                      </Link>
+                    );
+                  }
+                )}
               </div>
 
               {totalPages > 1 && (
@@ -351,30 +548,59 @@ export default function Women() {
                   <button
                     type="button"
                     disabled={page === 1}
-                    onClick={() => setPage((prev) => Math.max(1, prev - 1))}
+                    aria-label="Previous page"
+                    onClick={() =>
+                      setPage((currentPage) =>
+                        Math.max(
+                          1,
+                          currentPage - 1
+                        )
+                      )
+                    }
                   >
-                    ‹
+                    <ChevronIcon direction="left" />
                   </button>
 
-                  {Array.from({ length: totalPages }).map((_, index) => (
-                    <button
-                      key={index}
-                      type="button"
-                      className={page === index + 1 ? "active" : ""}
-                      onClick={() => setPage(index + 1)}
-                    >
-                      {index + 1}
-                    </button>
-                  ))}
+                  {Array.from({
+                    length: totalPages,
+                  }).map((_, index) => {
+                    const pageNumber =
+                      index + 1;
+
+                    return (
+                      <button
+                        key={pageNumber}
+                        type="button"
+                        className={
+                          page === pageNumber
+                            ? "active"
+                            : ""
+                        }
+                        onClick={() =>
+                          setPage(pageNumber)
+                        }
+                      >
+                        {pageNumber}
+                      </button>
+                    );
+                  })}
 
                   <button
                     type="button"
-                    disabled={page === totalPages}
+                    disabled={
+                      page === totalPages
+                    }
+                    aria-label="Next page"
                     onClick={() =>
-                      setPage((prev) => Math.min(totalPages, prev + 1))
+                      setPage((currentPage) =>
+                        Math.min(
+                          totalPages,
+                          currentPage + 1
+                        )
+                      )
                     }
                   >
-                    ›
+                    <ChevronIcon direction="right" />
                   </button>
                 </div>
               )}
@@ -382,17 +608,24 @@ export default function Women() {
           ) : (
             <div className="womenV2Empty">
               <h2>No products found</h2>
-              <p>Try another filter or featured tag.</p>
 
-              <button type="button" onClick={() => handleFilterChange("All")}>
+              <p>
+                Try another filter or featured
+                tag.
+              </p>
+
+              <button
+                type="button"
+                onClick={() =>
+                  handleFilterChange("All")
+                }
+              >
                 Reset Filters
               </button>
             </div>
           )}
         </div>
       </section>
-
-      <ServiceStrip />
     </main>
   );
 }

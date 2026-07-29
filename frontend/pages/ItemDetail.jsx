@@ -11,7 +11,6 @@ import {
 } from "react-router-dom";
 
 import Header from "@/components/Header";
-import ServiceStrip from "@/components/ServiceStrip";
 
 import { products } from "@/lib/products";
 import {
@@ -223,7 +222,6 @@ export default function ItemDetail() {
           </Link>
         </section>
 
-        <ServiceStrip />
       </main>
     );
   }
@@ -424,7 +422,6 @@ export default function ItemDetail() {
         </div>
       </section>
 
-      <ServiceStrip />
     </main>
   );
 }

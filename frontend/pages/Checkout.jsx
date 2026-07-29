@@ -8,7 +8,6 @@ import {
 } from "react-router-dom";
 
 import Header from "@/components/Header";
-import ServiceStrip from "@/components/ServiceStrip";
 
 import { products } from "@/lib/products";
 import { formatPrice } from "@/lib/storage";
@@ -1568,7 +1567,6 @@ export default function Checkout() {
         </div>
       </section>
 
-      <ServiceStrip />
     </main>
   );
 }

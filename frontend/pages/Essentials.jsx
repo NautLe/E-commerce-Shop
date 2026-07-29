@@ -1,7 +1,6 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import Header from "@/components/Header";
-import ServiceStrip from "@/components/ServiceStrip";
 import { products } from "@/lib/products";
 import { formatPrice } from "@/lib/storage";
 
@@ -501,9 +500,9 @@ export default function Essentials() {
                             )
                           }
                         >
-                          {likedItems[product.id]
-                            ? "♥"
-                            : "♡"}
+                        {likedItems[product.id]
+                       ? "\u2665"
+                       : "\u2661"}
                         </button>
                       </div>
                     </Link>
@@ -591,7 +590,6 @@ export default function Essentials() {
         </div>
       </section>
 
-      <ServiceStrip />
     </main>
   );
 }

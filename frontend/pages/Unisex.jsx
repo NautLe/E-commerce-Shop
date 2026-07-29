@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
+
 import Header from "@/components/Header";
-import ServiceStrip from "@/components/ServiceStrip";
 import { products } from "@/lib/products";
 import { formatPrice } from "@/lib/storage";
 import noteBg from "@/assets/images/unisex.jpg";
@@ -30,11 +30,20 @@ const productTypes = {
   "lightweight-coach-jacket": "Outerwear",
 };
 
-const chips = ["All", "Tops", "Bottoms", "Outerwear"];
+const chips = [
+  "All",
+  "Tops",
+  "Bottoms",
+  "Outerwear",
+];
 
 function HangerIcon() {
   return (
-    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden="true"
+    >
       <path
         d="M12 7.5C12 5.8 13.2 5 14.3 5C15.7 5 16.7 6 16.7 7.3C16.7 8.5 16 9.2 14.8 9.8L12 11.2"
         stroke="currentColor"
@@ -54,11 +63,56 @@ function HangerIcon() {
 
 function SparkIcon() {
   return (
-    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden="true"
+    >
       <path
         d="M12 3L14.2 8.8L20 11L14.2 13.2L12 19L9.8 13.2L4 11L9.8 8.8L12 3Z"
         stroke="currentColor"
         strokeWidth="1.8"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function HeartIcon({ filled = false }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill={filled ? "currentColor" : "none"}
+      aria-hidden="true"
+    >
+      <path
+        d="M12 20.5C12 20.5 3.5 15.7 3.5 9.2C3.5 6.4 5.6 4.5 8.1 4.5C9.7 4.5 11.1 5.3 12 6.6C12.9 5.3 14.3 4.5 15.9 4.5C18.4 4.5 20.5 6.4 20.5 9.2C20.5 15.7 12 20.5 12 20.5Z"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function ChevronIcon({ direction = "right" }) {
+  const path =
+    direction === "left"
+      ? "M15 6L9 12L15 18"
+      : "M9 6L15 12L9 18";
+
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden="true"
+    >
+      <path
+        d={path}
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
         strokeLinejoin="round"
       />
     </svg>
@@ -70,17 +124,24 @@ export default function Unisex() {
   const [filter, setFilter] = useState("All");
   const [sort, setSort] = useState("Featured");
   const [featured, setFeatured] = useState("All");
-  const [selectedColors, setSelectedColors] = useState({});
-  const [likedItems, setLikedItems] = useState({});
+  const [selectedColors, setSelectedColors] =
+    useState({});
+  const [likedItems, setLikedItems] =
+    useState({});
 
   const baseUnisexProducts = useMemo(() => {
     let list = unisexItemIds
-      .map((id) => products.find((product) => product.id === id))
+      .map((id) =>
+        products.find(
+          (product) => product.id === id
+        )
+      )
       .filter(Boolean);
 
     if (filter !== "All") {
       list = list.filter(
-        (product) => productTypes[product.id] === filter
+        (product) =>
+          productTypes[product.id] === filter
       );
     }
 
@@ -101,35 +162,53 @@ export default function Unisex() {
     if (featured !== "All") {
       list = list.filter(
         (product) =>
-          product.tag?.toLowerCase() === featured.toLowerCase()
+          product.tag?.toLowerCase() ===
+          featured.toLowerCase()
       );
     }
 
-    if (sort === "Price Low") {
-      list = [...list].sort((a, b) => a.price - b.price);
-    }
+    switch (sort) {
+      case "Price Low":
+        list.sort(
+          (a, b) => a.price - b.price
+        );
+        break;
 
-    if (sort === "Price High") {
-      list = [...list].sort((a, b) => b.price - a.price);
-    }
+      case "Price High":
+        list.sort(
+          (a, b) => b.price - a.price
+        );
+        break;
 
-    if (sort === "Name A-Z") {
-      list = [...list].sort((a, b) =>
-        a.name.localeCompare(b.name)
-      );
+      case "Name A-Z":
+        list.sort((a, b) =>
+          a.name.localeCompare(b.name)
+        );
+        break;
+
+      default:
+        break;
     }
 
     return list;
-  }, [baseUnisexProducts, featured, sort]);
+  }, [
+    baseUnisexProducts,
+    featured,
+    sort,
+  ]);
 
-  const totalPages = Math.ceil(
-    unisexProducts.length / pageSize
+  const totalPages = Math.max(
+    1,
+    Math.ceil(
+      unisexProducts.length / pageSize
+    )
   );
 
-  const currentProducts = unisexProducts.slice(
-    (page - 1) * pageSize,
-    page * pageSize
-  );
+  const currentProducts =
+    unisexProducts.slice(
+      (page - 1) * pageSize,
+      page * pageSize
+    );
 
   function handleFilterChange(value) {
     setFilter(value);
@@ -147,23 +226,33 @@ export default function Unisex() {
     setPage(1);
   }
 
-  function handleColorChange(event, productId, color) {
+  function handleColorChange(
+    event,
+    productId,
+    color
+  ) {
     event.preventDefault();
     event.stopPropagation();
 
-    setSelectedColors((previousColors) => ({
-      ...previousColors,
-      [productId]: color,
-    }));
+    setSelectedColors(
+      (previousColors) => ({
+        ...previousColors,
+        [productId]: color,
+      })
+    );
   }
 
-  function handleLike(event, productId) {
+  function handleLike(
+    event,
+    productId
+  ) {
     event.preventDefault();
     event.stopPropagation();
 
     setLikedItems((previousItems) => ({
       ...previousItems,
-      [productId]: !previousItems[productId],
+      [productId]:
+        !previousItems[productId],
     }));
   }
 
@@ -176,9 +265,14 @@ export default function Unisex() {
   }
 
   function getCurrentImage(product) {
-    const selectedColor = getSelectedColor(product);
+    const selectedColor =
+      getSelectedColor(product);
 
-    return product.images?.[selectedColor] || product.image;
+    return (
+      product.images?.[selectedColor] ||
+      product.image ||
+      ""
+    );
   }
 
   return (
@@ -189,7 +283,9 @@ export default function Unisex() {
         <div className="unisexV2Shell">
           <div className="unisexV2Breadcrumb">
             <Link to="/">Home</Link>
+
             <span>/</span>
+
             <span>Unisex</span>
           </div>
 
@@ -198,8 +294,8 @@ export default function Unisex() {
               <h1>The Unisex Edit</h1>
 
               <p>
-                Relaxed silhouettes. Neutral tones. Made for every
-                wardrobe.
+                Relaxed silhouettes. Neutral
+                tones. Made for every wardrobe.
               </p>
             </div>
 
@@ -210,11 +306,16 @@ export default function Unisex() {
                 <select
                   value={filter}
                   onChange={(event) =>
-                    handleFilterChange(event.target.value)
+                    handleFilterChange(
+                      event.target.value
+                    )
                   }
                 >
                   {chips.map((chip) => (
-                    <option key={chip} value={chip}>
+                    <option
+                      key={chip}
+                      value={chip}
+                    >
                       {chip}
                     </option>
                   ))}
@@ -228,10 +329,21 @@ export default function Unisex() {
                   value={sort}
                   onChange={handleSortChange}
                 >
-                  <option value="Featured">Featured</option>
-                  <option value="Price Low">Price Low</option>
-                  <option value="Price High">Price High</option>
-                  <option value="Name A-Z">Name A-Z</option>
+                  <option value="Featured">
+                    Featured
+                  </option>
+
+                  <option value="Price Low">
+                    Price Low
+                  </option>
+
+                  <option value="Price High">
+                    Price High
+                  </option>
+
+                  <option value="Name A-Z">
+                    Name A-Z
+                  </option>
                 </select>
               </label>
 
@@ -240,13 +352,20 @@ export default function Unisex() {
 
                 <select
                   value={featured}
-                  onChange={handleFeaturedChange}
+                  onChange={
+                    handleFeaturedChange
+                  }
                 >
-                  {availableTags.map((tag) => (
-                    <option key={tag} value={tag}>
-                      {tag}
-                    </option>
-                  ))}
+                  {availableTags.map(
+                    (tag) => (
+                      <option
+                        key={tag}
+                        value={tag}
+                      >
+                        {tag}
+                      </option>
+                    )
+                  )}
                 </select>
               </label>
             </div>
@@ -255,7 +374,8 @@ export default function Unisex() {
           <div
             className="unisexV2Note"
             style={{
-              "--unisex-note-bg": `url(${noteBg})`,
+              "--unisex-note-bg":
+                `url(${noteBg})`,
             }}
           >
             <div className="unisexV2NoteMain">
@@ -264,11 +384,15 @@ export default function Unisex() {
               </div>
 
               <div>
-                <strong>Unisex Edit</strong>
+                <strong>
+                  Unisex Edit
+                </strong>
 
                 <p>
-                  Versatile layers, easy silhouettes, and neutral
-                  staples designed for comfort and everyday styling.
+                  Versatile layers, easy
+                  silhouettes, and neutral
+                  staples designed for comfort
+                  and everyday styling.
                 </p>
               </div>
             </div>
@@ -299,7 +423,9 @@ export default function Unisex() {
                   <SparkIcon />
                 </div>
 
-                <strong>Everyday essentials</strong>
+                <strong>
+                  Everyday essentials
+                </strong>
               </div>
             </div>
           </div>
@@ -309,8 +435,14 @@ export default function Unisex() {
               <button
                 key={chip}
                 type="button"
-                className={filter === chip ? "active" : ""}
-                onClick={() => handleFilterChange(chip)}
+                className={
+                  filter === chip
+                    ? "active"
+                    : ""
+                }
+                onClick={() =>
+                  handleFilterChange(chip)
+                }
               >
                 {chip}
               </button>
@@ -325,90 +457,120 @@ export default function Unisex() {
                 </strong>
 
                 <span>
-                  Tap a color dot to preview each tone.
+                  Tap a color dot to preview
+                  each tone.
                 </span>
               </div>
 
               <div className="unisexV2Grid">
-                {currentProducts.map((product) => {
-                  const selectedColor =
-                    getSelectedColor(product);
+                {currentProducts.map(
+                  (product) => {
+                    const selectedColor =
+                      getSelectedColor(product);
 
-                  const currentImage =
-                    getCurrentImage(product);
+                    const currentImage =
+                      getCurrentImage(product);
 
-                  return (
-                    <Link
-                      to={`/item/${product.id}`}
-                      state={{ selectedColor }}
-                      className="unisexV2Card"
-                      key={product.id}
-                    >
-                      <div className="unisexV2Image">
-                        {product.tag && (
-                          <span>{product.tag}</span>
-                        )}
+                    return (
+                      <Link
+                        key={product.id}
+                        to={`/item/${product.id}`}
+                        state={{
+                          selectedColor,
+                        }}
+                        className="unisexV2Card"
+                      >
+                        <div className="unisexV2Image">
+                          {product.tag && (
+                            <span>
+                              {product.tag}
+                            </span>
+                          )}
 
-                        <img
-                          src={currentImage}
-                          alt={`${product.name} ${selectedColor}`}
-                        />
-                      </div>
-
-                      <div className="unisexV2Footer">
-                        <div>
-                          <div className="unisexV2Colors">
-                            {product.color?.map((color) => (
-                              <button
-                                key={color}
-                                type="button"
-                                className={`colorDot ${color.toLowerCase()} ${
-                                  selectedColor === color
-                                    ? "active"
-                                    : ""
-                                }`}
-                                title={color}
-                                aria-label={`Choose ${color}`}
-                                onClick={(event) =>
-                                  handleColorChange(
-                                    event,
-                                    product.id,
-                                    color
-                                  )
-                                }
-                              />
-                            ))}
-                          </div>
-
-                          <h3>{product.name}</h3>
-
-                          <p>
-                            {formatPrice(product.price)}
-                          </p>
+                          <img
+                            src={currentImage}
+                            alt={`${product.name} ${selectedColor}`}
+                            loading="lazy"
+                          />
                         </div>
 
-                        <button
-                          type="button"
-                          className={
-                            likedItems[product.id]
-                              ? "unisexV2Heart active"
-                              : "unisexV2Heart"
-                          }
-                          onClick={(event) =>
-                            handleLike(event, product.id)
-                          }
-                          aria-label={
-                            likedItems[product.id]
-                              ? "Remove from wishlist"
-                              : "Add to wishlist"
-                          }
-                        >
-                          {likedItems[product.id] ? "♥" : "♡"}
-                        </button>
-                      </div>
-                    </Link>
-                  );
-                })}
+                        <div className="unisexV2Footer">
+                          <div>
+                            <div className="unisexV2Colors">
+                              {product.color?.map(
+                                (color) => (
+                                  <button
+                                    key={color}
+                                    type="button"
+                                    className={`colorDot ${color.toLowerCase()} ${
+                                      selectedColor ===
+                                      color
+                                        ? "active"
+                                        : ""
+                                    }`}
+                                    title={color}
+                                    aria-label={`Choose ${color}`}
+                                    onClick={(
+                                      event
+                                    ) =>
+                                      handleColorChange(
+                                        event,
+                                        product.id,
+                                        color
+                                      )
+                                    }
+                                  />
+                                )
+                              )}
+                            </div>
+
+                            <h3>
+                              {product.name}
+                            </h3>
+
+                            <p>
+                              {formatPrice(
+                                product.price
+                              )}
+                            </p>
+                          </div>
+
+                          <button
+                            type="button"
+                            className={
+                              likedItems[
+                                product.id
+                              ]
+                                ? "unisexV2Heart active"
+                                : "unisexV2Heart"
+                            }
+                            onClick={(event) =>
+                              handleLike(
+                                event,
+                                product.id
+                              )
+                            }
+                            aria-label={
+                              likedItems[
+                                product.id
+                              ]
+                                ? "Remove from wishlist"
+                                : "Add to wishlist"
+                            }
+                          >
+                            <HeartIcon
+                              filled={Boolean(
+                                likedItems[
+                                  product.id
+                                ]
+                              )}
+                            />
+                          </button>
+                        </div>
+                      </Link>
+                    );
+                  }
+                )}
               </div>
 
               {totalPages > 1 && (
@@ -418,18 +580,23 @@ export default function Unisex() {
                     disabled={page === 1}
                     aria-label="Previous page"
                     onClick={() =>
-                      setPage((previousPage) =>
-                        Math.max(1, previousPage - 1)
+                      setPage(
+                        (previousPage) =>
+                          Math.max(
+                            1,
+                            previousPage - 1
+                          )
                       )
                     }
                   >
-                    ‹
+                    <ChevronIcon direction="left" />
                   </button>
 
                   {Array.from({
                     length: totalPages,
                   }).map((_, index) => {
-                    const pageNumber = index + 1;
+                    const pageNumber =
+                      index + 1;
 
                     return (
                       <button
@@ -440,7 +607,9 @@ export default function Unisex() {
                             ? "active"
                             : ""
                         }
-                        onClick={() => setPage(pageNumber)}
+                        onClick={() =>
+                          setPage(pageNumber)
+                        }
                       >
                         {pageNumber}
                       </button>
@@ -449,18 +618,21 @@ export default function Unisex() {
 
                   <button
                     type="button"
-                    disabled={page === totalPages}
+                    disabled={
+                      page === totalPages
+                    }
                     aria-label="Next page"
                     onClick={() =>
-                      setPage((previousPage) =>
-                        Math.min(
-                          totalPages,
-                          previousPage + 1
-                        )
+                      setPage(
+                        (previousPage) =>
+                          Math.min(
+                            totalPages,
+                            previousPage + 1
+                          )
                       )
                     }
                   >
-                    ›
+                    <ChevronIcon direction="right" />
                   </button>
                 </div>
               )}
@@ -470,12 +642,15 @@ export default function Unisex() {
               <h2>No products found</h2>
 
               <p>
-                Try another filter or featured tag.
+                Try another filter or featured
+                tag.
               </p>
 
               <button
                 type="button"
-                onClick={() => handleFilterChange("All")}
+                onClick={() =>
+                  handleFilterChange("All")
+                }
               >
                 Reset Filters
               </button>
@@ -483,8 +658,6 @@ export default function Unisex() {
           )}
         </div>
       </section>
-
-      <ServiceStrip />
     </main>
   );
 }
