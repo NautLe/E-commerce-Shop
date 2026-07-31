@@ -33,6 +33,8 @@ import UpdateOrderStatus from './Admin/UpdateOrderStatus'
 import ReviewList from './Admin/ReviewList'
 import VoucherList from './Admin/VoucherList'
 import CreateVoucher from './Admin/CreateVoucher'
+import Wishlist from './pages/Wishlist'
+import Addresses from './UserAuthentication/Addresses'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -62,7 +64,10 @@ const App = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/password/forgot" element={<ForgotPassword />} />
         <Route path="/reset/:token" element={<ResetPassword />} />
+        <Route path="/password/reset/:token" element={<ResetPassword />} />
         <Route path="/cart" element={<Cart/>} />
+        <Route path="/wishlist" element={<ProtectedRoutes element={<Wishlist />} />} />
+        <Route path="/addresses" element={<ProtectedRoutes element={<Addresses />} />} />
         <Route path="/profile" element={<ProtectedRoutes element={<Profile />} />} />
         <Route path="/profile/update" element={<ProtectedRoutes element={<UpdateProfile />} />} />
         <Route path="/password/update" element={<ProtectedRoutes element={<UpdatePassword />} />} />
@@ -83,7 +88,6 @@ const App = () => {
         <Route path="/admin/order/:orderId" element={<ProtectedRoutes element={<UpdateOrderStatus />} adminOnly={true}/>} />
         <Route path="/admin/vouchers" element={<ProtectedRoutes element={<VoucherList />} adminOnly={true}/>} />
         <Route path="/admin/voucher/create" element={<ProtectedRoutes element={<CreateVoucher />} adminOnly={true}/>} />
-
 
       </Routes>
     </Router>

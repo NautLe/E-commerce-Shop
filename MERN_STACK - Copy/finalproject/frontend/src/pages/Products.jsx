@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import '../pageStyles/Products.css';
 import PageTitle from '../components/PageTitle';
 import Navbar from '../components/Navbar';
@@ -11,7 +11,7 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import NoProduct from '../components/NoProduct';
 import { showToast } from '../utils/showToast';
 import Pagination from '../components/Pagination';
-
+import SearchIcon from '@mui/icons-material/Search';
 const Products = ({ categoryProp }) => {
   const { loading, error, products, resultsPerPage, productCount, filteredProductsCount } = useSelector(
     (state) => state.product
@@ -35,11 +35,15 @@ const Products = ({ categoryProp }) => {
   const [maxPrice, setMaxPrice] = useState('');
   const [inStockOnly, setInStockOnly] = useState(false);
 
-  const subcategoryList = !activeCategory || activeCategory.toLowerCase() === 'all'
-    ? ["All", "Tops", "Bottoms", "Dresses", "Outerwear", "Headwear", "Eyewear", "Bags", "Accessories", "Sport"]
-    : activeCategory?.toLowerCase() === 'essentials'
-      ? ["All", "Headwear", "Eyewear", "Bags", "Accessories", "Sport"]
-      : ["All", "Tops", "Bottoms", "Dresses", "Outerwear"];
+  const subcategoryList = useMemo(() => {
+    if (!activeCategory || activeCategory.toLowerCase() === 'all') {
+      return ["All", "Tops", "Bottoms", "Dresses", "Outerwear", "Headwear", "Eyewear", "Bags", "Accessories", "Sport"];
+    }
+    if (activeCategory.toLowerCase() === 'essentials') {
+      return ["All", "Headwear", "Eyewear", "Bags", "Accessories", "Sport"];
+    }
+    return ["All", "Tops", "Bottoms", "Dresses", "Outerwear"];
+  }, [activeCategory]);
 
   useEffect(() => {
     setSearchInput(urlKeyword);
@@ -50,19 +54,34 @@ const Products = ({ categoryProp }) => {
   }, [page]);
 
   useEffect(() => {
+    const isSubcatValid = subcategoryList.some(
+      (sub) => sub.toLowerCase() === selectedSubcategory.toLowerCase()
+    );
+    if (!isSubcatValid) {
+      setSelectedSubcategory('All');
+      setCurrentPage(1);
+    }
+  }, [activeCategory, subcategoryList, selectedSubcategory]);
+
+  useEffect(() => {
+    const isSubcatValid = subcategoryList.some(
+      (sub) => sub.toLowerCase() === selectedSubcategory.toLowerCase()
+    );
+    const validSubcategory = isSubcatValid ? selectedSubcategory : 'All';
+
     dispatch(
       getProduct({
         keyword: searchInput,
         page: currentPage,
         category: activeCategory,
-        subcategory: selectedSubcategory !== 'All' ? selectedSubcategory : undefined,
+        subcategory: validSubcategory !== 'All' ? validSubcategory : undefined,
         sort: sortBy,
         minPrice,
         maxPrice,
         inStock: inStockOnly
       })
     );
-  }, [dispatch, searchInput, currentPage, activeCategory, selectedSubcategory, sortBy, minPrice, maxPrice, inStockOnly]);
+  }, [dispatch, searchInput, currentPage, activeCategory, selectedSubcategory, sortBy, minPrice, maxPrice, inStockOnly, subcategoryList]);
 
   useEffect(() => {
     if (error) {
@@ -126,45 +145,7 @@ const Products = ({ categoryProp }) => {
       <Navbar />
 
       <div className='products-layout'>
-        {/* SIDEBAR FILTER */}
-        <div className='filter-section'>
-          <h3 className='filter-heading'>Price Range ($)</h3>
-          <div className='price-filter-inputs'>
-            <input
-              type="number"
-              placeholder="Min ($)"
-              value={minPrice}
-              onChange={(e) => { setMinPrice(e.target.value); setCurrentPage(1); }}
-              min="0"
-            />
-            <span>-</span>
-            <input
-              type="number"
-              placeholder="Max ($)"
-              value={maxPrice}
-              onChange={(e) => { setMaxPrice(e.target.value); setCurrentPage(1); }}
-              min="0"
-            />
-          </div>
 
-          <div className='instock-filter-container'>
-            <label className='instock-checkbox-label'>
-              <input
-                type="checkbox"
-                checked={inStockOnly}
-                onChange={(e) => { setInStockOnly(e.target.checked); setCurrentPage(1); }}
-              />
-              In Stock Only
-            </label>
-          </div>
-
-          <button
-            onClick={handleClearFilters}
-            className='clear-filters-btn'
-          >
-            Reset All Filters
-          </button>
-        </div>
 
         {/* MAIN PRODUCTS SECTION */}
         <div className='products-section'>
@@ -194,10 +175,7 @@ const Products = ({ categoryProp }) => {
           {/* ADVANCED SEARCH & TOOLBAR */}
           <div className='advanced-search-bar-container'>
             <div className='search-input-wrapper'>
-              <svg className='search-icon' viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <circle cx="11" cy="11" r="8"></circle>
-                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-              </svg>
+              <SearchIcon className='search-icon' />
               <input
                 type="text"
                 className='advanced-search-input'
@@ -240,7 +218,7 @@ const Products = ({ categoryProp }) => {
               <Loader />
             </div>
           ) : products && products.length > 0 ? (
-            <div className='products-product-container'>
+            <div className={`products-product-container ${products.length <= 3 ? 'few-products' : ''}`}>
               {products.map((product) => (
                 <Product key={product._id} product={product} />
               ))}

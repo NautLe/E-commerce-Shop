@@ -42,7 +42,7 @@ export const applyCoupon = handleAsyncError(async (req, res, next) => {
     calculatedDiscount = 0
     label = 'FREE SHIPPING'
   }
-
+ 
   res.status(200).json({
     success: true,
     message: `Coupon "${coupon.code}" applied! (${label})`,

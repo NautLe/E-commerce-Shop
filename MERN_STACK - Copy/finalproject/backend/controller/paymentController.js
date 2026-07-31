@@ -4,6 +4,7 @@ import OrderDetail from "../models/orderDetailModel.js"
 import Product from "../models/productModel.js"
 import ErrorHandler from "../utils/handleError.js"
 import handleAsyncError from "../middleware/handleAsyncError.js"
+import { createNotification } from "./notificationController.js"
 
 
 export const getPaymentStatus = handleAsyncError(async (req, res, next) => {
@@ -38,6 +39,14 @@ export const getPaymentStatus = handleAsyncError(async (req, res, next) => {
         await product.save({ validateBeforeSave: false })
       }
     }
+
+    // Create Notification for the user
+    await createNotification({
+      userId: order.user,
+      title: "Order Placed Successfully 🎉",
+      message: `Your order #${order._id.toString().slice(-6)} of $${order.totalPrice ? order.totalPrice.toFixed(2) : 0} has been confirmed.`,
+      type: "order"
+    })
   }
 
   res.status(200).json({
@@ -64,6 +73,14 @@ export const createCheckOutSession = handleAsyncError(async (req, res, next) => 
     orderStatus: "Processing",
     paymentInfo: { status: "Not Paid" },
     user: req.user._id
+  })
+
+  // Create Notification for the user
+  await createNotification({
+    userId: req.user._id,
+    title: "Order Placed Successfully 🎉",
+    message: `Your order #${order._id.toString().slice(-6)} of $${totalPrice ? totalPrice.toFixed(2) : 0} has been placed.`,
+    type: "order"
   })
 
   // 

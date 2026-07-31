@@ -11,6 +11,9 @@ import { fetchCart } from '../features/cart/cartSlice'
 import { applyCoupon, removeCoupon, clearCouponErrors, clearCouponMessage } from '../features/coupon/couponSlice'
 import { showToast } from '../utils/showToast'
 
+import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined'
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
+
 const Cart = () => {
   const dispatch = useDispatch()
   const { cartItems } = useSelector(state => state.cart)
@@ -75,8 +78,16 @@ const Cart = () => {
 
       {cartItems.length === 0 ? (
         <div className="empty-cart-container">
-          <p className="empty-cart-message">Your cart is empty.. </p>
-          <Link to="/products" className='viewProducts'>View Products</Link>
+          <div className="empty-cart-icon-wrapper">
+            <ShoppingBagOutlinedIcon className="empty-cart-icon" />
+          </div>
+          <h2 className="empty-cart-message">Your Cart is Empty</h2>
+          <p className="empty-cart-subtitle">
+            Looks like you haven't added anything to your cart yet. Explore our collection to find your next favorite items!
+          </p>
+          <Link to="/products" className='viewProducts'>
+            View Products <ArrowForwardIcon style={{ fontSize: '18px' }} />
+          </Link>
         </div>
       ) : (<>
         <PageTitle title="My Cart" />

@@ -33,8 +33,10 @@
   }
   
   .usersList-table th {
-    background-color: var(--bg-secondary);
-    color: #fff;
+    background-color: #faf9f6;
+    color: #111111 !important;
+    font-weight: 800;
+    border-bottom: 2px solid #e4e0d8;
   }
   
   .usersList-table tr:nth-child(even) {

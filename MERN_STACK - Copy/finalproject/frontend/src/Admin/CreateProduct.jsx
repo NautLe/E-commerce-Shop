@@ -17,7 +17,7 @@ const CreateProduct = () => {
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
   const [stock, setStock] = useState("");
-  const [category, setCategory] = useState('')
+  const [category, setCategory] = useState("");
   const [subcategory, setSubcategory] = useState("");
   const [image, setImage] = useState([]);
   const [imagePreview, setImagePreview] = useState([]);
@@ -27,7 +27,7 @@ const CreateProduct = () => {
     men: ["Tops", "Bottoms", "Dresses", "Outerwear"],
     women: ["Tops", "Bottoms", "Dresses", "Outerwear"],
     unisex: ["Tops", "Bottoms", "Dresses", "Outerwear"],
-    essentials: ["Headwear", "Eyewear", "Bags", "Accessories", "Sport"]
+    essentials: ["Headwear", "Eyewear", "Bags", "Accessories", "Sport"],
   };
 
   const handleCategoryChange = (e) => {
@@ -56,7 +56,8 @@ const CreateProduct = () => {
     myForm.set("subcategory", subcategory);
     myForm.set("stock", stock);
 
-    const sizesToSend = category?.toLowerCase() === 'essentials' ? ['OS'] : ['S', 'M', 'L', 'XL'];
+    const sizesToSend =
+      category?.toLowerCase() === "essentials" ? ["OS"] : ["S", "M", "L", "XL"];
     sizesToSend.forEach((sz) => {
       myForm.append("sizes", sz);
     });
@@ -162,11 +163,12 @@ const CreateProduct = () => {
             onChange={(e) => setSubcategory(e.target.value)}
           >
             <option value="">Choose Subcategory </option>
-            {category && subcategoriesMap[category.toLowerCase()]?.map((item) => (
-              <option value={item} key={item}>
-                {item}
-              </option>
-            ))}
+            {category &&
+              subcategoriesMap[category.toLowerCase()]?.map((item) => (
+                <option value={item} key={item}>
+                  {item}
+                </option>
+              ))}
           </select>
 
           <input

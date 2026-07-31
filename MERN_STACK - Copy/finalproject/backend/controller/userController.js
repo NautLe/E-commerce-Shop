@@ -101,7 +101,8 @@ export const requestPasswordReset = handleAsyncError(async(req,res,next) => {
         return next(new ErrorHandler(`Error occurred while saving reset token: ${error.message}`, 500))
     }
     
-    const resetPasswordUrl = `${req.protocol}://${req.get('host')}/reset/${resetToken}`
+    const frontendUrl = process.env.CLIENT_URL || req.headers.origin || `${req.protocol}://${req.get('host')}`;
+    const resetPasswordUrl = `${frontendUrl}/reset/${resetToken}`;
 
     const message = `Your password reset token is as follows:\n\n${resetPasswordUrl}\n\n This Link will expire in 15 mins. If you have not requested this email, please ignore this.`
     try{

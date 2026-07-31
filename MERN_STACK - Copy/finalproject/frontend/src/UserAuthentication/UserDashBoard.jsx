@@ -28,16 +28,29 @@ const UserDashBoard = ({ user }) => {
 
   const options = [
     { name: 'Profile Account', onClick: profile },
+    { name: 'Saved Addresses', onClick: myAddresses },
     { name: 'My Orders', onClick: orders },
     { name: `Cart (${cartItems?.length || 0})`, onClick: myCart, isCart: true },
     { name: 'Logout', onClick: logoutUser }
   ]
   if (user?.role === 'admin') {
-    options.unshift({
-      name: 'Admin Dashboard', onClick: dashboard
-    })
+    options.unshift(
+      { name: 'Admin Dashboard', onClick: dashboard },
+    )
   }
 
+  function myWishlist() {
+    setMenuVisible(false)
+    navigate("/wishlist")
+  }
+  function myAddresses() {
+    setMenuVisible(false)
+    navigate("/addresses")
+  }
+  function categories() {
+    setMenuVisible(false)
+    navigate("/admin/categories")
+  }
   function myCart() {
     setMenuVisible(false)
     navigate("/cart")

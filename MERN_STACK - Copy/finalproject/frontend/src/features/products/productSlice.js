@@ -76,7 +76,8 @@ const productSlice = createSlice({
         totalPages: 1,
         reviewSuccess: false,
         reviewError: null,
-        reviewLoading: false
+        reviewLoading: false,
+        filteredProductsCount: 0
     },
     reducers: {
         removeErrors: (state) => {
@@ -103,6 +104,7 @@ const productSlice = createSlice({
             state.productCount=action.payload.productsCount
             state.resultsPerPage=action.payload.resultsPerPage
             state.totalPages=action.payload.totalPages
+            state.filteredProductsCount = action.payload.filteredProductsCount
 
 
         })

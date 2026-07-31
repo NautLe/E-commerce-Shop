@@ -4,6 +4,7 @@ import Product from "../models/productModel.js";
 import User from "../models/userModel.js";
 import ErrorHandler from "../utils/handleError.js"
 import handleAsyncError from "../middleware/handleAsyncError.js"
+import { createNotification } from "./notificationController.js"
 
 // Create new order
 export const createNewOrder = handleAsyncError(async (req, res, next) => {
@@ -43,6 +44,14 @@ export const createNewOrder = handleAsyncError(async (req, res, next) => {
             await updateQuantity(item.product, item.quantity);
         }
     }
+
+    // Send order confirmation notification
+    await createNotification({
+        userId: req.user._id,
+        title: "Order Placed Successfully 🎉",
+        message: `Your order #${order._id.toString().slice(-6)} of $${totalPrice ? totalPrice.toFixed(2) : 0} has been placed.`,
+        type: "order"
+    })
 
     res.status(201).json({
         success: true,
@@ -129,6 +138,15 @@ export const updateOrderStatus = handleAsyncError(async (req, res, next) => {
         order.deliveredAt = Date.now()
     }
     await order.save({ validateBeforeSave: false })
+
+    // Send order status update notification
+    await createNotification({
+        userId: order.user,
+        title: `Order Status: ${req.body.status}`,
+        message: `Your order #${order._id.toString().slice(-6)} status has been updated to "${req.body.status}".`,
+        type: "order"
+    })
+
     res.status(200).json({
         success: true,
         order: {

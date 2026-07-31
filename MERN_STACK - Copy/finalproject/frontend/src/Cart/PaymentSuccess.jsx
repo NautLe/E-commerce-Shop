@@ -3,6 +3,7 @@ import '../CartStyles/PaymentSuccess.css'
 import { useNavigate, useSearchParams, useParams, Link } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { clearCart } from '../features/cart/cartSlice'
+import { fetchNotifications } from '../features/notification/notificationSlice'
 import PageTitle from '../components/PageTitle'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
@@ -30,6 +31,7 @@ const PaymentSuccess = () => {
         await axios.get(`/api/v1/payment/status/${referenceId}`)
         showToast.success('Order Placed Successfully!')
         dispatch(clearCart())
+        dispatch(fetchNotifications())
         sessionStorage.removeItem('orderItem')
       } catch (error) {
         console.error('Payment verification error:', error)

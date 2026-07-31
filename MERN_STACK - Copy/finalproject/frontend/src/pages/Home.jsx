@@ -54,14 +54,10 @@ const Home = () => {
   }, [heroImages.length]);
 
   const getCategoryList = (catName) => {
-    const dbFiltered = (products || []).filter(
-      (p) =>
-        p.category?.toLowerCase() === catName.toLowerCase() ||
-        p.category?.toLowerCase() === "unisex"
-    );
-    return dbFiltered.slice(0, 5);
-  };
-
+  return (products || [])
+    .filter((p) => p.category?.toLowerCase() === catName.toLowerCase())
+    .slice(0, 5);
+};
   const menList = getCategoryList("men");
   const womenList = getCategoryList("women");
 

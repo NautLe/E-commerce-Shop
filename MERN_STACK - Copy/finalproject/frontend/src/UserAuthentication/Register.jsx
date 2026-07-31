@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import '../UserStyles/Form.css'
+import Navbar from '../components/Navbar'
+import Footer from '../components/Footer'
+import PageTitle from '../components/PageTitle'
 import { Link, useNavigate } from 'react-router-dom'
 import { showToast } from '../utils/showToast'
 import { useDispatch, useSelector } from 'react-redux'
@@ -40,7 +43,6 @@ const Register = () => {
         }
     }
 
-    // Helper function to check if a password meets strength requirements
     const isStrongPassword = (pass) => {
         const hasMinLength = pass.length >= 8;
         const hasUpperCase = /[A-Z]/.test(pass);
@@ -54,26 +56,22 @@ const Register = () => {
     const registerSubmit = (e) => {
         e.preventDefault()
 
-        // Check if all required fields are filled
         if (!name || !email || !password || !confirmPassword) {
             showToast.error("Please fill in all required fields.")
             return;
         }
 
-        // Validate email format
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email)) {
             showToast.error("Please enter a valid email address.")
             return;
         }
 
-        // Validate password strength
         if (!isStrongPassword(password)) {
             showToast.error("Password must be at least 8 characters long and contain at least 1 uppercase letter, 1 lowercase letter, 1 number, and 1 special character.")
             return;
         }
 
-        // Check if password and confirm password match
         if (password !== confirmPassword) {
             showToast.error("Passwords do not match.")
             return;
@@ -85,9 +83,6 @@ const Register = () => {
         myForm.set("password", password);
         myForm.set("confirmPassword", confirmPassword);
         myForm.set("avatar", avatar);
-        for (let pair of myForm.entries()) {
-            console.log(pair[0], pair[1]);
-        }
         dispatch(register(myForm))
     }
 
@@ -106,7 +101,6 @@ const Register = () => {
         }
     }, [dispatch, success, navigate])
 
-    // Real-time password criteria check
     const passwordCriteria = {
         hasMinLength: password.length >= 8,
         hasUpperCase: /[A-Z]/.test(password),
@@ -119,70 +113,75 @@ const Register = () => {
     const isEmailValid = emailRegex.test(email);
 
     return (
-        <div className="form-container">
-            <div className="form-content">
-                <form className='form' onSubmit={registerSubmit} encType='multipart/form-data'>
-                    <h2>Sign up</h2>
-                    <div className="input-group">
-                        <input onChange={userInput} type="text" placeholder='Enter your name' name="name" value={name} required />
-                    </div>
-                    <div className="input-group">
-                        <input onChange={userInput} type="email" placeholder='Enter your Email' name="email" value={email} required />
-                        {email && !isEmailValid && (
-                            <span className="validation-hint invalid">Please enter a valid email address</span>
-                        )}
-                    </div>
-                    <div className="input-group">
-                        <div className="password-input-container">
-                            <input onChange={userInput} type={showPassword ? "text" : "password"} placeholder='Enter your password' name="password" value={password} autoComplete="new-password" required />
-                            <span className="password-toggle-icon" onClick={() => setShowPassword(!showPassword)}>
-                                {showPassword ? <VisibilityOff /> : <Visibility />}
-                            </span>
+        <>
+            <PageTitle title="Sign Up - MOCHA" />
+            <Navbar />
+            <div className="form-container">
+                <div className="form-content">
+                    <form className='form' onSubmit={registerSubmit} encType='multipart/form-data'>
+                        <h2>Sign up</h2>
+                        <div className="input-group">
+                            <input onChange={userInput} type="text" placeholder='Enter your name' name="name" value={name} required />
                         </div>
-                        {password && (
-                            <ul className="password-checklist">
-                                <li className={passwordCriteria.hasMinLength ? "valid" : "invalid"}>
-                                    {passwordCriteria.hasMinLength ? "OKAY" : "NOT OKAY"} At least 8 characters
-                                </li>
-                                <li className={passwordCriteria.hasUpperCase ? "valid" : "invalid"}>
-                                    {passwordCriteria.hasUpperCase ? "OKAY" : "NOT"} At least 1 uppercase letter (A-Z)
-                                </li>
-                                <li className={passwordCriteria.hasLowerCase ? "valid" : "invalid"}>
-                                    {passwordCriteria.hasLowerCase ? "OKAY" : "NOT OKAY"} At least 1 lowercase letter (a-z)
-                                </li>
-                                <li className={passwordCriteria.hasNumber ? "valid" : "invalid"}>
-                                    {passwordCriteria.hasNumber ? "OKAY" : "NOT OKAY"} At least 1 number (0-9)
-                                </li>
-                                <li className={passwordCriteria.hasSpecialChar ? "valid" : "invalid"}>
-                                    {passwordCriteria.hasSpecialChar ? "OKAY" : "NOT OKAY"} At least 1 special character (!@#$)
-                                </li>
-                            </ul>
-                        )}
-                    </div>
-                    <div className="input-group">
-                        <div className="password-input-container">
-                            <input onChange={userInput} type={showConfirmPassword ? "text" : "password"} placeholder='Enter your confirm password' name="confirmPassword" value={confirmPassword} autoComplete="new-password" required />
-                            <span className="password-toggle-icon" onClick={() => setShowConfirmPassword(!showConfirmPassword)}>
-                                {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
-                            </span>
+                        <div className="input-group">
+                            <input onChange={userInput} type="email" placeholder='Enter your Email' name="email" value={email} required />
+                            {email && !isEmailValid && (
+                                <span className="validation-hint invalid">Please enter a valid email address</span>
+                            )}
                         </div>
-                        {confirmPassword && (
-                            <span className={`validation-hint ${password === confirmPassword ? "valid" : "invalid"}`}>
-                                {password === confirmPassword ? "Passwords match" : "Passwords do not match"}
-                            </span>
-                        )}
-                    </div>
-                    <div className="input-group avatar-group">
-                        <input onChange={userInput} type="file" name="avatar" className='file-input' accept='image/*' />
-                        <img src={avatarPreview} alt="Avatar Preview" className='avatar' />
-                    </div>
-                    <button className="authBtn" disabled={loading}>{loading ? "Signing up..." : "Sign Up"}</button>
-                    <p className="form-links">
-                        Already Have an account? <Link to="/login">Sign in here</Link>
-                    </p>
-                </form>
+                        <div className="input-group">
+                            <div className="password-input-container">
+                                <input onChange={userInput} type={showPassword ? "text" : "password"} placeholder='Enter your password' name="password" value={password} autoComplete="new-password" required />
+                                <span className="password-toggle-icon" onClick={() => setShowPassword(!showPassword)}>
+                                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                                </span>
+                            </div>
+                            {password && (
+                                <ul className="password-checklist">
+                                    <li className={passwordCriteria.hasMinLength ? "valid" : "invalid"}>
+                                        {passwordCriteria.hasMinLength ? "✓" : "✕"} At least 8 characters
+                                    </li>
+                                    <li className={passwordCriteria.hasUpperCase ? "valid" : "invalid"}>
+                                        {passwordCriteria.hasUpperCase ? "✓" : "✕"} At least 1 uppercase letter (A-Z)
+                                    </li>
+                                    <li className={passwordCriteria.hasLowerCase ? "valid" : "invalid"}>
+                                        {passwordCriteria.hasLowerCase ? "✓" : "✕"} At least 1 lowercase letter (a-z)
+                                    </li>
+                                    <li className={passwordCriteria.hasNumber ? "valid" : "invalid"}>
+                                        {passwordCriteria.hasNumber ? "✓" : "✕"} At least 1 number (0-9)
+                                    </li>
+                                    <li className={passwordCriteria.hasSpecialChar ? "valid" : "invalid"}>
+                                        {passwordCriteria.hasSpecialChar ? "✓" : "✕"} At least 1 special character (!@#$)
+                                    </li>
+                                </ul>
+                            )}
+                        </div>
+                        <div className="input-group">
+                            <div className="password-input-container">
+                                <input onChange={userInput} type={showConfirmPassword ? "text" : "password"} placeholder='Enter your confirm password' name="confirmPassword" value={confirmPassword} autoComplete="new-password" required />
+                                <span className="password-toggle-icon" onClick={() => setShowConfirmPassword(!showConfirmPassword)}>
+                                    {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                                </span>
+                            </div>
+                            {confirmPassword && (
+                                <span className={`validation-hint ${password === confirmPassword ? "valid" : "invalid"}`}>
+                                    {password === confirmPassword ? "✓ Passwords match" : "✕ Passwords do not match"}
+                                </span>
+                            )}
+                        </div>
+                        <div className="input-group avatar-group">
+                            <input onChange={userInput} type="file" name="avatar" className='file-input' accept='image/*' />
+                            <img src={avatarPreview} alt="Avatar Preview" className='avatar' />
+                        </div>
+                        <button className="authBtn" disabled={loading}>{loading ? "Signing up..." : "Sign Up"}</button>
+                        <p className="form-links">
+                            Already Have an account? <Link to="/login">Sign in here</Link>
+                        </p>
+                    </form>
+                </div>
             </div>
-        </div>
+            <Footer />
+        </>
     )
 }
 

@@ -4,13 +4,15 @@ import PageTitle from '../components/PageTitle'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import Rating from '../components/Rating'
+import FavoriteIcon from '@mui/icons-material/Favorite'
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
 import { useDispatch, useSelector } from 'react-redux'
 import { getProductDetails, removeErrors, createReview, removeReviewSuccess, removeReviewError } from '../features/products/productSlice'
 import { useParams } from 'react-router-dom'
 import Loader from '../components/Loader'
 import { showToast } from '../utils/showToast'
 import { addItemsToCart, removeMessage, removeErrors as removeCartErrors } from '../features/cart/cartSlice'
-
+import { addToWishlist, removeFromWishlist } from '../features/wishlist/wishlistSlice'
 
 const ProductDetails = () => {
     const [quantity, setQuantity] = useState(1)
@@ -25,8 +27,34 @@ const ProductDetails = () => {
     const { loading, error, product, reviewSuccess, reviewError, reviewLoading } = useSelector((state) => state.product)
     const { loading: cartLoading, error: cartError, success, message } = useSelector((state) => state.cart)
     const { isAuthenticated } = useSelector((state) => state.user)
+    const { wishlist } = useSelector((state) => state.wishlist)
     const dispatch = useDispatch()
-    const { id } = useParams();
+    const { id } = useParams()
+
+    const isWishlisted = Boolean(
+        wishlist?.products?.some((item) => {
+            const pId = item.product?._id || item.product || item._id || item
+            return pId?.toString() === id?.toString()
+        })
+    )
+
+    const handleWishlistToggle = () => {
+        if (!isAuthenticated) {
+            showToast.error('Please login to add items to wishlist')
+            return
+        }
+        if (isWishlisted) {
+            dispatch(removeFromWishlist(id))
+                .unwrap()
+                .then(() => showToast.success('Removed from wishlist'))
+                .catch((err) => showToast.error(err || 'Failed to remove from wishlist'))
+        } else {
+            dispatch(addToWishlist(id))
+                .unwrap()
+                .then(() => showToast.success('Added to wishlist'))
+                .catch((err) => showToast.error(err || 'Failed to add to wishlist'))
+        }
+    }
 
     useEffect(() => {
         if (id) {
@@ -209,7 +237,34 @@ const ProductDetails = () => {
                                         />
                                         <button className="quantity-button" onClick={increaseQuantity}>+</button>
                                     </div>
-                                    <button className="add-to-cart-btn" disabled={cartLoading} onClick={addToCart}>{cartLoading ? 'Adding...' : 'Add to Cart'} </button>
+                                    <div style={{ display: 'flex', gap: '12px', alignItems: 'center', marginTop: '15px' }}>
+                                        <button className="add-to-cart-btn" disabled={cartLoading} onClick={addToCart} style={{ margin: 0, flex: 1 }}>{cartLoading ? 'Adding...' : 'Add to Cart'} </button>
+                                        <button
+                                            type="button"
+                                            className={`details-wishlist-btn ${isWishlisted ? 'active' : ''}`}
+                                            onClick={handleWishlistToggle}
+                                            title={isWishlisted ? "Remove from Wishlist" : "Add to Wishlist"}
+                                            aria-label="Wishlist"
+                                            style={{
+                                                background: isWishlisted ? '#fff0f3' : '#ffffff',
+                                                border: isWishlisted ? '1px solid #ff4d4f' : '1px solid #ddd',
+                                                borderRadius: '6px',
+                                                padding: '10px 16px',
+                                                cursor: 'pointer',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                transition: 'all 0.2s ease',
+                                                height: '46px'
+                                            }}
+                                        >
+                                            {isWishlisted ? (
+                                                <FavoriteIcon style={{ color: '#e63946', fontSize: '22px' }} />
+                                            ) : (
+                                                <FavoriteBorderIcon style={{ color: '#555', fontSize: '22px' }} />
+                                            )}
+                                        </button>
+                                    </div>
                                 </>
                                 )}
 
