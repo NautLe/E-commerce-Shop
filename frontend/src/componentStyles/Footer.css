@@ -1,0 +1,119 @@
+.mocha-footer {
+  color: #fff;
+  background: #111;
+  width: 100%;
+}
+
+.mocha-footer-main {
+  width: min(1520px, calc(100% - 164px));
+  padding: 48px 0;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.45fr .8fr 1fr 1.1fr;
+  gap: 70px;
+}
+
+.mocha-footer section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.mocha-footer section > strong {
+  font-family: Arial Black, Arial, sans-serif;
+  font-size: 29px;
+  letter-spacing: 5px;
+}
+
+.mocha-footer h3 {
+  margin: 0 0 24px;
+  color: #fff;
+  font-size: 14px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.mocha-footer p {
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  margin: 20px 0 0;
+  color: #bbb;
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+.mocha-footer section:last-child p {
+  margin: 0 0 13px;
+}
+
+.mocha-footer p svg {
+  flex: 0 0 auto;
+  font-size: 18px;
+}
+
+.mocha-footer a {
+  margin-bottom: 13px;
+  color: #bbb !important;
+  font-size: 14px;
+  text-decoration: none !important;
+}
+
+.mocha-footer a:hover {
+  color: #fff !important;
+}
+
+.mocha-footer-bottom {
+  width: min(1520px, calc(100% - 164px));
+  min-height: 66px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid #353535;
+  color: #888;
+  font-size: 11px;
+}
+
+.mocha-footer-bottom div {
+  display: flex;
+  gap: 30px;
+}
+
+.mocha-footer-bottom a {
+  margin: 0;
+  color: #888 !important;
+  font-size: 11px;
+}
+
+@media (max-width: 900px) {
+  .mocha-footer-main {
+    width: calc(100% - 64px);
+    grid-template-columns: repeat(2, 1fr);
+    gap: 42px;
+  }
+  .mocha-footer-bottom {
+    width: calc(100% - 64px);
+  }
+}
+
+@media (max-width: 600px) {
+  .mocha-footer-main {
+    width: calc(100% - 36px);
+    padding: 38px 0;
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+  .mocha-footer-bottom {
+    width: calc(100% - 36px);
+    padding: 18px 0;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .mocha-footer-bottom div {
+    flex-wrap: wrap;
+    gap: 12px 20px;
+  }
+}
+  
