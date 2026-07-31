@@ -1,0 +1,63 @@
+.mocha-home { min-height: 100vh; color: #111; background: #fff; font-family: Arial, Helvetica, sans-serif; padding-top: 65px; }
+.mocha-home a { color: #111; text-decoration: none; }
+
+.mocha-hero { position: relative; min-height: calc(100vh - 65px); padding: 76px 48px; display: flex; align-items: center; overflow: hidden; background: #faf8f5; }
+.mocha-hero-image { position: absolute; inset: 0; opacity: 0; background-repeat: no-repeat; background-position: right center; background-size: contain; transition: opacity 1s ease; }
+.mocha-hero-image::after { position: absolute; inset: 0; content: ''; background: linear-gradient(90deg,#faf8f5 0%,rgba(250,248,245,.97) 20%,rgba(250,248,245,.55) 34%,rgba(250,248,245,0) 52%); }
+.mocha-hero-image.active { opacity: 1; }
+.mocha-hero-copy { position: relative; z-index: 1; width: 480px; max-width: 100%; text-align: left; }
+.mocha-hero-copy > p { margin-bottom: 22px; color: #111; font-size: 15px; font-weight: 900; letter-spacing: 3px; text-align: left; }
+.mocha-hero-copy h1 { margin: 0; color: #111; font-family: Arial Black, "Arial Bold", Arial, sans-serif; font-size: clamp(52px, 5.2vw, 92px); font-weight: 900; line-height: 1.05; letter-spacing: -3px; text-align: left; }
+.mocha-hero-copy > span { display: block; max-width: 420px; margin-top: 25px; color: #555; font-size: 22px; line-height: 1.5; text-align: left; }
+.mocha-hero-copy > div { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 34px; }
+.mocha-button { min-height: 54px; padding: 0 28px; display: inline-flex; align-items: center; border: 1px solid #111; font-size: 14px; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; }
+.mocha-button.dark { color: #fff !important; background: #111; }
+.mocha-dots { display: flex; gap: 12px; margin-top: 27px; }
+.mocha-dots button { width: 38px; height: 5px; background: #cfcfcf; border: 0; cursor: pointer; }
+.mocha-dots button.active { background: #111; }
+
+.mocha-benefits { display: grid; grid-template-columns: repeat(3,1fr); border-top: 1px solid #e4e0d8; border-bottom: 1px solid #e4e0d8; background: #fff; }
+.mocha-benefits div { min-height: 80px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 12px 20px; }
+.mocha-benefits div + div { border-left: 1px solid #e4e0d8; }
+.mocha-benefits strong { font-size: 14px; font-weight: 900; letter-spacing: 1.5px; text-transform: uppercase; color: #111; }
+.mocha-benefits span { margin-top: 5px; color: #777; font-size: 13px; font-weight: 400; }
+
+.mocha-section, .mocha-products { padding: 58px 42px; }
+.mocha-section > p, .mocha-products > p { font-size: 13px; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; color: #111; margin-bottom: 12px; }
+.mocha-section h2, .mocha-products h2 { margin-bottom: 26px; font-size: clamp(34px, 5vw, 50px); line-height: 1; letter-spacing: -2px; }
+.mocha-categories { display: grid; grid-template-columns: repeat(4,1fr); gap: 18px; }
+.mocha-categories a { position: relative; height: 340px; overflow: hidden; background: #f5f3ee; }
+.mocha-categories img { width: 100%; height: 100%; object-fit: cover; transition: transform .35s; }
+.mocha-categories a::after { position: absolute; inset: 0; content: ''; background: linear-gradient(transparent 30%,rgba(0,0,0,.58)); }
+.mocha-categories a:hover img { transform: scale(1.06); }
+.mocha-categories div { position: absolute; z-index: 1; bottom: 18px; left: 18px; color: #fff; }
+.mocha-categories h3 { margin: 0; font-size: 18px; text-transform: uppercase; }
+.mocha-categories span { font-size: 12px; font-weight: bold; text-transform: uppercase; }
+
+.mocha-products { padding: 48px 42px 110px; }
+.mocha-products h2 { margin-bottom: 28px; font-family: Arial Black, "Arial Bold", Arial, sans-serif; font-size: clamp(32px, 4vw, 46px); font-weight: 900; line-height: 1.05; letter-spacing: -2px; text-transform: none; }
+.mocha-product-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 24px 16px; justify-content: center; }
+.mocha-product-card { position: relative; display: flex; flex-direction: column; background: #fff; border: 1px solid #dfdad2; overflow: hidden; text-decoration: none !important; color: #111; transition: transform .2s ease, box-shadow .2s ease; width: 100%; }
+.mocha-product-card:hover { transform: translateY(-4px); box-shadow: 0 14px 28px rgba(0,0,0,.06); }
+.mocha-product-image { position: relative; width: 100%; aspect-ratio: 1 / 1; overflow: hidden; background: #dedad2; }
+.mocha-product-image img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .3s ease; }
+.mocha-product-card:hover .mocha-product-image img { transform: scale(1.04); }
+.mocha-product-tag { position: absolute; z-index: 3; top: 12px; left: 12px; padding: 3px 8px; font-size: 10px; font-weight: 900; letter-spacing: 0.5px; text-transform: uppercase; background: #fff; color: #111; border: 1px solid #111; line-height: 1.2; }
+.mocha-product-info { padding: 14px 16px 16px; display: flex; flex-direction: column; flex: 1; background: #fff; border-top: 1px solid #dfdad2; }
+.mocha-colors { display: flex; align-items: center; gap: 6px; margin-bottom: 10px; }
+.mocha-colors b { width: 12px; height: 12px; border-radius: 50%; box-sizing: border-box; display: inline-block; }
+.mocha-colors b.swatch-active, .mocha-colors b:nth-child(1) { background: #111; border: 2px solid #fff; box-shadow: 0 0 0 1.5px #111; }
+.mocha-colors b:nth-child(2) { background: #111; }
+.mocha-colors b:nth-child(3) { background: #caa98d; }
+.mocha-product-info h3 { margin: 0 0 4px 0; font-size: 15px; font-weight: 800; color: #111; line-height: 1.25; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mocha-product-sub-text { font-size: 11px; color: #888888; text-transform: uppercase; letter-spacing: 0.8px; margin: 0 0 6px 0; font-weight: 600; }
+.mocha-product-price-row { display: flex; align-items: center; justify-content: space-between; margin-top: auto; padding-top: 2px; }
+.mocha-product-price-row p { margin: 0; font-size: 14px; font-weight: 800; color: #111; }
+.mocha-heart-icon { background: none; border: none; font-size: 15px; color: #888; cursor: pointer; padding: 0; line-height: 1; transition: color .2s, transform .2s; }
+.mocha-heart-icon:hover { color: #111; transform: scale(1.15); }
+.mocha-home-rating-container { display: flex; align-items: center; gap: 6px; margin-top: 8px; line-height: 1; }
+.mocha-home-review-count { font-size: 12px; color: #777; font-weight: 500; line-height: 1; display: inline-block; margin: 0; padding: 0; transform: translateY(1px); }
+
+@media (max-width: 1280px) { .mocha-product-grid { grid-template-columns: repeat(4, 1fr); } }
+@media (max-width: 900px) { .mocha-hero { min-height: 650px; }.mocha-categories { grid-template-columns: repeat(2,1fr); }.mocha-product-grid { grid-template-columns: repeat(3,1fr); }.mocha-products { padding: 40px 24px 80px; } }
+@media (max-width: 600px) { .mocha-hero { min-height: 600px; padding: 60px 24px; }.mocha-hero-image { background-position: 68% center; background-size: auto 100%; }.mocha-hero-copy h1 { font-size: 48px; }.mocha-hero-copy > span { font-size: 17px; }.mocha-benefits { grid-template-columns: 1fr; }.mocha-benefits div + div { border-top: 1px solid #e4e0d8; border-left: 0; }.mocha-section { padding: 45px 18px; }.mocha-products { padding: 35px 18px 60px; }.mocha-categories { gap: 10px; }.mocha-categories a { height: 220px; }.mocha-product-grid { grid-template-columns: repeat(2,1fr); gap: 14px 10px; } }

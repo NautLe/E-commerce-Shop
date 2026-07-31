@@ -1,0 +1,38 @@
+.rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  line-height: 1;
+  user-select: none;
+}
+
+.star {
+  font-size: 1.3rem;
+  line-height: 1;
+  display: inline-block;
+  transition: color 0.15s ease, transform 0.15s ease;
+  color: #e0e0e0;
+}
+
+.star.filled {
+  color: #ffb400;
+}
+
+.star.empty {
+  color: #dcd8d0;
+}
+
+.star.clickable {
+  cursor: pointer;
+}
+
+.star.clickable:hover {
+  transform: scale(1.25);
+  color: #ffb400;
+}
+
+.productCardSpan {
+  font-size: 0.9rem;
+  color: #555555;
+  margin-left: 0.5rem;
+}

@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\URLShorterner2.MVC.props" />
+</Project>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Web Programming 2</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Header Section -->
+  <div id="first-section">
+    <h1>Welcome to Web Programming 2 Course</h1>
+    <h2>Student Name: Lê Huỳnh Mạnh Tuấn</h2>
+    <h2>Student ID: GCS230492</h2>
+
+    <ul>
+      <li><a href="#">Home</a></li>
+      <li><a href="#">About</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+  </div>
+
+  <main>
+    <!-- About Section -->
+    <section>
+      <h2>About HTML</h2>
+      <p class="s1">HTML stands for <strong>HyperText Markup Language</strong>.</p>
+      <p>It is the <em>standard</em> language for creating web pages.</p>
+      <img src="https://picsum.photos/200/300" alt="Sample image" />
+      <p>Src: https://picsum.photos/200/300</p>
+    </section>
+
+    <hr />
+
+    <!-- Greeting and Grade -->
+    <section>
+      <h1>Welcome to the Web Programming Course! 📚</h1>
+      <p id="student-grade">Your grade: A+ 🏆</p>
+
+      <form>
+        <button type="submit" class="submit-btn">
+          Submit <img src="https://img.icons8.com/ios-filled/20/ffffff/save--v1.png" alt="Save Icon" />
+        </button>
+      </form>
+
+      <p>Have a nice day! 🌞</p>
+    </section>
+
+    <!-- Sample Article Section -->
+    <section>
+      <h2>Sample Article</h2>
+      <p id="sample-article1111">This is an article section with an ordered list:</p>
+      <ol>
+        <li>Introduction</li>
+        <li>Details</li>
+        <li>Summary</li>
+      </ol>
+    </section>
+
+    <!-- Contact Form -->
+    <section>
+      <h2>Contact Form</h2>
+      <form>
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" /><br><br>
+
+        <label for="email">Email:</label>
+        <input type="text" id="email" name="email" /><br><br>
+
+        <label for="message">Message:</label><br>
+        <textarea rows="4" cols="40" id="message" name="message"></textarea><br><br>
+
+        <input type="submit" value="Send" />
+      </form>
+    </section>
+
+    <!-- Student Table -->
+    <section>
+      <h2>Student Grades</h2>
+      <table border="1" cellpadding="5">
+        <thead>
+          <tr>
+            <th>Student Name</th>
+            <th>ID</th>
+            <th>Course</th>
+            <th>Grade</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Alice Nguyen</td>
+            <td>1001</td>
+            <td>Web Programming</td>
+            <td>A</td>
+          </tr>
+          <tr>
+            <td>Bob Tran</td>
+            <td>1002</td>
+            <td>Database</td>
+            <td>B+</td>
+          </tr>
+          <tr>
+            <td>Charlie Le</td>
+            <td>1003</td>
+            <td>Algorithms</td>
+            <td>A-</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <p>© 2025 Web Programming Course by Lê Huỳnh Mạnh Tuấn</p>
+  </footer>
+
+</body>
+</html>

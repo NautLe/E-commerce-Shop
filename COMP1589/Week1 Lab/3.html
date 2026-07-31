@@ -1,0 +1,64 @@
+<!-- Program no.5 -->
+<!-- Forms using JS Event Listener -->
+<html>
+<head>
+<title>About you</title>
+<script>
+function show() 
+{
+    var y = "you have chosen: ";
+    var x =", ";
+    var w = "and ";
+    if(document.form1.health.checked && document.form1.wealth.checked&&document.form1.happiness.checked) 
+{
+    y = y + x;
+}
+    else
+    if (document.form1.health.checked && document.form1.wealth.checked &&! document.form1.happiness.checked) 
+    {
+        y = y + w;
+    }
+    if (document.form1.wealth.checked)
+    {
+        y = y + "Wealth";
+    }
+    if(document.form1.wealth.checked && document.form1.happiness.checked)
+    {
+        y = y + w;
+    }
+    else
+    if (document.form1.health.checked && document.form1.happiness.checked)
+    if(document.form1.happiness.checked)
+    {
+        y = y + "Happiness";
+    }
+    if ( ! document.form1.health.checked &&! document.form1.wealth.checked && ! document.form1.happiness.checked )
+    {
+        y = " Please choose an option";
+    }
+    document.form1.output.value = y;
+} //End of function
+
+</script>
+</head>
+
+<body>
+    <Form name ="form1">
+    <br><br>
+    <br><br>
+    <br><br>
+    <h1> <center> What will you choose in life? </center></h1>
+    <p></p>
+    <input type = "checkbox" name = "health" style = "height: 20px;width: 20px;">Health
+    <p></p>
+    <input type = "checkbox" name = "wealth" style = "height: 20px;width: 20px;">Wealth
+    <p></p>
+    <input type = "checkbox" name = "wealth" style = "height: 20px;width: 20px;">Happiness
+    <p></p>
+    <input type ="Text" size= 80 name = "output">
+    <p></p><p></p>
+    <input type = "button" name = "choice" value="make a choice"
+    onclick=show()>
+</Form>
+</body>
+</html>

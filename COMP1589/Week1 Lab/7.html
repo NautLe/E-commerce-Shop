@@ -1,0 +1,23 @@
+<body>
+<html>
+    <head>
+        <script>
+            function addit(){
+                a=1*form1.num.value;
+                b=1*form1.num2.value;
+                c=1*form1.num3.value;
+                x=a+b+c;
+                form1.answer.value=x;
+            }
+        </script>
+    </head>
+    <form name =form1>
+        <h1> Enter your numbers: </h1>
+        <input name ="num" type = text size=4>
+        <input name ="num2" type = text size=4>
+        <input name ="num3" type = text size=4>
+        <input type = button value = "ADD" onClick = addit()>
+        <input name="answer" type = text size = 4>
+    </form>
+</body>
+</html>
