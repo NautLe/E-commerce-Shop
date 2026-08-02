@@ -46,7 +46,7 @@ const ProductDetails = () => {
         if (isWishlisted) {
             dispatch(removeFromWishlist(id))
                 .unwrap()
-                .then(() => showToast.success('Removed from wishlist'))
+                .then(() => showToast.success(`The {item.name} was removed from wishlist`))
                 .catch((err) => showToast.error(err || 'Failed to remove from wishlist'))
         } else {
             dispatch(addToWishlist(id))

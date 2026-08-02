@@ -6,9 +6,10 @@ import PageTitle from '../components/PageTitle'
 import { Link, useNavigate } from 'react-router-dom'
 import { showToast } from '../utils/showToast'
 import { useDispatch, useSelector } from 'react-redux'
-import { register, removeErrors, removeSuccess } from '../features/users/userSlice'
+import { register, verifyOTP, removeErrors, removeSuccess } from '../features/users/userSlice'
 import Visibility from '@mui/icons-material/Visibility'
 import VisibilityOff from '@mui/icons-material/VisibilityOff'
+import { Clear, Done } from '@mui/icons-material'
 
 const Register = () => {
     const [user, setUser] = useState({
@@ -24,6 +25,12 @@ const Register = () => {
     const [avatarPreview, setAvatarPreview] = useState('/images/admin-logo.png')
     const [showPassword, setShowPassword] = useState(false)
     const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+    
+    // OTP step states
+    const [showOtpStep, setShowOtpStep] = useState(false)
+    const [otpCode, setOtpCode] = useState('')
+    const [registeredEmail, setRegisteredEmail] = useState('')
+    
     const navigate = useNavigate()
 
     const userInput = (e) => {
@@ -77,6 +84,7 @@ const Register = () => {
             return;
         }
 
+        setRegisteredEmail(email)
         const myForm = new FormData();
         myForm.set("name", name);
         myForm.set("email", email);
@@ -84,6 +92,21 @@ const Register = () => {
         myForm.set("confirmPassword", confirmPassword);
         myForm.set("avatar", avatar);
         dispatch(register(myForm))
+    }
+
+    const handleVerifyOtp = (e) => {
+        e.preventDefault()
+        if (!otpCode || otpCode.length !== 6) {
+            showToast.error("Please enter a valid 6-digit OTP code.")
+            return;
+        }
+        dispatch(verifyOTP({ email: registeredEmail, otp: otpCode })).then((res) => {
+            if (res.meta.requestStatus === 'fulfilled') {
+                showToast.success("Email verified successfully! Please log in.")
+                dispatch(removeSuccess())
+                navigate('/login')
+            }
+        })
     }
 
     useEffect(() => {
@@ -94,12 +117,12 @@ const Register = () => {
     }, [dispatch, error])
 
     useEffect(() => {
-        if (success) {
-            showToast.success("Registration Successful. Please log in.")
+        if (success && !showOtpStep && registeredEmail) {
+            showToast.success("A 6-digit OTP code has been sent to your email!")
+            setShowOtpStep(true)
             dispatch(removeSuccess())
-            navigate('/login')
         }
-    }, [dispatch, success, navigate])
+    }, [dispatch, success, showOtpStep, registeredEmail])
 
     const passwordCriteria = {
         hasMinLength: password.length >= 8,
@@ -118,66 +141,89 @@ const Register = () => {
             <Navbar />
             <div className="form-container">
                 <div className="form-content">
-                    <form className='form' onSubmit={registerSubmit} encType='multipart/form-data'>
-                        <h2>Sign up</h2>
-                        <div className="input-group">
-                            <input onChange={userInput} type="text" placeholder='Enter your name' name="name" value={name} required />
-                        </div>
-                        <div className="input-group">
-                            <input onChange={userInput} type="email" placeholder='Enter your Email' name="email" value={email} required />
-                            {email && !isEmailValid && (
-                                <span className="validation-hint invalid">Please enter a valid email address</span>
-                            )}
-                        </div>
-                        <div className="input-group">
-                            <div className="password-input-container">
-                                <input onChange={userInput} type={showPassword ? "text" : "password"} placeholder='Enter your password' name="password" value={password} autoComplete="new-password" required />
-                                <span className="password-toggle-icon" onClick={() => setShowPassword(!showPassword)}>
-                                    {showPassword ? <VisibilityOff /> : <Visibility />}
-                                </span>
+                    {showOtpStep ? (
+                        <form className="form" onSubmit={handleVerifyOtp}>
+                            <h2>Verify Your Email</h2>
+                            <p style={{ textAlign: 'center', color: '#555', marginBottom: '20px', fontSize: '14px' }}>
+                                We sent a 6-digit OTP code to <strong>{registeredEmail}</strong>. Please enter it below to complete registration.
+                            </p>
+                            <div className="input-group">
+                                <input
+                                    type="text"
+                                    maxLength="6"
+                                    placeholder="Enter 6-Digit OTP"
+                                    value={otpCode}
+                                    onChange={(e) => setOtpCode(e.target.value)}
+                                    style={{ textAlign: 'center', letterSpacing: '4px', fontSize: '18px', fontWeight: 'bold' }}
+                                    required
+                                />
                             </div>
-                            {password && (
-                                <ul className="password-checklist">
-                                    <li className={passwordCriteria.hasMinLength ? "valid" : "invalid"}>
-                                        {passwordCriteria.hasMinLength ? "✓" : "✕"} At least 8 characters
-                                    </li>
-                                    <li className={passwordCriteria.hasUpperCase ? "valid" : "invalid"}>
-                                        {passwordCriteria.hasUpperCase ? "✓" : "✕"} At least 1 uppercase letter (A-Z)
-                                    </li>
-                                    <li className={passwordCriteria.hasLowerCase ? "valid" : "invalid"}>
-                                        {passwordCriteria.hasLowerCase ? "✓" : "✕"} At least 1 lowercase letter (a-z)
-                                    </li>
-                                    <li className={passwordCriteria.hasNumber ? "valid" : "invalid"}>
-                                        {passwordCriteria.hasNumber ? "✓" : "✕"} At least 1 number (0-9)
-                                    </li>
-                                    <li className={passwordCriteria.hasSpecialChar ? "valid" : "invalid"}>
-                                        {passwordCriteria.hasSpecialChar ? "✓" : "✕"} At least 1 special character (!@#$)
-                                    </li>
-                                </ul>
-                            )}
-                        </div>
-                        <div className="input-group">
-                            <div className="password-input-container">
-                                <input onChange={userInput} type={showConfirmPassword ? "text" : "password"} placeholder='Enter your confirm password' name="confirmPassword" value={confirmPassword} autoComplete="new-password" required />
-                                <span className="password-toggle-icon" onClick={() => setShowConfirmPassword(!showConfirmPassword)}>
-                                    {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
-                                </span>
+                            <button className="authBtn" disabled={loading}>
+                                {loading ? "Verifying..." : "Verify & Complete"}
+                            </button>
+                        </form>
+                    ) : (
+                        <form className='form' onSubmit={registerSubmit} encType='multipart/form-data'>
+                            <h2>Sign up</h2>
+                            <div className="input-group">
+                                <input onChange={userInput} type="text" placeholder='Enter your name' name="name" value={name} required />
                             </div>
-                            {confirmPassword && (
-                                <span className={`validation-hint ${password === confirmPassword ? "valid" : "invalid"}`}>
-                                    {password === confirmPassword ? "✓ Passwords match" : "✕ Passwords do not match"}
-                                </span>
-                            )}
-                        </div>
-                        <div className="input-group avatar-group">
-                            <input onChange={userInput} type="file" name="avatar" className='file-input' accept='image/*' />
-                            <img src={avatarPreview} alt="Avatar Preview" className='avatar' />
-                        </div>
-                        <button className="authBtn" disabled={loading}>{loading ? "Signing up..." : "Sign Up"}</button>
-                        <p className="form-links">
-                            Already Have an account? <Link to="/login">Sign in here</Link>
-                        </p>
-                    </form>
+                            <div className="input-group">
+                                <input onChange={userInput} type="email" placeholder='Enter your Email' name="email" value={email} required />
+                                {email && !isEmailValid && (
+                                    <span className="validation-hint invalid">Please enter a valid email address</span>
+                                )}
+                            </div>
+                            <div className="input-group">
+                                <div className="password-input-container">
+                                    <input onChange={userInput} type={showPassword ? "text" : "password"} placeholder='Enter your password' name="password" value={password} autoComplete="new-password" required />
+                                    <span className="password-toggle-icon" onClick={() => setShowPassword(!showPassword)}>
+                                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                                    </span>
+                                </div>
+                                {password && (
+                                    <ul className="password-checklist">
+                                        <li className={passwordCriteria.hasMinLength ? "valid" : "invalid"}>
+                                            {passwordCriteria.hasMinLength ? <Done/> : <Clear/> }At least 8 characters
+                                        </li>
+                                        <li className={passwordCriteria.hasUpperCase ? "valid" : "invalid"}>
+                                            {passwordCriteria.hasUpperCase ? <Done/> : <Clear/>} At least 1 uppercase letter (A-Z)
+                                        </li>
+                                        <li className={passwordCriteria.hasLowerCase ? "valid" : "invalid"}>
+                                            {passwordCriteria.hasLowerCase ? <Done/> : <Clear/>} At least 1 lowercase letter (a-z)
+                                        </li>
+                                        <li className={passwordCriteria.hasNumber ? "valid" : "invalid"}>
+                                            {passwordCriteria.hasNumber ? <Done/> : <Clear/>} At least 1 number (0-9)
+                                        </li>
+                                        <li className={passwordCriteria.hasSpecialChar ? "valid" : "invalid"}>
+                                            {passwordCriteria.hasSpecialChar ? <Done/> : <Clear/>} At least 1 special character (!@#$)
+                                        </li>
+                                    </ul>
+                                )}
+                            </div>
+                            <div className="input-group">
+                                <div className="password-input-container">
+                                    <input onChange={userInput} type={showConfirmPassword ? "text" : "password"} placeholder='Enter your confirm password' name="confirmPassword" value={confirmPassword} autoComplete="new-password" required />
+                                    <span className="password-toggle-icon" onClick={() => setShowConfirmPassword(!showConfirmPassword)}>
+                                        {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                                    </span>
+                                </div>
+                                {confirmPassword && (
+                                    <span className={`validation-hint ${password === confirmPassword ? "valid" : "invalid"}`}>
+                                        {password === confirmPassword ? <Done/> : <Clear/>} Passwords {password === confirmPassword ? "match" : "do not match"}
+                                    </span>
+                                )}
+                            </div>
+                            <div className="input-group avatar-group">
+                                <input onChange={userInput} type="file" name="avatar" className='file-input' accept='image/*' />
+                                <img src={avatarPreview} alt="Avatar Preview" className='avatar' />
+                            </div>
+                            <button className="authBtn" disabled={loading}>{loading ? "Signing up..." : "Sign Up"}</button>
+                            <p className="form-links">
+                                Already Have an account? <Link to="/login">Sign in here</Link>
+                            </p>
+                        </form>
+                    )}
                 </div>
             </div>
             <Footer />

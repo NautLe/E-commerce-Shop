@@ -35,6 +35,7 @@ import VoucherList from './Admin/VoucherList'
 import CreateVoucher from './Admin/CreateVoucher'
 import Wishlist from './pages/Wishlist'
 import Addresses from './UserAuthentication/Addresses'
+import Contact from './pages/Contact'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -52,6 +53,7 @@ const App = () => {
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/contact" element={<Contact />} />
         <Route path="/product/:id" element={<ProductDetails />} />
         <Route path="/products" element={<Products />} />
         <Route path="/products/:keyword" element={<Products />} />

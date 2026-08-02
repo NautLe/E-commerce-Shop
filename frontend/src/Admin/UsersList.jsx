@@ -25,7 +25,7 @@ const UsersList = () => {
     const handleDelete = (userId) =>{
         const confirm = window.confirm("Are you sure you want to delete this user?")
         if(confirm){
-            dispatch(deleteUser(userId))
+            dispatch(deleteUser({userId}))
         }
     } 
 
@@ -68,8 +68,8 @@ const UsersList = () => {
                         <td>{user.role}</td>
                         <td>{new Date(user.createdAt).toLocaleDateString()}</td>
                         <td>
-                            <Link to={`/admin/user/${user._id}`} className='action-icon edit-icon' onClick={()=>handleDelete(user._id)}><Edit /></Link>
-                            <button className="action-icon delete-icon"><Delete/></button>
+                            <Link to={`/admin/user/${user._id}`} className='action-icon edit-icon' ><Edit /></Link>
+                            <button className="action-icon delete-icon" onClick={()=>handleDelete(user._id)}><Delete/></button>
     
                         </td>
                     </tr>

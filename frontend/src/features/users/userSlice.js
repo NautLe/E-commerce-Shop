@@ -117,9 +117,21 @@ export const resetPassword = createAsyncThunk('user/resetPassword',async({token,
         
     } catch (error) {
         return rejectWithValue(error.response?.data || {message: 'Email sent failed'})
-        
     }
 })
+
+export const verifyOTP = createAsyncThunk('user/verifyOTP', async ({ email, otp }, { rejectWithValue }) => {
+    try {
+        const config = {
+            headers: { 'Content-Type': 'application/json' }
+        }
+        const { data } = await axios.post('/api/v1/email/otp/verify', { email, otp }, config)
+        return data
+    } catch (error) {
+        return rejectWithValue(error.response?.data || { message: 'OTP verification failed' })
+    }
+})
+
 export const userSlice = createSlice({
     name: 'user',
     initialState:{
@@ -274,6 +286,21 @@ export const userSlice = createSlice({
             state.loading = false
             state.error = action.payload?.message || 'Email sent Failed.'
 
+        })
+        // verify OTP case
+        builder.addCase(verifyOTP.pending,(state)=>{
+            state.loading = true
+            state.error = null
+        })
+        .addCase(verifyOTP.fulfilled,(state,action)=>{
+            state.loading = false
+            state.error = null
+            state.success = true
+            state.message = action.payload?.message || 'Email verified successfully!'
+        })
+        .addCase(verifyOTP.rejected,(state,action)=>{
+            state.loading = false
+            state.error = action.payload?.message || 'OTP verification failed.'
         })
         // logout case
       builder.addCase(logout.pending,(state)=>{

@@ -7,7 +7,6 @@ import { Link } from 'react-router-dom'
 import { showToast } from '../utils/showToast'
 import { removeErrors, removeSuccess, forgotPassword } from '../features/users/userSlice'
 import { useDispatch, useSelector } from 'react-redux'
-import Loader from '../components/Loader'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 
 const ForgotPassword = () => {
@@ -46,6 +45,9 @@ const ForgotPassword = () => {
             <div className='form-container'>
                 <div className='form-content'>
                     <form className="form" onSubmit={handleForgotPasswordSubmit}>
+                        <Link to="/login" className="back-link">
+                            <ArrowBackIcon style={{ fontSize: '18px' }} /> Back to Sign In
+                        </Link>
                         <h2>Forgot Password</h2>
 
                         <p style={{ textAlign: 'center', color: '#666', fontSize: '13.5px', marginBottom: '20px', lineHeight: '1.4' }}>

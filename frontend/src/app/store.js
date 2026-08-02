@@ -8,6 +8,7 @@ import couponReducer from '../features/coupon/couponSlice'
 import wishlistReducer from '../features/wishlist/wishlistSlice'
 import addressReducer from '../features/address/addressSlice'
 import notificationReducer from '../features/notification/notificationSlice'
+import contactReducer from '../features/contact/contactSlice'
 
 export const store = configureStore({
     reducer:{
@@ -19,6 +20,7 @@ export const store = configureStore({
         coupon: couponReducer,
         wishlist: wishlistReducer,
         address: addressReducer,
-        notification: notificationReducer
+        notification: notificationReducer,
+        contact: contactReducer
     }
 })

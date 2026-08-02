@@ -12,6 +12,7 @@ import NoProduct from '../components/NoProduct';
 import { showToast } from '../utils/showToast';
 import Pagination from '../components/Pagination';
 import SearchIcon from '@mui/icons-material/Search';
+import { Clear } from '@mui/icons-material';
 const Products = ({ categoryProp }) => {
   const { loading, error, products, resultsPerPage, productCount, filteredProductsCount } = useSelector(
     (state) => state.product
@@ -185,7 +186,7 @@ const Products = ({ categoryProp }) => {
               />
               {searchInput && (
                 <button type="button" className='clear-search-icon-btn' onClick={handleClearSearch}>
-                  ✕
+                  <Clear/>
                 </button>
               )}
             </div>
