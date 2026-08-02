@@ -89,8 +89,8 @@ const ConfirmOrder = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {cartItems.map((item) => (
-                                <tr key={item.productId}>
+                            {cartItems.map((item, index) => (
+                                <tr key={`${item.productId}-${item.size || ''}-${index}`}>
                                     <td><img src={item.image} alt={item.name} className='product-image' /></td>
                                     <td>{item.name}</td>
                                     <td>{item.price} $</td>

@@ -39,6 +39,14 @@
   text-transform: uppercase;
 }
 
+.form-description {
+  text-align: center;
+  color: #555555;
+  margin-bottom: 20px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
 .input-group {
   display: flex;
   flex-direction: column;
@@ -62,6 +70,13 @@
   border-color: #111111;
   background-color: #ffffff;
   box-shadow: 0 0 0 3px rgba(17, 17, 17, 0.08);
+}
+
+.otp-input {
+  text-align: center;
+  letter-spacing: 4px;
+  font-size: 18px;
+  font-weight: 700;
 }
 
 .password-input-container {
@@ -247,6 +262,10 @@
   transform: translateX(-3px);
 }
 
+.back-icon {
+  font-size: 18px;
+}
+
 .btn-secondary {
   width: 100%;
   background: transparent;
@@ -279,6 +298,3 @@
     padding: 30px 24px;
   }
 }
-  
-
-  

@@ -54,7 +54,7 @@ const ResetPassword = () => {
                 <div className="form-content">
                     <form className='form' onSubmit={resetPasswordSubmit}>
                         <Link to="/login" className="back-link">
-                            <ArrowBackIcon style={{ fontSize: '18px' }} /> Back to Sign In
+                            <ArrowBackIcon className="back-icon" /> Back to Sign In
                         </Link>
 
                         <h2>Reset Password</h2>

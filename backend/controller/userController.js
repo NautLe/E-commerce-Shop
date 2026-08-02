@@ -8,7 +8,6 @@ import {v2 as cloudinary} from 'cloudinary'
 
 // register user
 export const userRegister = handleAsyncError(async (req, res, next) => {
-
     const { name, email, password, avatar, confirmPassword } = req.body;
 
     if (password !== confirmPassword) {
@@ -42,33 +41,47 @@ export const userRegister = handleAsyncError(async (req, res, next) => {
         avatar: avatarData
     });
 
+    // Generate & send OTP automatically upon registration
+    try {
+        const otp = user.generateOTPCode();
+        await user.save({ validateBeforeSave: false });
+
+        await sendEmail({
+            email: user.email,
+            subject: "[MOCHA] Account Verification OTP Code",
+            message: `Hello ${user.name},\n\nThank you for registering at MOCHA! Your 6-Digit Verification OTP Code is: ${otp}\n\nThis code will expire in 10 minutes.`
+        });
+    } catch (err) {
+        console.error("Failed to send registration OTP email:", err.message);
+    }
+
     res.status(201).json({
         success: true,
-        message: "Registration successful. Please log in.",
+        message: "Registration successful! A 6-digit OTP code has been sent to your email.",
         user
     });
 });
-// Login User
 
-export const userLogin = handleAsyncError(async(req,res,next) => {
-    const { email, password } = req.body
-    if(!email || !password){
-        return next(new ErrorHandler("Please enter email and password", 400))
-
-}
-const user = await User.findOne({email}).select("+password")
-
-if (!user){
-    return next(new ErrorHandler("Invalid email or password.", 401))
-}
- const isPasswordMatched = await user.verifyPassword(password)
-    if (!isPasswordMatched){
-        return next(new ErrorHandler("Invalid email or password.", 401))
+// Login User 
+export const userLogin = handleAsyncError(async (req, res, next) => {
+    const { email, password } = req.body;
+    if (!email || !password) {
+        return next(new ErrorHandler("Please enter email and password", 400));
     }
 
-    sendToken(user, 200, res)
+    const user = await User.findOne({ email }).select("+password");
 
-})
+    if (!user) {
+        return next(new ErrorHandler("Invalid email or password.", 401));
+    }
+
+    const isPasswordMatched = await user.verifyPassword(password);
+    if (!isPasswordMatched) {
+        return next(new ErrorHandler("Invalid email or password.", 401));
+    }
+
+    sendToken(user, 200, res);
+});
 
 // Logout User
 
@@ -83,9 +96,8 @@ export const userLogout = handleAsyncError(async(req,res,next) =>
         })
     })
 
-    // reset password link
+// reset password link
 export const requestPasswordReset = handleAsyncError(async(req,res,next) => {
-
     const {email} = req.body
     const user = await User.findOne({email})    
     if (!user){
@@ -106,7 +118,6 @@ export const requestPasswordReset = handleAsyncError(async(req,res,next) => {
 
     const message = `Your password reset token is as follows:\n\n${resetPasswordUrl}\n\n This Link will expire in 15 mins. If you have not requested this email, please ignore this.`
     try{
-        // sendEmail
         await sendEmail({
             email: user.email,
             subject: "Password Recovery Request",
@@ -122,13 +133,12 @@ export const requestPasswordReset = handleAsyncError(async(req,res,next) => {
         await user.save({validateBeforeSave: false})
         return next(new ErrorHandler("Email could not be sent. Please try again later", 500))
     }
-
 })  
 
-    //Reset Password
+// Reset Password
 export const resetPassword = handleAsyncError(async(req,res,next)=>{
     const resetPasswordToken = crypto.createHash("sha256").update(req.params.token).digest("hex")
-    const user  = await User.findOne({
+    const user = await User.findOne({
         resetPasswordToken,
         resetPasswordExpire: {$gt: Date.now()}
     })
@@ -141,15 +151,12 @@ export const resetPassword = handleAsyncError(async(req,res,next)=>{
     }
     if (password !== confirmPassword){
         return next(new ErrorHandler("Password does not match.", 400))
-
     }
     user.password = password
     user.resetPasswordToken = undefined
     user.resetPasswordExpire = undefined
     await user.save()
-    sendToken (user,200,res)
-
-   
+    sendToken(user,200,res)
 })
 
     // Get user detail
@@ -264,16 +271,85 @@ export const updateUserRole = handleAsyncError(async(req,res, next)=>{
 
 // Admin delete - user profile
 
+const DEFAULT_AVATAR_ID = "avatar/ykozeveive9poxrj3hm6"
 export const deleteUser = handleAsyncError(async(req,res,next)=>{
+
         const user = await User.findByIdAndDelete(req.params.id)
 
     if(!user){
         return next(new ErrorHandler("User doesn't exist", 400))
     }
     const imageId = user.avatar.public_id
-    await cloudinary.uploader.destroy(imageId)
+    if (imageId && imageId !== DEFAULT_AVATAR_ID) {
+        await cloudinary.uploader.destroy(imageId)
+    }
         res.status(200).json({
             success: true,
             message: "User deleted successfully"
         })
     })
+
+// Send Email Verification OTP
+export const sendEmailVerificationOTP = handleAsyncError(async (req, res, next) => {
+    const { email } = req.body;
+    const targetEmail = email || (req.user && req.user.email);
+    const user = await User.findOne({ email: targetEmail });
+
+    if (!user) {
+        return next(new ErrorHandler("User not found with this email", 404));
+    }
+
+    const otp = user.generateOTPCode();
+    await user.save({ validateBeforeSave: false });
+
+    const message = `Your 6-Digit Account Verification OTP Code is: ${otp}\n\nThis code will expire in 10 minutes.`;
+    try {
+        await sendEmail({
+            email: user.email,
+            subject: "[MOCHA] Account Verification OTP Code",
+            message
+        });
+
+        res.status(200).json({
+            success: true,
+            message: `Verification OTP Code sent to ${user.email} successfully.`
+        });
+    } catch (error) {
+        user.otpCode = undefined;
+        user.otpExpire = undefined;
+        await user.save({ validateBeforeSave: false });
+        return next(new ErrorHandler("Email could not be sent. Please try again later", 500));
+    }
+});
+
+// Verify Email OTP
+export const verifyEmailOTP = handleAsyncError(async (req, res, next) => {
+    const { email, otp } = req.body;
+    const targetEmail = email || (req.user && req.user.email);
+
+    if (!targetEmail || !otp) {
+        return next(new ErrorHandler("Please enter email and OTP code", 400));
+    }
+
+    const hashedOTP = crypto.createHash("sha256").update(otp).digest("hex");
+    const user = await User.findOne({
+        email: targetEmail,
+        otpCode: hashedOTP,
+        otpExpire: { $gt: Date.now() }
+    });
+
+    if (!user) {
+        return next(new ErrorHandler("Invalid or expired OTP code. Please try again.", 400));
+    }
+
+    user.isVerified = true;
+    user.otpCode = undefined;
+    user.otpExpire = undefined;
+    await user.save();
+
+    res.status(200).json({
+        success: true,
+        message: "Email verified successfully!",
+        user
+    });
+});

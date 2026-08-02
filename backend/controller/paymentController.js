@@ -75,14 +75,6 @@ export const createCheckOutSession = handleAsyncError(async (req, res, next) => 
     user: req.user._id
   })
 
-  // Create Notification for the user
-  await createNotification({
-    userId: req.user._id,
-    title: "Order Placed Successfully 🎉",
-    message: `Your order #${order._id.toString().slice(-6)} of $${totalPrice ? totalPrice.toFixed(2) : 0} has been placed.`,
-    type: "order"
-  })
-
   // 
   const orderDetailsData = orderItems.map(item => ({
     order: order._id,
@@ -90,7 +82,8 @@ export const createCheckOutSession = handleAsyncError(async (req, res, next) => 
     name: item.name,
     price: item.price,
     quantity: item.quantity,
-    image: item.image
+    image: item.image,
+    stock: item.stock
   }))
   await OrderDetail.insertMany(orderDetailsData)
 

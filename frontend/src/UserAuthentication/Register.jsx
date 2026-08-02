@@ -144,7 +144,7 @@ const Register = () => {
                     {showOtpStep ? (
                         <form className="form" onSubmit={handleVerifyOtp}>
                             <h2>Verify Your Email</h2>
-                            <p style={{ textAlign: 'center', color: '#555', marginBottom: '20px', fontSize: '14px' }}>
+                            <p className="form-description">
                                 We sent a 6-digit OTP code to <strong>{registeredEmail}</strong>. Please enter it below to complete registration.
                             </p>
                             <div className="input-group">
@@ -152,9 +152,9 @@ const Register = () => {
                                     type="text"
                                     maxLength="6"
                                     placeholder="Enter 6-Digit OTP"
+                                    className="otp-input"
                                     value={otpCode}
                                     onChange={(e) => setOtpCode(e.target.value)}
-                                    style={{ textAlign: 'center', letterSpacing: '4px', fontSize: '18px', fontWeight: 'bold' }}
                                     required
                                 />
                             </div>

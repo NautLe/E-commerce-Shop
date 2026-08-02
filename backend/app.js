@@ -17,6 +17,7 @@
   import wishlistRoute from "./routes/wishlistRoute.js"
 import addressRoute from "./routes/addressRoute.js"
 import notificationRoute from "./routes/notificationRoute.js"
+import contactRoute from "./routes/contactRoute.js"
   const app = express();
 
   const __filename= fileURLToPath(import.meta.url)
@@ -67,6 +68,7 @@ import notificationRoute from "./routes/notificationRoute.js"
   app.use("/api/v1", wishlistRoute)
   app.use("/api/v1", addressRoute)
   app.use("/api/v1", notificationRoute)
+  app.use("/api/v1", contactRoute)
   app.use(errorHandlerMiddleware)
 
   // server static file

@@ -13,7 +13,7 @@ export const getCart = handleAsyncError(async (req, res, next) => {
 
 // 
 export const addToCart = handleAsyncError(async (req, res, next) => {
-    const { productId, name, price, image, quantity, size } = req.body
+    const { productId, name, price, image, quantity, size, stock} = req.body
 
     if (!req.session.cart) {
         req.session.cart = []
@@ -23,8 +23,12 @@ export const addToCart = handleAsyncError(async (req, res, next) => {
 
     if (existingItem) {
         existingItem.quantity += quantity
+        existingItem.stock = stock 
+        if (image) {
+            existingItem.image = image
+        }
     } else {
-        req.session.cart.push({ productId, name, price, image, quantity, size: size || 'S' })
+        req.session.cart.push({ productId, name, price, image, quantity, size: size || 'S', stock })
     }
 
     res.status(200).json({

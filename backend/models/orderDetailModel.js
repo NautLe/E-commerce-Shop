@@ -26,7 +26,10 @@ const orderDetailSchema = new mongoose.Schema({
     image: {
         type: String,
         required: true
+    },
+    stock: {
+        type: Number,
+        required: true
     }
 })
-
 export default mongoose.model("OrderDetail", orderDetailSchema)

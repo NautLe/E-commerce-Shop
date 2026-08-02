@@ -37,6 +37,7 @@ export const createNewOrder = handleAsyncError(async (req, res, next) => {
             price: item.price,
             quantity: item.quantity,
             image: item.image,
+            stock: item.stock
         }));
         await OrderDetail.insertMany(orderDetailsData);
 
@@ -130,9 +131,7 @@ export const updateOrderStatus = handleAsyncError(async (req, res, next) => {
 
     const orderItems = await OrderDetail.find({ order: order._id })
 
-    if (req.body.status === 'Shipped') {
-        await Promise.all(orderItems.map(item => updateQuantity(item.product, item.quantity)))
-    }
+
     order.orderStatus = req.body.status
     if (order.orderStatus === 'Delivered') {
         order.deliveredAt = Date.now()

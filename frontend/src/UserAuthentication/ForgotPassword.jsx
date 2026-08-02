@@ -46,11 +46,11 @@ const ForgotPassword = () => {
                 <div className='form-content'>
                     <form className="form" onSubmit={handleForgotPasswordSubmit}>
                         <Link to="/login" className="back-link">
-                            <ArrowBackIcon style={{ fontSize: '18px' }} /> Back to Sign In
+                            <ArrowBackIcon className="back-icon" /> Back to Sign In
                         </Link>
                         <h2>Forgot Password</h2>
 
-                        <p style={{ textAlign: 'center', color: '#666', fontSize: '13.5px', marginBottom: '20px', lineHeight: '1.4' }}>
+                        <p className="form-description">
                             Enter your registered email address and we will send you instructions to reset your password.
                         </p>
 

@@ -12,7 +12,7 @@ export const fetchCart = createAsyncThunk('cart/fetchCart', async (_, { rejectWi
 })
 
 // Add an item to the cart 
-export const addItemsToCart = createAsyncThunk('cart/addItemsToCart', async ({ id, quantity, size }, { rejectWithValue }) => {
+export const addItemsToCart = createAsyncThunk('cart/addItemsToCart', async ({ id, quantity, size, image }, { rejectWithValue }) => {
     try {
         // Fetch product details first
         const { data: productData } = await axios.get(`/api/v1/product/${id}`)
@@ -24,7 +24,7 @@ export const addItemsToCart = createAsyncThunk('cart/addItemsToCart', async ({ i
             productId: productData.product._id,
             name: productData.product.name,
             price: productData.product.price,
-            image: productData.product.image[0].url,
+            image: image || productData.product.image[0]?.url,
             stock: productData.product.stock,
             quantity,
             size: itemSize

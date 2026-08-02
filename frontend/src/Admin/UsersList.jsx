@@ -37,7 +37,7 @@ const UsersList = () => {
             if (message) {
                 showToast.success(message)
                 dispatch(clearMessage())
-                navigate('/admin/dashboard')
+                navigate('  ')
             }
         }, [dispatch, error,message])
   return (

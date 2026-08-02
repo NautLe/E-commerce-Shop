@@ -18,7 +18,7 @@ const ProductDetails = () => {
     const [quantity, setQuantity] = useState(1)
     const [userRating, setUserRating] = useState(0)
     const [comment, setComment] = useState('')
-    const [selectedImage, setSelectedImage] = useState("")
+    const [selectedImage, setSelectedImage] = useState(null)
     const [selectedSize, setSelectedSize] = useState('')
     const handleRatingChange = (newRating) => {
         setUserRating(newRating)
@@ -136,7 +136,15 @@ const ProductDetails = () => {
 
     const addToCart = () => {
         const finalSize = selectedSize || (isEssential ? 'OS' : 'S')
-        dispatch(addItemsToCart({ id, quantity, size: finalSize }))
+        dispatch(
+          addItemsToCart({
+            id,
+            quantity,
+            size: finalSize,
+            stock: product.stock,
+            image: selectedImage || (product.image[0]?.url || ''),
+          })
+        )
     }
 
     const handleReviewSubmit = (e) => {
@@ -173,7 +181,7 @@ const ProductDetails = () => {
             <div className="product-details-container">
                 <div className="product-detail-container">
                     <div className="product-image-container">
-                    <img src={selectedImage} 
+                    <img src={selectedImage || (product.image[0]?.url || null)} 
                     alt={product.name} className='product-detail-image' />
                     {product.image.length > 1 && (
                         <div className="product-thumbnails">

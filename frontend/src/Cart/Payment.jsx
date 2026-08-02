@@ -29,7 +29,8 @@ const Payment = () => {
                     price: item.price,
                     quantity: item.quantity,
                     image: item.image,
-                    product: item.productId
+                    product: item.productId,
+                    stock: item.stock,
                 })),
                 shippingInfo, 
                 shippingPrice: orderItem.shipping,
