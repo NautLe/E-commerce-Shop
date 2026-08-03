@@ -95,10 +95,10 @@ const ReviewList = () => {
                                         {product.numReviews > 0 ? (
                                             <button className="action-btn view-btn" onClick={() => handleViewReviews(product._id)} >View Reviews</button>
                                         ) : (
-                                            <span style={{ color: '#888', fontSize: '0.9rem' }}>No Reviews</span>
+                                            <span className="no-reviews-text">No Reviews</span>
                                         )}
-                                    </td>
-                                </tr>
+                                     </td>
+                                 </tr>
                             ))}
                         </tbody>
                     </table>
@@ -131,7 +131,7 @@ const ReviewList = () => {
                                     </tbody>
                                 </table>
                             ) : (
-                                <p style={{ marginTop: '15px', color: '#666' }}>No reviews found for this product.</p>
+                                <p className="no-reviews-msg">No reviews found for this product.</p>
                             )}
                         </div>
                     )}

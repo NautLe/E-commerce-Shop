@@ -44,7 +44,7 @@ const PromoModal = ({ onClose }) => {
       <section className="promo-modal" role="dialog" aria-modal="true" aria-labelledby="promo-title">
         <div className="promo-hot-tag">HOT</div>
         <button className="promo-close" type="button" onClick={onClose} aria-label="Close offer">
-          <CloseIcon style={{ fontSize: '20px' }} />
+          <CloseIcon className="promo-close-icon" />
         </button>
         <p className="promo-eyebrow">EXCLUSIVE OFFER</p>
         <h2 className="promo-title" id="promo-title">

@@ -61,7 +61,7 @@ const Payment = () => {
             <CheckOut activePath={2} />
             <div className="payment-container">
                 <Link to="/order/confirm" className='payment-go-back'>Go Back</Link>
-                {error && <div style={{ color: 'red', marginTop: '10px' }}>{error}</div>}
+                {error && <div className="payment-error-msg">{error}</div>}
                 <button
                     className="payment-btn"
                     onClick={handlePayment}

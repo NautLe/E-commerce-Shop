@@ -215,7 +215,7 @@ const Products = ({ categoryProp }) => {
           </div>
 
           {loading ? (
-            <div style={{ padding: '60px 0', textAlign: 'center' }}>
+            <div className="products-loader-wrapper">
               <Loader />
             </div>
           ) : products && products.length > 0 ? (

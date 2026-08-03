@@ -35,17 +35,23 @@ const Wishlist = () => {
     }
 
     const handleAddToCart = (product) => {
+        if (!product.stock || product.stock <= 0) {
+            showToast.error('Product is out of stock!')
+            return
+        }
         dispatch(addItemsToCart({ id: product._id, quantity: 1 }))
             .unwrap()
             .then(() => {
                 showToast.success('Moved product to cart!')
             })
             .catch((err) => {
-                showToast.error(err.message || 'Could not add to cart')
+                showToast.error(err.message || err || 'Could not add to cart')
             })
     }
 
-    const products = wishlist?.products || []
+    const validProducts = (wishlist?.products || []).filter(
+        (item) => item.product && typeof item.product === 'object' && item.product._id && item.product.name
+    )
 
     return (
         <>
@@ -55,12 +61,12 @@ const Wishlist = () => {
             <div className="wishlist-container">
                 <h1 className="wishlist-title">My Wishlist</h1>
 
-                {loading && products.length === 0 ? (
+                {loading && validProducts.length === 0 ? (
                     <Loader />
-                ) : products.length === 0 ? (
+                ) : validProducts.length === 0 ? (
                     <div className="empty-wishlist">
                         <div className="empty-wishlist-icon">
-                            <FavoriteBorder style={{ fontSize: '48px', color: '#999' }} />
+                            <FavoriteBorder className="empty-wishlist-heart-icon" />
                         </div>
                         <h3>Your wishlist is empty</h3>
                         <p>Explore our products and tap the heart icon to save your favorites!</p>
@@ -70,9 +76,9 @@ const Wishlist = () => {
                     </div>
                 ) : (
                     <div className="wishlist-grid">
-                        {products.map((item) => {
+                        {validProducts.map((item) => {
                             const p = item.product
-                            if (!p) return null
+                            const isOutOfStock = !p.stock || p.stock <= 0
                             return (
                                 <div className="wishlist-card" key={p._id}>
                                     <div className="wishlist-image-wrapper">
@@ -82,7 +88,7 @@ const Wishlist = () => {
                                             onClick={() => handleRemove(p._id)}
                                             title="Remove item"
                                         >
-                                            <Delete style={{ fontSize: '18px' }} />
+                                            <Delete className="wishlist-remove-icon" />
                                         </button>
                                     </div>
                                     <div className="wishlist-card-content">
@@ -95,8 +101,9 @@ const Wishlist = () => {
                                             <button
                                                 className="wishlist-cart-btn"
                                                 onClick={() => handleAddToCart(p)}
+                                                disabled={isOutOfStock}
                                             >
-                                                <ShoppingCart style={{ fontSize: '16px' }} /> Add to Cart
+                                                <ShoppingCart className="wishlist-cart-icon" /> {isOutOfStock ? 'Out of Stock' : 'Add to Cart'}
                                             </button>
                                         </div>
                                     </div>

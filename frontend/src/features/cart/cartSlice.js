@@ -17,6 +17,10 @@ export const addItemsToCart = createAsyncThunk('cart/addItemsToCart', async ({ i
         // Fetch product details first
         const { data: productData } = await axios.get(`/api/v1/product/${id}`)
 
+        if (!productData.product || productData.product.stock <= 0) {
+            return rejectWithValue({ message: 'Product is out of stock.' })
+        }
+
         const isEssential = productData.product.category?.toLowerCase() === 'essentials'
         const itemSize = size || (isEssential ? 'OS' : (productData.product.sizes?.[0] || 'S'))
 
@@ -34,7 +38,7 @@ export const addItemsToCart = createAsyncThunk('cart/addItemsToCart', async ({ i
         const { data } = await axios.post('/api/v1/cart/add', payload)
         return { ...data, itemName: payload.name }
     } catch (error) {
-        return rejectWithValue(error.response?.data || 'An error Occurred.')
+        return rejectWithValue(error.response?.data || error.message || 'An error Occurred.')
     }
 })
 

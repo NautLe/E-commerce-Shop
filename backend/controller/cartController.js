@@ -15,6 +15,10 @@ export const getCart = handleAsyncError(async (req, res, next) => {
 export const addToCart = handleAsyncError(async (req, res, next) => {
     const { productId, name, price, image, quantity, size, stock} = req.body
 
+    if (typeof stock === 'number' && stock <= 0) {
+        return next(new ErrorHandler("Product is out of stock", 400))
+    }
+
     if (!req.session.cart) {
         req.session.cart = []
     }
@@ -22,6 +26,9 @@ export const addToCart = handleAsyncError(async (req, res, next) => {
     const existingItem = req.session.cart.find(item => item.productId === productId && (item.size === size || (!item.size && !size)))
 
     if (existingItem) {
+        if (typeof stock === 'number' && existingItem.quantity + quantity > stock) {
+            return next(new ErrorHandler(`Only ${stock} items available in stock`, 400))
+        }
         existingItem.quantity += quantity
         existingItem.stock = stock 
         if (image) {

@@ -74,24 +74,17 @@ const Shipping = () => {
                 <h1 className="shipping-form-header">Shipping details</h1>
 
                 {addresses && addresses.length > 0 && (
-                    <div style={{ marginBottom: '20px' }}>
-                        <h3 style={{ fontSize: '14px', fontWeight: '600', marginBottom: '8px' }}>Saved Addresses:</h3>
-                        <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+                    <div className="saved-addresses-wrapper">
+                        <h3 className="saved-addresses-heading">Saved Addresses:</h3>
+                        <div className="saved-addresses-grid">
                             {addresses.map((addr) => (
                                 <div
                                     key={addr._id}
                                     onClick={() => handleSelectSavedAddress(addr)}
-                                    style={{
-                                        border: selectedAddressId === addr._id ? '2px solid #111' : '1px solid #ccc',
-                                        borderRadius: '8px',
-                                        padding: '10px 14px',
-                                        cursor: 'pointer',
-                                        background: selectedAddressId === addr._id ? '#f5f5f5' : '#fff',
-                                        fontSize: '13px'
-                                    }}
+                                    className={`saved-address-chip ${selectedAddressId === addr._id ? 'selected' : ''}`}
                                 >
                                     <strong>{addr.fullName || addr.name}</strong> ({addr.phoneNumber || addr.phone})<br/>
-                                    <span style={{ color: '#666' }}>{addr.addressLine || addr.address}, {addr.city}</span>
+                                    <span className="saved-address-detail">{addr.addressLine || addr.address}, {addr.city}</span>
                                 </div>
                             ))}
                         </div>

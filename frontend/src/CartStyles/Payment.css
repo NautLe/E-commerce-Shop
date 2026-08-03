@@ -52,4 +52,10 @@
       gap: 2rem; 
     }
   }
+
+.payment-error-msg {
+  color: red;
+  margin-top: 10px;
+}
+
   

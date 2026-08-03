@@ -36,12 +36,23 @@ export const getOrderDetails = createAsyncThunk('order/getOrderDetails', async(o
     }
 })
 
+// Cancel order (User or Admin)
+export const cancelUserOrder = createAsyncThunk('order/cancelUserOrder', async(orderId, {rejectWithValue}) => {
+    try {   
+        const {data} = await axios.put(`/api/v1/order/cancel/${orderId}`)
+        return data
+    } catch (error) {
+        return rejectWithValue(error.response?.data?.message || error.response?.data || 'Failed to cancel order.')
+    }
+})
+
 const orderSlice = createSlice({
     name: 'order',
     initialState: {
         success: false,
         loading: false,
         error: null,
+        message: null,
         orders: [],
         order: {}
     },
@@ -51,6 +62,7 @@ const orderSlice = createSlice({
         },
         removeSuccess: (state) => {
             state.success = false
+            state.message = null
         }
     },
     extraReducers: (builder) => {
@@ -95,6 +107,21 @@ const orderSlice = createSlice({
         .addCase(getOrderDetails.rejected, (state, action) => {
             state.loading = false
             state.error = action.payload?.message || "Failed to fetch order details."
+        })
+
+        .addCase(cancelUserOrder.pending, (state) => {
+            state.loading = true
+            state.error = null
+        })
+        .addCase(cancelUserOrder.fulfilled, (state, action) => {
+            state.loading = false
+            state.order = action.payload.order
+            state.success = action.payload.success
+            state.message = action.payload.message
+        })
+        .addCase(cancelUserOrder.rejected, (state, action) => {
+            state.loading = false
+            state.error = typeof action.payload === 'string' ? action.payload : action.payload?.message || "Failed to cancel order."
         })
     }
 })

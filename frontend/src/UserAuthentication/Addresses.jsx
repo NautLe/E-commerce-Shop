@@ -140,7 +140,7 @@ const Addresses = () => {
                         <p className="addresses-subtitle">Manage your shipping addresses for faster checkout</p>
                     </div>
                     <button className="add-address-btn" onClick={handleOpenCreate}>
-                        <Add style={{ fontSize: '18px' }} /> Add New Address
+                        <Add className="icon-add" /> Add New Address
                     </button>
                 </div>
 
@@ -148,10 +148,10 @@ const Addresses = () => {
                     <Loader />
                 ) : addresses.length === 0 ? (
                     <div className="empty-addresses">
-                        <LocationOn style={{ fontSize: '48px', color: '#999', marginBottom: '1rem' }} />
+                        <LocationOn className="empty-addresses-icon" />
                         <h3>No addresses saved yet</h3>
                         <p>Add your shipping address to make your next purchase seamless!</p>
-                        <button className="add-address-btn" onClick={handleOpenCreate} style={{ marginTop: '1rem' }}>
+                        <button className="add-address-btn" onClick={handleOpenCreate}>
                             Add Address
                         </button>
                     </div>
@@ -161,7 +161,7 @@ const Addresses = () => {
                             <div className={`address-card ${addr.isDefault ? 'default-card' : ''}`} key={addr._id}>
                                 {addr.isDefault && (
                                     <div className="default-badge">
-                                        <CheckCircle style={{ fontSize: '14px' }} /> Default Address
+                                        <CheckCircle className="default-badge-icon" /> Default Address
                                     </div>
                                 )}
                                 <h3 className="addr-name">{addr.fullName || addr.name}</h3>
@@ -171,10 +171,10 @@ const Addresses = () => {
 
                                 <div className="address-actions">
                                     <button className="addr-edit-btn" onClick={() => handleOpenEdit(addr)}>
-                                        <Edit style={{ fontSize: '16px' }} /> Edit
+                                        <Edit className="addr-edit-btn-icon" /> Edit
                                     </button>
                                     <button className="addr-delete-btn" onClick={() => handleDelete(addr._id)}>
-                                        <Delete style={{ fontSize: '16px' }} /> Delete
+                                        <Delete className="addr-delete-btn-icon" /> Delete
                                     </button>
                                 </div>
                             </div>

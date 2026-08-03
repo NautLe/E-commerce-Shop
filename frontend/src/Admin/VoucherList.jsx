@@ -58,7 +58,7 @@ const VoucherList = () => {
               <h1 className="voucher-title">All Vouchers</h1>
             </div>
             <Link to="/admin/voucher/create" className="create-voucher-nav-btn">
-              <AddBox style={{ fontSize: '18px', marginRight: '6px' }} />
+              <AddBox className="voucher-btn-icon" />
               Create Voucher
             </Link>
           </div>
@@ -81,7 +81,7 @@ const VoucherList = () => {
                 <tbody>
                   {!coupons || coupons.length === 0 ? (
                     <tr>
-                      <td colSpan="7" style={{ textAlign: 'center', padding: '35px', color: '#666' }}>
+                      <td colSpan="7" className="empty-voucher-cell">
                         No vouchers found. Click "Create Voucher" to add one!
                       </td>
                     </tr>
@@ -97,7 +97,7 @@ const VoucherList = () => {
                           {coupon.discountType === 'fixed' && `$${coupon.discount} OFF`}
                           {coupon.discountType === 'freeship' && 'FREE SHIPPING'}
                         </td>
-                        <td style={{ textTransform: 'capitalize' }}>{coupon.discountType}</td>
+                        <td className="capitalize-cell">{coupon.discountType}</td>
                         <td>${coupon.minAmount || 0}</td>
                         <td>{new Date(coupon.createdAt).toLocaleDateString()}</td>
                         <td>
@@ -106,7 +106,7 @@ const VoucherList = () => {
                             disabled={deleting && deleting[coupon._id]}
                             onClick={() => handleDeleteVoucher(coupon._id, coupon.code)}
                           >
-                            <Delete style={{ fontSize: '16px', verticalAlign: 'middle', marginRight: '4px' }} />
+                            <Delete className="delete-btn-icon" />
                             {deleting && deleting[coupon._id] ? 'Deleting...' : 'Delete'}
                           </button>
                         </td>

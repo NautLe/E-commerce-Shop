@@ -70,8 +70,7 @@ const Home = () => {
         {heroImages.map((image, index) => (
           <div
             key={image}
-            className={`mocha-hero-image ${index === activeHero ? "active" : ""}`}
-            style={{ backgroundImage: `url(${referenceAssets}/${image})` }}
+            className={`mocha-hero-image mocha-hero-image-${index} ${index === activeHero ? "active" : ""}`}
           />
         ))}
         <div className="mocha-hero-copy">
@@ -177,7 +176,7 @@ const Home = () => {
       </section>
 
       {/* WOMEN SECTION */}
-      <section className="mocha-products" style={{ paddingTop: 0 }}>
+      <section className="mocha-products no-top-padding">
         <p>FOR WOMEN</p>
         <h2>WOMEN COLLECTION</h2>
         {loading ? (

@@ -30,7 +30,10 @@ const MyOrders = () => {
     return orders.filter(order => {
       const matchesSearch = order._id.toLowerCase().includes(searchQuery.toLowerCase()) ||
         order.orderItems?.some(item => item.name?.toLowerCase().includes(searchQuery.toLowerCase()))
-      const matchesStatus = statusFilter === 'All' || order.orderStatus.toLowerCase() === statusFilter.toLowerCase()
+      const matchesStatus = statusFilter === 'All' || 
+        (statusFilter.toLowerCase() === 'delivering' || statusFilter.toLowerCase() === 'shipping'
+          ? (order.orderStatus?.toLowerCase() === 'delivering' || order.orderStatus?.toLowerCase() === 'shipping')
+          : order.orderStatus?.toLowerCase() === statusFilter.toLowerCase())
       return matchesSearch && matchesStatus
     })
   }, [orders, searchQuery, statusFilter])
@@ -44,51 +47,30 @@ const MyOrders = () => {
         <h1>My Orders</h1>
 
         {/* Filter & Search Bar for User Orders */}
-        <div style={{
-          display: 'flex',
-          flexWrap: 'wrap',
-          gap: '16px',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          marginBottom: '20px',
-          background: '#f8f8f8',
-          padding: '16px',
-          borderRadius: '8px'
-        }}>
-          <div style={{ flex: '1', minWidth: '240px' }}>
+        <div className="orders-filter-container">
+          <div className="orders-search-box">
             <input
               type="text"
+              className="orders-search-input"
               placeholder="Search by Order ID or Product Name..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              style={{
-                width: '100%',
-                padding: '10px 14px',
-                borderRadius: '6px',
-                border: '1px solid #ccc',
-                fontSize: '14px'
-              }}
             />
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <label htmlFor="user-order-status" style={{ fontWeight: 'bold', fontSize: '14px', color: '#333' }}>Status:</label>
+          <div className="orders-status-filter">
+            <label htmlFor="user-order-status" className="orders-status-label">Status:</label>
             <select
               id="user-order-status"
+              className="orders-status-select"
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              style={{
-                padding: '10px 14px',
-                borderRadius: '6px',
-                border: '1px solid #ccc',
-                fontSize: '14px',
-                background: '#fff'
-              }}
             >
               <option value="All">All Statuses</option>
               <option value="Processing">Processing</option>
-              <option value="Shipped">Shipped</option>
+              <option value="Delivering">Delivering</option>
               <option value="Delivered">Delivered</option>
+              <option value="Cancelled">Cancelled</option>
             </select>
           </div>
         </div>
@@ -124,8 +106,8 @@ const MyOrders = () => {
             </table>
           </div>
         ) : (
-          <div className="no-orders" style={{ minHeight: '300px' }}>
-            <p className="no-order-message" style={{ fontSize: '20px' }}>No orders found.</p>
+          <div className="no-orders">
+            <p className="no-order-message">No orders found.</p>
           </div>
         )}
       </div>

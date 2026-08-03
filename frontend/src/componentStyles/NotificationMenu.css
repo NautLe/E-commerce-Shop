@@ -164,3 +164,8 @@
 .delete-notif-btn:hover {
   color: #ef4444;
 }
+
+.notif-icon-sm {
+  font-size: 14px !important;
+}
+

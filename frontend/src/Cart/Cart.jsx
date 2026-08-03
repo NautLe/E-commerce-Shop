@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import "../CartStyles/Cart.css";
 import PageTitle from "../components/PageTitle";
 import Navbar from "../components/Navbar";
@@ -31,7 +31,7 @@ const Cart = () => {
   const navigate = useNavigate();
 
   const [couponCode, setCouponCode] = useState("");
-
+  const isManualApply = useRef(false);  
   useEffect(() => {
     dispatch(fetchCart());
   }, [dispatch]);
@@ -43,22 +43,26 @@ const Cart = () => {
     }
     if (couponMessage) {
       showToast.success(couponMessage);
+       isManualApply.current = false;
       dispatch(clearCouponMessage());
     }
   }, [couponError, couponMessage, dispatch]);
 
   const subTotal = cartItems.reduce(
-    (acc, item) => acc + item.price * item.quantity,
-    0,
-  );
+    (acc, item) => acc + item.price * item.quantity,0,);
 
   let discount = 0;
   let shipping = subTotal > 50 ? 0 : 20;
 
+useEffect(() => {
+  if (appliedCoupon?.code && subTotal > 0) {
+    dispatch(applyCoupon({ code: appliedCoupon.code, subTotal }));
+  }
+
+}, [subTotal]);
   if (appliedCoupon) {
-    if (appliedCoupon.type === "percent") {
-      discount = (subTotal * appliedCoupon.value) / 100;
-    } else if (appliedCoupon.type === "freeship") {
+    discount = appliedCoupon.calculatedDiscount || 0;
+    if (appliedCoupon.type === "freeship") {
       shipping = 0;
     }
   }
@@ -73,6 +77,7 @@ const Cart = () => {
       showToast.error("Please enter a coupon code.");
       return;
     }
+    isManualApply.current = true;
     dispatch(applyCoupon({ code, subTotal }));
     setCouponCode("");
   };
@@ -100,7 +105,7 @@ const Cart = () => {
             collection to find your next favorite items!
           </p>
           <Link to="/products" className="viewProducts">
-            View Products <ArrowForwardIcon style={{ fontSize: "18px" }} />
+            View Products <ArrowForwardIcon className="arrow-icon-sm" />
           </Link>
         </div>
       ) : (
@@ -141,10 +146,7 @@ const Cart = () => {
               </div>
 
               {discount > 0 && (
-                <div
-                  className="summary-item"
-                  style={{ color: "#2e7d32", fontWeight: "bold" }}
-                >
+                <div className="summary-item discount">
                   <p className="summary-label">
                     Discount ({appliedCoupon?.label}):
                   </p>
@@ -161,7 +163,7 @@ const Cart = () => {
                 <p className="summary-label">Shipping:</p>
                 <p className="summary-value">
                   {shipping === 0 ? (
-                    <span style={{ color: "#2e7d32", fontWeight: "bold" }}>
+                    <span className="free-shipping-badge">
                       FREE
                     </span>
                   ) : (
@@ -171,56 +173,18 @@ const Cart = () => {
               </div>
 
               {/* Promo Code Input Box */}
-              <div
-                className="coupon-container"
-                style={{
-                  margin: "1rem 0",
-                  padding: "10px 0",
-                  borderTop: "1px solid #eee",
-                }}
-              >
-                <label
-                  style={{
-                    fontSize: "13px",
-                    fontWeight: "600",
-                    color: "#444",
-                    display: "block",
-                    marginBottom: "6px",
-                  }}
-                >
+              <div className="coupon-container">
+                <label className="coupon-label">
                   Promo Code
                 </label>
                 {appliedCoupon ? (
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                      background: "#e8f5e9",
-                      padding: "8px 12px",
-                      borderRadius: "6px",
-                      border: "1px solid #c8e6c9",
-                    }}
-                  >
-                    <span
-                      style={{
-                        fontSize: "13px",
-                        fontWeight: "bold",
-                        color: "#2e7d32",
-                      }}
-                    >
+                  <div className="coupon-applied-box">
+                    <span className="coupon-applied-code">
                       {appliedCoupon.code} ({appliedCoupon.label})
                     </span>
                     <button
                       onClick={handleRemoveCoupon}
-                      style={{
-                        background: "none",
-                        border: "none",
-                        color: "#d32f2f",
-                        cursor: "pointer",
-                        fontWeight: "bold",
-                        fontSize: "13px",
-                      }}
+                      className="coupon-remove-btn"
                     >
                       Remove
                     </button>
@@ -228,34 +192,18 @@ const Cart = () => {
                 ) : (
                   <form
                     onSubmit={handleApplyCoupon}
-                    style={{ display: "flex", gap: "6px" }}
+                    className="coupon-form"
                   >
                     <input
                       type="text"
                       placeholder="Enter promo code"
                       value={couponCode}
                       onChange={(e) => setCouponCode(e.target.value)}
-                      style={{
-                        flex: 1,
-                        padding: "8px 10px",
-                        fontSize: "13px",
-                        border: "1px solid #ccc",
-                        borderRadius: "6px",
-                        outline: "none",
-                      }}
+                      className="coupon-input"
                     />
                     <button
                       type="submit"
-                      style={{
-                        padding: "8px 14px",
-                        background: "#111",
-                        color: "#fff",
-                        border: "none",
-                        borderRadius: "6px",
-                        cursor: "pointer",
-                        fontWeight: "bold",
-                        fontSize: "13px",
-                      }}
+                      className="coupon-apply-btn"
                     >
                       Apply
                     </button>

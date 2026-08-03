@@ -112,3 +112,8 @@
   .promo-discount, .promo-code-section { padding: 21px; }
   .promo-percent { font-size: 64px; }
 }
+
+.promo-close-icon {
+  font-size: 20px !important;
+}
+

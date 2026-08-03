@@ -35,6 +35,7 @@ export const addToWishlist = handleAsyncError(async (req, res, next) => {
 
     wishlist.products.push({ product: productId })
     await wishlist.save()
+    await wishlist.populate("products.product")
 
     res.status(200).json({
         success: true,
@@ -54,6 +55,7 @@ export const removeFromWishlist = handleAsyncError(async (req, res, next) => {
         (item) => item.product.toString() !== productId
     )
     await wishlist.save()
+    await wishlist.populate("products.product")
 
     res.status(200).json({
         success: true,

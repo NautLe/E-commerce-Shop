@@ -167,6 +167,17 @@
   color: #111827;
 }
 
+.empty-wishlist-icon svg,
+.empty-wishlist-heart-icon {
+  font-size: 48px;
+  color: #999;
+}
+
+.wishlist-remove-btn svg,
+.wishlist-remove-icon {
+  font-size: 18px;
+}
+
 .wishlist-cart-btn {
   display: inline-flex;
   align-items: center;
@@ -182,6 +193,18 @@
   transition: all 0.2s ease;
 }
 
-.wishlist-cart-btn:hover {
+.wishlist-cart-btn svg,
+.wishlist-cart-icon {
+  font-size: 16px;
+}
+
+.wishlist-cart-btn:hover:not(:disabled) {
   background: #000;
 }
+
+.wishlist-cart-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background: #999;
+}
+

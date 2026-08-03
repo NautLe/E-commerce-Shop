@@ -32,7 +32,7 @@ const UpdateOrderStatus = () => {
     } = order
 
     const paymentStatus = paymentInfo.status==='succeeded'?'Paid':'Not Paid'
-    const finalOrderStatus = paymentStatus==='Not Paid' ? 'Cancelled' : orderStatus;
+    const finalOrderStatus = (orderStatus === 'Cancelled' || paymentStatus === 'Not Paid') ? 'Cancelled' : orderStatus;
     const handleStatusUpdate = () =>{
         if(!status){
             showToast.error('Please select a status')
@@ -92,13 +92,14 @@ const UpdateOrderStatus = () => {
             </table>
              <div className="order-status">
         <h2>Update Status</h2>
-        <select className='status-select' disabled={loading || orderStatus==='Delivered'} value={status} onChange={(e)=>(setStatus(e.target.value))}>
+        <select className='status-select' disabled={loading || orderStatus==='Delivered' || orderStatus==='Cancelled'} value={status} onChange={(e)=>(setStatus(e.target.value))}>
             <option value="">Select Status</option>
-            <option value="Shipped">Shipped</option>
+            <option value="Processing">Processing</option>
             <option value="Delivering">Delivering</option>
             <option value="Delivered">Delivered</option>
+            <option value="Cancelled">Cancelled</option>
         </select>
-        <button className="update-button" onClick={handleStatusUpdate} disabled={loading || !status ||orderStatus==='Delivered'}>Update Status</button>
+        <button className="update-button" onClick={handleStatusUpdate} disabled={loading || !status || orderStatus==='Delivered' || orderStatus==='Cancelled'}>Update Status</button>
     </div>
         </div>
         

@@ -56,9 +56,9 @@ const Product = ({ product }) => {
           aria-label="Wishlist"
         >
           {isWishlisted ? (
-            <FavoriteIcon style={{ color: '#e63946', fontSize: '18px' }} />
+            <FavoriteIcon className="wishlist-card-icon-filled" />
           ) : (
-            <FavoriteBorderIcon style={{ color: '#555', fontSize: '18px' }} />
+            <FavoriteBorderIcon className="wishlist-card-icon-empty" />
           )}
         </button>
 

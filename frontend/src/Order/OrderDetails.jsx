@@ -4,17 +4,15 @@ import PageTitle from '../components/PageTitle'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import { useDispatch, useSelector } from 'react-redux'
-import { getOrderDetails, removeErrors } from '../features/order/orderSlice'
+import { cancelUserOrder, getOrderDetails, removeErrors, removeSuccess } from '../features/order/orderSlice'
 import { useParams } from 'react-router-dom'
 import { showToast } from '../utils/showToast'
 import Loader from '../components/Loader'
 
 const OrderDetails = () => {
     const { orderId } = useParams();
-    console.log(orderId);
-    
 
-    const { order, loading, error } = useSelector(state => state.order)
+    const { order, loading, error, success, message } = useSelector(state => state.order)
     const dispatch = useDispatch()
 
     useEffect(() => {
@@ -26,7 +24,17 @@ const OrderDetails = () => {
             showToast.error(error)
             dispatch(removeErrors())
         }
-    }, [dispatch, error])
+        if (success && message) {
+            showToast.success(message)
+            dispatch(removeSuccess())
+        }
+    }, [dispatch, error, success, message])
+
+    const handleCancelOrder = () => {
+        if (window.confirm("Are you sure you want to cancel this order?")) {
+            dispatch(cancelUserOrder(orderId))
+        }
+    }
 
     const {
         shippingInfo = {},
@@ -42,9 +50,11 @@ const OrderDetails = () => {
     } = order || {}
 
     const paymentStatus = paymentInfo?.status === 'succeeded' ? 'Paid' : 'Not Paid'
-    const finalOrderStatus = paymentStatus === 'Not Paid' ? 'Cancelled' : orderStatus
+    const finalOrderStatus = (orderStatus === 'Cancelled' || paymentStatus === 'Not Paid') ? 'Cancelled' : orderStatus
     const orderStatusClass = finalOrderStatus === 'Delivered' ? 'status-tag delivered' : `${finalOrderStatus?.toLowerCase()}`
     const paymentStatusClass = `pay-tag ${paymentStatus === 'Paid' ? 'paid' : 'not-paid'}`
+    const canCancel = finalOrderStatus !== 'Delivered' && finalOrderStatus !== 'Cancelled'
+
     return (
         <>
         <PageTitle title={orderId} />
@@ -142,6 +152,18 @@ const OrderDetails = () => {
                         </tr>
                     </tbody>
                 </table>
+
+                {canCancel && (
+                    <div style={{ marginTop: '1.5rem', textAlign: 'right' }}>
+                        <button 
+                            onClick={handleCancelOrder}
+                            className="cancel-order-btn"
+                            disabled={loading}
+                        >
+                            Cancel Order
+                        </button>
+                    </div>
+                )}
             </div>
         </div>
         )}

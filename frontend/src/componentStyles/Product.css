@@ -172,3 +172,13 @@
   background-color: #333333;
   transform: translateY(-1px);
 }
+
+.wishlist-card-icon-filled {
+  color: #e63946;
+  font-size: 18px !important;
+}
+
+.wishlist-card-icon-empty {
+  color: #555;
+  font-size: 18px !important;
+}

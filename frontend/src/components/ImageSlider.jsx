@@ -19,7 +19,7 @@ const ImageSlider = () => {
   
   return (
     <div className="image-slider-container">
-        <div className="slider-images" style={{transform:`translateX(-${currentIndex*100}%)`}}>
+        <div className={`slider-images slide-${currentIndex}`}>
               {images.map((image,index)=>
               (<div className="slider-item" key={index} >
                 <img src={image} alt={`Slide ${index+1}`} />

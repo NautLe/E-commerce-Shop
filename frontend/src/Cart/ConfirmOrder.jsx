@@ -114,7 +114,7 @@ const ConfirmOrder = () => {
                         <tbody>
                             <tr>
                                 <td> {subTotal} $</td>
-                                {discount > 0 && <td style={{ color: '#2e7d32', fontWeight: 'bold' }}>-{discount} $</td>}
+                                {discount > 0 && <td className="discount-cell">-{discount} $</td>}
                                 <td>{shipping === 0 ? 'FREE' : `${shipping} $`}</td>
                                 <td>{tax} $</td>
                                 <td> {total} $ </td>

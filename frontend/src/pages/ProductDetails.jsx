@@ -135,6 +135,10 @@ const ProductDetails = () => {
     const availableSizes = isEssential ? ['OS'] : (product?.sizes?.length ? product.sizes : ['S', 'M', 'L', 'XL'])
 
     const addToCart = () => {
+        if (!product.stock || product.stock <= 0) {
+            showToast.error('Product is out of stock!')
+            return
+        }
         const finalSize = selectedSize || (isEssential ? 'OS' : 'S')
         dispatch(
           addItemsToCart({
@@ -201,7 +205,7 @@ const ProductDetails = () => {
                     <div className="product-info">
                         <h2>{product.name}</h2>
                         {(product.category || product.subcategory) && (
-                          <p style={{ fontSize: '13px', color: '#777', textTransform: 'uppercase', letterSpacing: '0.8px', margin: '4px 0 12px 0' }}>
+                          <p className="product-category-subtitle">
                             {product.category}{product.subcategory ? ` / ${product.subcategory}` : ''}
                           </p>
                         )}
@@ -221,7 +225,7 @@ const ProductDetails = () => {
                                 {product.stock > 0 && (<>
                                     <div className="product-size-container">
                                         <label className="size-label">
-                                            Size: <strong style={{ color: '#111', textTransform: 'uppercase' }}>{selectedSize || (isEssential ? 'OS' : 'S')}</strong>
+                                            Size: <strong className="selected-size-text">{selectedSize || (isEssential ? 'OS' : 'S')}</strong>
                                         </label>
                                         <div className="size-buttons-group">
                                             {availableSizes.map((sz) => (
@@ -245,31 +249,19 @@ const ProductDetails = () => {
                                         />
                                         <button className="quantity-button" onClick={increaseQuantity}>+</button>
                                     </div>
-                                    <div style={{ display: 'flex', gap: '12px', alignItems: 'center', marginTop: '15px' }}>
-                                        <button className="add-to-cart-btn" disabled={cartLoading} onClick={addToCart} style={{ margin: 0, flex: 1 }}>{cartLoading ? 'Adding...' : 'Add to Cart'} </button>
+                                    <div className="cart-action-group">
+                                        <button className="add-to-cart-btn" disabled={cartLoading} onClick={addToCart}>{cartLoading ? 'Adding...' : 'Add to Cart'} </button>
                                         <button
                                             type="button"
                                             className={`details-wishlist-btn ${isWishlisted ? 'active' : ''}`}
                                             onClick={handleWishlistToggle}
                                             title={isWishlisted ? "Remove from Wishlist" : "Add to Wishlist"}
                                             aria-label="Wishlist"
-                                            style={{
-                                                background: isWishlisted ? '#fff0f3' : '#ffffff',
-                                                border: isWishlisted ? '1px solid #ff4d4f' : '1px solid #ddd',
-                                                borderRadius: '6px',
-                                                padding: '10px 16px',
-                                                cursor: 'pointer',
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                justifyContent: 'center',
-                                                transition: 'all 0.2s ease',
-                                                height: '46px'
-                                            }}
                                         >
                                             {isWishlisted ? (
-                                                <FavoriteIcon style={{ color: '#e63946', fontSize: '22px' }} />
+                                                <FavoriteIcon className="wishlist-icon-filled" />
                                             ) : (
-                                                <FavoriteBorderIcon style={{ color: '#555', fontSize: '22px' }} />
+                                                <FavoriteBorderIcon className="wishlist-icon-empty" />
                                             )}
                                         </button>
                                     </div>

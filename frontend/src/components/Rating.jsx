@@ -43,7 +43,6 @@ const Rating = ({ value, onRatingChange, disabled = false }) => {
                     onMouseEnter={() => handleMouseEnter(i)}
                     onMouseLeave={handleMouseLeave}
                     onClick={() => handleClick(i)}
-                    style={{ pointerEvents: disabled ? 'none' : 'auto' }}
                 >
                     ★
                 </span>

@@ -155,7 +155,7 @@ const UpdateProduct = () => {
                             <img src={img.url} key={index} alt="Old product preview" className='update-product-old-image' />
                         ))}
                     </div>
-                    <button style={{ cursor: 'pointer' }} className="update-product-submit-btn">{loading ? 'Updating...' : 'Update'}</button>
+                    <button className="update-product-submit-btn">{loading ? 'Updating...' : 'Update'}</button>
                 </form>
             </div>
             <Footer />

@@ -64,6 +64,8 @@ const couponSlice = createSlice({
       .addCase(applyCoupon.rejected, (state, action) => {
         state.loading = false
         state.error = action.payload
+        state.appliedCoupon = null
+        sessionStorage.removeItem('appliedCoupon')
       })
   }
 })

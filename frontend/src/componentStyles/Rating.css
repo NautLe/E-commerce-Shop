@@ -12,6 +12,7 @@
   display: inline-block;
   transition: color 0.15s ease, transform 0.15s ease;
   color: #e0e0e0;
+  pointer-events: none;
 }
 
 .star.filled {
@@ -24,6 +25,7 @@
 
 .star.clickable {
   cursor: pointer;
+  pointer-events: auto;
 }
 
 .star.clickable:hover {

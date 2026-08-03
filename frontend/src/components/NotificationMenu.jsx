@@ -91,7 +91,7 @@ const NotificationMenu = () => {
                                                 onClick={(e) => handleMarkAsRead(item._id, e)}
                                                 title="Mark as read"
                                             >
-                                                <DoneAll style={{ fontSize: '14px' }} />
+                                                <DoneAll className="notif-icon-sm" />
                                             </button>
                                         )}
                                         <button
@@ -99,7 +99,7 @@ const NotificationMenu = () => {
                                             onClick={(e) => handleDelete(item._id, e)}
                                             title="Delete"
                                         >
-                                            <Close style={{ fontSize: '14px' }} />
+                                            <Close className="notif-icon-sm" />
                                         </button>
                                     </div>
                                 </div>

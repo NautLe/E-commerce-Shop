@@ -43,7 +43,6 @@ export const getPaymentStatus = handleAsyncError(async (req, res, next) => {
     // Create Notification for the user
     await createNotification({
       userId: order.user,
-      title: "Order Placed Successfully 🎉",
       message: `Your order #${order._id.toString().slice(-6)} of $${order.totalPrice ? order.totalPrice.toFixed(2) : 0} has been confirmed.`,
       type: "order"
     })

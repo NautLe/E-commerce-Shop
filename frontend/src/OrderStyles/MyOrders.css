@@ -55,14 +55,61 @@
     align-items: center;
     padding: 20px;
     color: #777;
-    min-height: 70vh;
+    min-height: 300px;
   }
   .no-order-message{
-    font-size: 40px;;
+    font-size: 20px;
   }
   .order-link{
     color: var(--bg-secondary);
   }
+
+.orders-filter-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  background: #f8f8f8;
+  padding: 16px;
+  border-radius: 8px;
+}
+
+.orders-search-box {
+  flex: 1;
+  min-width: 240px;
+}
+
+.orders-search-input {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.orders-status-filter {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.orders-status-label {
+  font-weight: bold;
+  font-size: 14px;
+  color: #333;
+}
+
+.orders-status-select {
+  padding: 10px 14px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  background: #fff;
+}
+
 
   @media (max-width: 768px) {
     .orders-table th,

@@ -78,22 +78,12 @@ const CartItem = ({ item }) => {
             <strong>Price: </strong>${item.price.toFixed(2)}
           </p>
           {item.size && (
-            <p
-              className="item-size"
-              style={{ fontSize: "13px", color: "#555", margin: "3px 0" }}
-            >
+            <p className="item-size">
               <strong>Size: </strong>
-              <span
-                style={{
-                  textTransform: "uppercase",
-                  fontWeight: "700",
-                  color: "#111",
-                }}
-              >
+              <span className="item-size-value">
                 {item.size}
               </span>
             </p>
-            
           )}
           <p >Stock: {item.stock}</p>
           <p className="item-quantity">

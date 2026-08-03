@@ -16,26 +16,25 @@ const OrdersList = () => {
 
     const dispatch = useDispatch()
 
-    const {orderId} = useParams()
 
-    const handleDelete = (orderId) =>{
+    const handleDelete = (orderId) => {
         const confirm = window.confirm('Are you sure you want to delete this order?')
-        if(confirm){
+        if (confirm) {
             dispatch(deleteOrder(orderId))
         }
     }
     useEffect(() => {
-    if (error) {
-        showToast.error(error)
-        dispatch(removeErrors())
-    }
-    if(success){
-        showToast.success(message)
-        dispatch(removeSuccess())
-        dispatch(clearMessage())
-        dispatch(fetchAllOrders())
-    }
-}, [dispatch, error, success , message])
+        if (error) {
+            showToast.error(error)
+            dispatch(removeErrors())
+        }
+        if (success) {
+            showToast.success(message)
+            dispatch(removeSuccess())
+            dispatch(clearMessage())
+            dispatch(fetchAllOrders())
+        }
+    }, [dispatch, error, success, message])
 
 
     useEffect(() => {
@@ -47,7 +46,10 @@ const OrdersList = () => {
         return orders.filter(order => {
             const matchesSearch = order._id.toLowerCase().includes(searchQuery.toLowerCase()) ||
                 order.orderItems?.some(item => item.name?.toLowerCase().includes(searchQuery.toLowerCase()))
-            const matchesStatus = statusFilter === 'All' || order.orderStatus.toLowerCase() === statusFilter.toLowerCase()
+            const matchesStatus = statusFilter === 'All' || 
+                (statusFilter.toLowerCase() === 'delivering' || statusFilter.toLowerCase() === 'shipping'
+                    ? (order.orderStatus?.toLowerCase() === 'delivering' || order.orderStatus?.toLowerCase() === 'shipping')
+                    : order.orderStatus?.toLowerCase() === statusFilter.toLowerCase())
             return matchesSearch && matchesStatus
         })
     }, [orders, searchQuery, statusFilter])
@@ -59,54 +61,32 @@ const OrdersList = () => {
                 <PageTitle title="All Orders" />
                 <div className="ordersList-container">
                     <h1 className="ordersList-title">All Orders</h1>
-                    
+
                     {/* Orders Search and Filter Toolbar */}
-                    <div style={{
-                        display: 'flex',
-                        flexWrap: 'wrap',
-                        gap: '16px',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        marginBottom: '20px',
-                        background: '#fff',
-                        padding: '16px',
-                        borderRadius: '8px',
-                        boxShadow: '0 2px 4px rgba(0,0,0,0.05)'
-                    }}>
-                        <div style={{ flex: '1', minWidth: '240px' }}>
+                    <div className="admin-orders-toolbar">
+                        <div className="admin-orders-search-box">
                             <input
                                 type="text"
+                                className="admin-orders-search-input"
                                 placeholder="Search by Order ID or Item Name..."
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
-                                style={{
-                                    width: '100%',
-                                    padding: '10px 14px',
-                                    borderRadius: '6px',
-                                    border: '1px solid #ccc',
-                                    fontSize: '14px'
-                                }}
                             />
                         </div>
 
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                            <label htmlFor="status-filter" style={{ fontWeight: 'bold', fontSize: '14px' }}>Status:</label>
+                        <div className="admin-orders-filter-group">
+                            <label htmlFor="status-filter" className="admin-orders-filter-label">Status:</label>
                             <select
                                 id="status-filter"
+                                className="admin-orders-filter-select"
                                 value={statusFilter}
                                 onChange={(e) => setStatusFilter(e.target.value)}
-                                style={{
-                                    padding: '10px 14px',
-                                    borderRadius: '6px',
-                                    border: '1px solid #ccc',
-                                    fontSize: '14px',
-                                    background: '#fff'
-                                }}
                             >
                                 <option value="All">All Statuses</option>
                                 <option value="Processing">Processing</option>
-                                <option value="Shipped">Shipped</option>
+                                <option value="Delivering">Delivering</option>
                                 <option value="Delivered">Delivered</option>
+                                <option value="Cancelled">Cancelled</option>
                             </select>
                         </div>
                     </div>
@@ -135,7 +115,7 @@ const OrdersList = () => {
                                             <td>
                                                 <Link to={`/admin/order/${order._id}`} className='action-icon edit-icon'><Edit /></Link>
                                                 <button
-                                                    className="action-icon delete-icon" onClick={()=>handleDelete(order._id)}> <Delete />
+                                                    className="action-icon delete-icon" onClick={() => handleDelete(order._id)}> <Delete />
                                                 </button>
                                             </td>
                                         </tr>
@@ -143,8 +123,8 @@ const OrdersList = () => {
                                 </tbody>
                             </table>
                         ) : (
-                            <div style={{ textAlign: 'center', padding: '40px', background: '#fff', borderRadius: '8px' }}>
-                                <p style={{ fontSize: '18px', color: '#777' }}>No orders found matching your search criteria.</p>
+                            <div className="admin-no-orders-box">
+                                <p className="admin-no-orders-text">No orders found matching your search criteria.</p>
                             </div>
                         )}
                     </div>

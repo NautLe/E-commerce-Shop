@@ -61,3 +61,13 @@
 @media (max-width: 1280px) { .mocha-product-grid { grid-template-columns: repeat(4, 1fr); } }
 @media (max-width: 900px) { .mocha-hero { min-height: 650px; }.mocha-categories { grid-template-columns: repeat(2,1fr); }.mocha-product-grid { grid-template-columns: repeat(3,1fr); }.mocha-products { padding: 40px 24px 80px; } }
 @media (max-width: 600px) { .mocha-hero { min-height: 600px; padding: 60px 24px; }.mocha-hero-image { background-position: 68% center; background-size: auto 100%; }.mocha-hero-copy h1 { font-size: 48px; }.mocha-hero-copy > span { font-size: 17px; }.mocha-benefits { grid-template-columns: 1fr; }.mocha-benefits div + div { border-top: 1px solid #e4e0d8; border-left: 0; }.mocha-section { padding: 45px 18px; }.mocha-products { padding: 35px 18px 60px; }.mocha-categories { gap: 10px; }.mocha-categories a { height: 220px; }.mocha-product-grid { grid-template-columns: repeat(2,1fr); gap: 14px 10px; } }
+
+.mocha-hero-image-0 { background-image: url('/images/hero-bg.jpg'); }
+.mocha-hero-image-1 { background-image: url('/images/hero-bg-1.jpg'); }
+.mocha-hero-image-2 { background-image: url('/images/hero-bg-2.jpg'); }
+.mocha-hero-image-3 { background-image: url('/images/hero-bg-3.jpg'); }
+
+.mocha-products.no-top-padding {
+  padding-top: 0;
+}
+

@@ -98,3 +98,8 @@
         font-size: 0.9rem;
     }
 }
+
+.discount-cell {
+  color: #2e7d32;
+  font-weight: bold;
+}

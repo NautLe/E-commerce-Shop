@@ -12,13 +12,18 @@ class ApiFunctionality {
                     { description: { $regex: this.queryString.keyword, $options: "i" } },
                     { category: { $regex: this.queryString.keyword, $options: "i" } },
                     { subcategory: { $regex: this.queryString.keyword, $options: "i" } }
+
                 ]
             };
+            const numberRating = Number(this.queryString.keyword)
+            if(!NaN(numberRating)){
+                keyword.$or.push({ ratings: numberRating })
+            }
             this.query = this.query.find(keyword);
         }
         return this;
     }
-
+    
     filter() {
         const queryCopy = { ...this.queryString };
         const removeFields = ["keyword", "page", "limit", "sort"];
