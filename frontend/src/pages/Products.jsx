@@ -32,9 +32,6 @@ const Products = ({ categoryProp }) => {
   const [sortBy, setSortBy] = useState('default');
   const [selectedSubcategory, setSelectedSubcategory] = useState('All');
   const [searchInput, setSearchInput] = useState(urlKeyword);
-  const [minPrice, setMinPrice] = useState('');
-  const [maxPrice, setMaxPrice] = useState('');
-  const [inStockOnly, setInStockOnly] = useState(false);
 
   const subcategoryList = useMemo(() => {
     if (!activeCategory || activeCategory.toLowerCase() === 'all') {
@@ -76,13 +73,10 @@ const Products = ({ categoryProp }) => {
         page: currentPage,
         category: activeCategory,
         subcategory: validSubcategory !== 'All' ? validSubcategory : undefined,
-        sort: sortBy,
-        minPrice,
-        maxPrice,
-        inStock: inStockOnly
+        sort: sortBy
       })
     );
-  }, [dispatch, searchInput, currentPage, activeCategory, selectedSubcategory, sortBy, minPrice, maxPrice, inStockOnly, subcategoryList]);
+  }, [dispatch, searchInput, currentPage, activeCategory, selectedSubcategory, sortBy, subcategoryList]);
 
   useEffect(() => {
     if (error) {
@@ -121,14 +115,10 @@ const Products = ({ categoryProp }) => {
 
   const handleClearFilters = () => {
     setSearchInput('');
-    setMinPrice('');
-    setMaxPrice('');
     setSelectedSubcategory('All');
     setSortBy('default');
-    setInStockOnly(false);
     setCurrentPage(1);
     navigate('/products');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleSubcategoryClick = (subCat) => {
@@ -210,6 +200,8 @@ const Products = ({ categoryProp }) => {
                 <option value="price_desc">Price: High to Low</option>
                 <option value="ratings">Top Rated</option>
                 <option value="newest">Latest Arrivals</option>
+                <option value="rating">Rating</option>
+
               </select>
             </div>
           </div>

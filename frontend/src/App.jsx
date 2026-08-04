@@ -36,13 +36,15 @@ import CreateVoucher from './Admin/CreateVoucher'
 import Wishlist from './pages/Wishlist'
 import Addresses from './UserAuthentication/Addresses'
 import Contact from './pages/Contact'
-
+import { fetchCart } from './features/cart/cartSlice'
 const App = () => {
   const dispatch = useDispatch()
   const [authChecked, setAuthChecked] = useState(false)
 
   useEffect(() => {
-    dispatch(loadUser()).finally(() => setAuthChecked(true))
+    dispatch(fetchCart())
+    dispatch(loadUser())
+    .finally(() => setAuthChecked(true))
   }, [dispatch])
 
   if (!authChecked) {
@@ -57,16 +59,22 @@ const App = () => {
         <Route path="/product/:id" element={<ProductDetails />} />
         <Route path="/products" element={<Products />} />
         <Route path="/products/:keyword" element={<Products />} />
+
+        {/* // Category Routes // */}
         <Route path="/women" element={<Products categoryProp="women" />} />
         <Route path="/men" element={<Products categoryProp="men" />} />
         <Route path="/unisex" element={<Products categoryProp="unisex" />} />
         <Route path="/essentials" element={<Products categoryProp="essentials" />} />
         <Route path="/category/:categoryName" element={<Products />} />
+
+        {/* // auth routes */}
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/password/forgot" element={<ForgotPassword />} />
         <Route path="/reset/:token" element={<ResetPassword />} />
         <Route path="/password/reset/:token" element={<ResetPassword />} />
+
+
         <Route path="/cart" element={<Cart/>} />
         <Route path="/wishlist" element={<ProtectedRoutes element={<Wishlist />} />} />
         <Route path="/addresses" element={<ProtectedRoutes element={<Addresses />} />} />
@@ -74,11 +82,15 @@ const App = () => {
         <Route path="/profile/update" element={<ProtectedRoutes element={<UpdateProfile />} />} />
         <Route path="/password/update" element={<ProtectedRoutes element={<UpdatePassword />} />} />
         <Route path="/shipping" element={<ProtectedRoutes element={<Shipping />} />} />
+
+        {/* // order routes */}
         <Route path="/order/confirm" element={<ProtectedRoutes element={<ConfirmOrder />} />} />
         <Route path="/order/payment" element={<ProtectedRoutes element={<Payment />} />} />
         <Route path="/orders" element={<ProtectedRoutes element={<MyOrders />} />} />
         <Route path="/paymentSuccess" element={<ProtectedRoutes element={<PaymentSuccess />} />} />
         <Route path="/order/:orderId" element={<ProtectedRoutes element={<OrderDetails />} />} />
+
+        {/* // admin routes  */}
         <Route path="/admin/dashboard" element={<ProtectedRoutes element={<AdminDashboard />} adminOnly={true}/>} />
         <Route path="/admin/products" element={<ProtectedRoutes element={<ProductList />} adminOnly={true}/>} />
         <Route path="/admin/product/create" element={<ProtectedRoutes element={<CreateProduct />} adminOnly={true}/>} />

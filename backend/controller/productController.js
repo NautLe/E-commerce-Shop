@@ -43,6 +43,7 @@ export const createProducts = handleAsyncError(async (req, res, next) => {
 export const getAllProducts = handleAsyncError(async (req, res, next) => {
 
     let resultPerPage = 5;
+
     if (req.query.limit && req.query.limit !== 'undefined') {
         if (req.query.limit === 'all') {
             resultPerPage = 1000;

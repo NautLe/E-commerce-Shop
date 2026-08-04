@@ -126,6 +126,7 @@ useEffect(() => {
                   <div className="header-action item-total-heading">
                     Actions
                   </div>
+                  
                 </div>
 
                 {/* Cart item */}
@@ -133,6 +134,7 @@ useEffect(() => {
                   cartItems.map((item, index) => (
                     <CartItem item={item} key={`${item.productId}-${item.size || ''}-${index}`} />
                   ))}
+                  
               </div>
             </div>
 

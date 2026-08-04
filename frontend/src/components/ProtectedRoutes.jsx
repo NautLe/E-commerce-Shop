@@ -12,9 +12,11 @@ const ProtectedRoutes = ({element, adminOnly=false}) => {
         return <Loader/>
     }
     if(!isAuthenticated){
+        showToast.error("Please login to continue...")
         return <Navigate to={`/login?redirect=${location.pathname}${location.search}`} /> 
     }
     if(adminOnly && user.role!=='admin'){
+        showToast.error("You are not authorized to access this resource.")
         return <Navigate to ='/'/>
     }
 

@@ -15,29 +15,15 @@ class ApiFunctionality {
 
                 ]
             };
-            const numberRating = Number(this.queryString.keyword)
-            if(!NaN(numberRating)){
-                keyword.$or.push({ ratings: numberRating })
-            }
             this.query = this.query.find(keyword);
         }
         return this;
     }
     
     filter() {
-        const queryCopy = { ...this.queryString };
+        const filterObj = { ...this.queryString };
         const removeFields = ["keyword", "page", "limit", "sort"];
-        removeFields.forEach((el) => delete queryCopy[el]);
-
-        if (queryCopy.inStock === 'true' || queryCopy.inStock === true) {
-            queryCopy.stock = { gt: 0 };
-            delete queryCopy.inStock;
-        }
-
-        // Convert gte/gt/lte/lt → $gte/$gt/$lte/$lt
-        let queryStr = JSON.stringify(queryCopy);
-        queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (key) => `$${key}`);
-        let filterObj = JSON.parse(queryStr);
+        removeFields.forEach((el) => delete filterObj[el]);
 
         if (filterObj.category) {
             const cat = filterObj.category.toString().toLowerCase();

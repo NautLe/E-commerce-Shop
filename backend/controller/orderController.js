@@ -249,32 +249,3 @@
         })
     })
 
-export const refundOrder = handleAsyncError(async(req,res,next)=>{
-    const order = await Order.findById(req.params.id)
-    if(!order){
-        return next(new ErrorHandler("Order not found.", 404))
-    }
-    if(order.orderStatus !== 'Cancelled'){
-        return next(new ErrorHandler("Only cancelled orders can be refunded.", 400))
-    }
-    if(order.paymentInfo?.status !== "succeeded"){
-        return next(new ErrorHandler("This order was not paid, so it cannot be refunded.", 400))
-    }
-    try {
-        await stripe.refunds.create({
-            payment_intent: order.paymentInfo.id,
-
-        })
-    } catch (stripeError) {
-        return next(new ErrorHandler("Error occurred while processing refund.", 500))
-    }
-    order.orderStatus = "Refunded"
-    order.paymentInfo.status = "refunded"
-    await order.save({validateBeforeSave: false})
-    res.status(200).json({
-        success: true,
-        message: "Order refunded successfully",
-        order
-    })
-
-})

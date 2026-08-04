@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import axios from '../../utils/axiosInstance'
 
-export const getProduct = createAsyncThunk('product/getProduct', async ({ keyword = '', page = 1, category, subcategory, sort, minPrice, maxPrice, inStock, limit }, { rejectWithValue }) => {
+export const getProduct = createAsyncThunk('product/getProduct', async ({ keyword = '', page = 1, category, subcategory, sort, limit }, { rejectWithValue }) => {
     try {
         let link = '/api/v1/products?page=' + page
         if (limit) {
@@ -18,15 +18,6 @@ export const getProduct = createAsyncThunk('product/getProduct', async ({ keywor
         }
         if (sort && sort !== 'default') {
             link += `&sort=${sort}`
-        }
-        if (minPrice !== undefined && minPrice !== '') {
-            link += `&price[gte]=${minPrice}`
-        }
-        if (maxPrice !== undefined && maxPrice !== '') {
-            link += `&price[lte]=${maxPrice}`
-        }
-        if (inStock) {
-            link += `&inStock=true`
         }
 
         const { data } = await axios.get(link)

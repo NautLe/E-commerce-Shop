@@ -1,6 +1,7 @@
 import handleAsyncError from "../middleware/handleAsyncError.js"
+import ErrorHandler from "../utils/handleError.js"
 
-// 
+// get cart
 export const getCart = handleAsyncError(async (req, res, next) => {
     if (!req.session.cart) {
         req.session.cart = []
@@ -11,7 +12,7 @@ export const getCart = handleAsyncError(async (req, res, next) => {
     })
 })
 
-// 
+// add to cart 
 export const addToCart = handleAsyncError(async (req, res, next) => {
     const { productId, name, price, image, quantity, size, stock} = req.body
 
@@ -23,7 +24,11 @@ export const addToCart = handleAsyncError(async (req, res, next) => {
         req.session.cart = []
     }
 
-    const existingItem = req.session.cart.find(item => item.productId === productId && (item.size === size || (!item.size && !size)))
+    const existingItem = req.session.cart.find(
+      (item) =>
+        item.productId === productId &&
+        (item.size === size || (!item.size && !size)),
+    );
 
     if (existingItem) {
         if (typeof stock === 'number' && existingItem.quantity + quantity > stock) {
@@ -44,7 +49,7 @@ export const addToCart = handleAsyncError(async (req, res, next) => {
     })
 })
 
-// 
+// update cart item quantity
 export const updateCartItem = handleAsyncError(async (req, res, next) => {
     const { productId, quantity } = req.body
 
